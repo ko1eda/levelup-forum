@@ -14,7 +14,13 @@ class ThreadController extends Controller
      */
     public function index()
     {
-        //
+        // get latest 50 threads
+
+        $threads= Thread::all()
+            ->latest()
+            ->limit(50);
+
+        return view('threads.index', compact('threads'));
     }
 
     /**
