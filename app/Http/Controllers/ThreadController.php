@@ -16,9 +16,9 @@ class ThreadController extends Controller
     {
         // get latest 50 threads
 
-        $threads= Thread::all()
-            ->latest()
-            ->limit(50);
+        $threads= Thread::latest()
+            ->limit(25)
+            ->get();
 
         return view('threads.index', compact('threads'));
     }
@@ -52,7 +52,9 @@ class ThreadController extends Controller
      */
     public function show(Thread $thread)
     {
-        //
+        
+        return view('threads.show', compact('thread'));
+
     }
 
     /**
