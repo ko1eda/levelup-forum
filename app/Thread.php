@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Thread extends Model
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function replies()
     {

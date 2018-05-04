@@ -14,9 +14,7 @@ class ThreadsTest extends TestCase
     // should use.
     use RefreshDatabase;
 
-    // note you need this test docblock
-    // for phpunit to work
-
+    protected $thread;
 
     public function setUp()
     {
