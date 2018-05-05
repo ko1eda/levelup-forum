@@ -46,6 +46,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        // Throw an exception for 404 HTTP errors
+        // during testing, this is off by default
+        // https://laravel.com/docs/5.6/errors
+        if (app()->environment() === 'testing') {
+            throw $exception;
+        }
         return parent::render($request, $exception);
     }
 }
