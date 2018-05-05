@@ -5,12 +5,17 @@
 
       <div class="card">
         <div class="card-header">
-          {{ $thread->title }}
+          <a href="#">
+            <strong>
+              {{ $thread->user->name }}:
+            </strong>
+          </a> 
+            {{ $thread->title }}
         </div>
 
         <div class="card-body">
           <h5 class="card-title">
-            user->name
+            {{-- {{ $thread->user->name }} --}}
           </h5>
 
           <p class="card-text">
