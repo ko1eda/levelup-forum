@@ -33,4 +33,13 @@ class Thread extends Model
     {
         return '/threads/' .$this->id;
     }
+
+    /**
+     * Add a reply to the given thread
+     * @return void
+     */
+    public function addReply(array $reply)
+    {
+        $this->replies()->create($reply);
+    }
 }

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
+    protected $fillable = ['user_id', 'body'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
