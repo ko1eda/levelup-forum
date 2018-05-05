@@ -52,7 +52,12 @@ class ThreadController extends Controller
      */
     public function show(Thread $thread)
     {
-        $replies = $thread->replies;
+        // lazy eager load asscoaited user
+        $thread->load('user');
+        
+        // lazy eager load asscoaited user
+        $replies = $thread->replies->load('user');
+
         return view('threads.show', compact('thread', 'replies'));
     }
 
