@@ -29,9 +29,9 @@ class Thread extends Model
      * return path to current thread
      * @return String
      */
-    public function path()
+    public function path(String $append = '')
     {
-        return '/threads/' .$this->id;
+        return '/threads/' .$this->id. $append;
     }
 
     /**

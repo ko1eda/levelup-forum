@@ -56,7 +56,11 @@ class ThreadController extends Controller
         $thread->load('user');
         
         // lazy eager load asscoaited user
-        $replies = $thread->replies->load('user');
+        $replies = $thread
+            ->replies()
+            ->latest()
+            ->get()
+            ->load('user');
 
         return view('threads.show', compact('thread', 'replies'));
     }
