@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+
+    /**
+     * The attributes that are mass assignable.
+     * @var array
+     */
+    protected $fillable = ['body', 'title', 'user_id'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -13,7 +20,6 @@ class Thread extends Model
     {
         return $this->hasMany(Reply::class);
     }
-    
     
     /**
      * A thread belongs to a user
@@ -23,7 +29,6 @@ class Thread extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 
     /**
      * return path to current thread
