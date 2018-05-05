@@ -17,9 +17,10 @@ class ReplyController extends Controller
 
     public function store(Thread $thread, Request $req)
     {
-
+        // Remember that $thread
+        // already has the correct id
+        // bound to it b/c route model binding
         $this->validate($req, [
-            'user_id' => 'required',
             'body' => 'required'
         ]);
         
@@ -28,6 +29,6 @@ class ReplyController extends Controller
             'user_id' => \Auth::user()->id
         ]);
 
-        return redirect('/threads/'.$thread->id);
+        return back();
     }
 }
