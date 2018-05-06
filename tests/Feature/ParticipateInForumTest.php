@@ -16,7 +16,7 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     public function an_unauthenticated_user_cannot_reply_to_a_thread()
     {
-        // Cusotom method check for unauthexception
+        // Custom method check for http redirect response for unauth users
         $this->checkUnauthFunctionality('post', '/threads/1/replies');
     }
 

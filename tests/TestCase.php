@@ -10,6 +10,17 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
 
     /**
+     * Turn off default html exception handling
+     * for tests in favor of laravel exception handling
+     * @return void
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->withoutExceptionHandling();
+    }
+
+    /**
      * Send a request to the given endpoint
      * as an Unauthorized user, passing in
      * any necessary data.
@@ -20,9 +31,10 @@ abstract class TestCase extends BaseTestCase
         String $endpoint = '',
         array $data = []
     ) {
-        $this->expectException(\Illuminate\Auth\AuthenticationException::class);
-        
-        $this->$requestType($endpoint, $data);
+        // Enable http exception handling
+        $this->withExceptionHandling()
+            ->$requestType($endpoint, $data)
+            ->assertRedirect('/login');
 
         return $this; // Return the instance for chaining
     }

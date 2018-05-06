@@ -11,11 +11,18 @@ use App\Thread;
 class CreateThreadsTest extends TestCase
 {
     use RefreshDatabase;
+    
 
     /** @test */
     public function an_unauthenticated_user_cannot_create_a_thread()
     {
         $this->checkUnauthFunctionality('post', '/threads');
+    }
+
+    /** @test */
+    public function an_unauthenticated_user_cannot_see_create_thread_page()
+    {
+        $this->checkUnauthFunctionality('get', '/threads/create');
     }
 
     /** @test */
