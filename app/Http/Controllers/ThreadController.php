@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Thread;
 use Illuminate\Http\Request;
+use App\Channel;
 
 class ThreadController extends Controller
 {
@@ -42,7 +43,7 @@ class ThreadController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     *show
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -67,10 +68,11 @@ class ThreadController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \App\Channel  $channel
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show(Thread $thread)
+    public function show(Channel $channel, Thread $thread)
     {
         // lazy eager load asscoaited user
         $thread->load('user');

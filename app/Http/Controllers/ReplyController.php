@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Thread;
 use App\Reply;
+use App\Channel;
 
 class ReplyController extends Controller
 {
@@ -15,7 +16,7 @@ class ReplyController extends Controller
         $this->middleware('auth');
     }
 
-    public function store(Thread $thread, Request $req)
+    public function store(Channel $channel ,Thread $thread, Request $req)
     {
         // Remember that $thread
         // already has the correct id

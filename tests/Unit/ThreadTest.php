@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Thread;
 use App\Reply;
+use App\User;
 use App\Channel;
 
 class ThreadTest extends TestCase
@@ -26,11 +27,22 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
+    public function a_thread_can_fetch_its_path()
+    {
+        // Given we have a thread, 
+        // Then that threads path function should return
+        $this->assertEquals(
+            "/threads/{$this->thread->channel->slug}/{$this->thread->id}",
+            $this->thread->path()
+        );
+    }
+
+    /** @test */
     public function a_thread_has_an_associated_user()
     {
          // Given we have a thread
          // Then that thread must have an associated User
-         $this->assertInstanceOf(\App\User::class, $this->thread->user);
+         $this->assertInstanceOf(User::class, $this->thread->user);
     }
 
     /** @test */

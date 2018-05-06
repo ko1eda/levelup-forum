@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Thread extends Model
 {
 
@@ -42,12 +41,15 @@ class Thread extends Model
     }
 
     /**
-     * return path to current thread
+     * Return path to current thread
+     * @param String $append - any additional path
      * @return String
      */
     public function path(String $append = '')
     {
-        return '/threads/' .$this->id. $append;
+        return (
+            "/threads/{$this->channel->slug}/{$this->id}". $append
+        );
     }
 
     /**

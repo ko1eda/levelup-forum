@@ -42,7 +42,7 @@ class ThreadsTest extends TestCase
     {
         // If the uri is matching this threads id
         // Then I will see the specific thread with that title
-        $this->get('/threads/' .$this->thread->id)
+        $this->get($this->thread->path())
             ->assertSee($this->thread->title);
     }
 
@@ -58,7 +58,7 @@ class ThreadsTest extends TestCase
 
         // When I visit the uri for the given thread
         // Then I will see the associated reply's body
-        $this->get('/threads/' .$this->thread->id)
+        $this->get($this->thread->path())
             ->assertSee($reply->body);
     }
 }

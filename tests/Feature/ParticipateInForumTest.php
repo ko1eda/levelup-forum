@@ -16,8 +16,9 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     public function an_unauthenticated_user_cannot_reply_to_a_thread()
     {
-        // Custom method check for http redirect response for unauth users
-        $this->checkUnauthFunctionality('post', '/threads/1/replies');
+        $thread = factory(Thread::class)->create();
+        
+        $this->checkUnauthFunctionality('post', $thread->path('/replies'));
     }
 
     /** @test */
@@ -30,23 +31,16 @@ class ParticipateInForumTest extends TestCase
         $thread = factory(Thread::class)->create();
     
         // And the user posts a reply
-        // note: we use make here bc
-        // were storing it to db with a post request.
-
-        // specifying the thread_id also isn't necessary
-        // in this case bc route model binding
-        // automatically associates a Thread with the correct id
-        // to the request but i left it here anyway
-        $reply = factory(Reply::class)->make([
+        $reply = factory(Reply::class)->create([
             'thread_id' => $thread->id
         ]);
-        // by default laravel will not throw an exception for this
-        // if no route exists you must change the settings
-        // in your app/exceptions/hanlder render method
-        $this->post("/threads/{$thread->id}/replies", $reply->toArray());
+        $this->post($thread->path('/replies'), $reply->toArray());
+
+        // Then the reply should persist to the database
+        $this->assertDatabaseHas('replies', $reply->toArray());
         
-        // Then the reply should be visible on the page
-        $this->get('/threads/'.$thread->id)
+        // Then the reply should be visible on the threads page
+        $this->get($thread->path())
             ->assertSee($reply->body);
     }
 }

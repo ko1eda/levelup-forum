@@ -32,7 +32,7 @@ class CreateThreadsTest extends TestCase
         $this->signInUser();
 
         // And that user makes a POST request to our endpoint
-        $thread = factory(Thread::class)->make();
+        $thread = factory(Thread::class)->create();
         $this->post('/threads', $thread->toArray());
 
         // And when the user visits the threads page
