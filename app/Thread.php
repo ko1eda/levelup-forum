@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Thread extends Model
 {
 
@@ -11,9 +12,10 @@ class Thread extends Model
      * The attributes that are mass assignable.
      * @var array
      */
-    protected $fillable = ['body', 'title', 'user_id'];
+    protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
 
     /**
+     * A thread can have many replies
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function replies()
@@ -28,6 +30,15 @@ class Thread extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * A thread belongs to a channel (main category)
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
     }
 
     /**

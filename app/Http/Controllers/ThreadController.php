@@ -57,7 +57,8 @@ class ThreadController extends Controller
         $thread = Thread::create([
             'body' => $req->get('body'),
             'title' => $req->get('title'),
-            'user_id' => \Auth::user()->id
+            'user_id' => \Auth::user()->id,
+            'channel_id' => $req->get('channel_id')
         ]);
         
         return redirect($thread->path());

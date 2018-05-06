@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Thread;
 use App\Reply;
+use App\Channel;
 
 class ThreadTest extends TestCase
 {
@@ -59,5 +60,13 @@ class ThreadTest extends TestCase
             'user_id' => 1,
             'thread_id' => $this->thread->id
         ]);
+    }
+
+    /** @test */
+    public function a_thread_belongs_to_a_channel()
+    {
+       // Given we have a thread
+       // Then that thread should have an associated channel (main category)
+       $this->assertInstanceOf(Channel::class, $this->thread->channel);
     }
 }
