@@ -11,7 +11,7 @@ class ThreadController extends Controller
     public function __construct()
     {
         $this->middleware('auth')
-            ->except('show', 'index');
+            ->except(['show', 'index']);
     }
 
     /**
@@ -37,7 +37,7 @@ class ThreadController extends Controller
      */
     public function create()
     {
-        //
+        return view('threads.create');
     }
 
     /**
@@ -59,7 +59,7 @@ class ThreadController extends Controller
             'title' => $req->get('title'),
             'user_id' => \Auth::user()->id
         ]);
-
+        
         return redirect($thread->path());
     }
 

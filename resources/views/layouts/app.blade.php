@@ -69,8 +69,17 @@
 
         <main class="py-4">
           <div class="container">
-            @yield('content')
+
+            <div class="row justify-content-center">
+              <div class="col-10">
+
+                  @yield('content')
+
+              </div>
+            </div>
+
           </div>
+
         </main>
     </div>
 </body>
