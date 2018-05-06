@@ -16,20 +16,15 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     public function an_unauthenticated_user_cannot_reply_to_a_thread()
     {
-        // An error will be thrown
-        $this->expectException(\Illuminate\Auth\AuthenticationException::class);
-
-        // Given an unauthenticated user
-        // tries to post a reply
-        $this->post("/threads/1/replies", []);
+        // Cusotom method check for unauthexception
+        $this->checkUnauthFunctionality('post', '/threads/1/replies');
     }
-    
+
     /** @test */
     public function an_authenticated_user_can_reply_to_a_thread()
     {
         // Given we have a authenticated user
-        $user = factory(User::class)->create();
-        $this->be($user); // sets currently logged in user
+        $this->signInUser();
 
         // When that user navigates to an existing thread
         $thread = factory(Thread::class)->create();
