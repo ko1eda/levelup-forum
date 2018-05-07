@@ -17,8 +17,8 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         // load all channels into the navbar dropdown
-        \View::composer('layouts.app', function ($view) {
-            $channels = \App\Channel::latest()->limit(10)->get();
+        \View::composer(['shared.navbar', 'threads.create'], function ($view) {
+            $channels = \App\Channel::latest()->get();
             
             return $view->with(compact('channels'));
         });
