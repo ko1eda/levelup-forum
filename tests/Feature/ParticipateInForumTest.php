@@ -31,16 +31,32 @@ class ParticipateInForumTest extends TestCase
         $thread = factory(Thread::class)->create();
     
         // And the user posts a reply
-        $reply = factory(Reply::class)->create([
+        $reply = factory(Reply::class)->make([
             'thread_id' => $thread->id
         ]);
         $this->post($thread->path('/replies'), $reply->toArray());
-
-        // Then the reply should persist to the database
-        $this->assertDatabaseHas('replies', $reply->toArray());
         
         // Then the reply should be visible on the threads page
         $this->get($thread->path())
             ->assertSee($reply->body);
+    }
+
+    /** @test */
+    public function a_published_reply_must_have_a_body()
+    {
+        // Given we have a authenticated user
+        $this->signInUser();
+
+        // When that user navigates to an existing thread
+        // and makes a reply
+        $thread = factory(Thread::class)->create();
+        $reply = factory(Reply::class)->make(['body' => null]);
+        
+        // If that reply does not have a body
+        // Then laravel should flash the corresponding
+        // error to the session
+        $this->withExceptionHandling()
+            ->post($thread->path('/replies'), $reply->toArray())
+            ->assertSessionHasErrors('body');
     }
 }

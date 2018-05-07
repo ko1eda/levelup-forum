@@ -43,8 +43,9 @@ class ThreadController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *show
-     * @param  \Illuminate\Http\Request  $request
+     * show
+     *
+     * @param  \Illuminate\Http\Request  $req
      * @return \Illuminate\Http\Response
      */
     public function store(Request $req)
@@ -52,7 +53,8 @@ class ThreadController extends Controller
         // validate
         $this->validate($req, [
             'body' => 'required',
-            'title' => 'required'
+            'title' => 'required',
+            'channel_id' => 'required|exists:channels,id'
         ]);
 
         $thread = Thread::create([
@@ -74,10 +76,10 @@ class ThreadController extends Controller
      */
     public function show(Channel $channel, Thread $thread)
     {
+
         // lazy eager load asscoaited user
-        $thread->load('user');
-        
-        // lazy eager load asscoaited user
+        // prevent n+1 problem
+        // in threads.show foreach loop
         $replies = $thread
             ->replies()
             ->latest()
