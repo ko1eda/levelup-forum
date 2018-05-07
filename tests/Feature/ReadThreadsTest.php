@@ -36,6 +36,28 @@ class ThreadsTest extends TestCase
             ->assertStatus(200)
             ->assertSee($this->thread->title);
     }
+
+    /** @test */
+    public function a_user_can_view_all_threads_by_associated_channel()
+    {
+
+        // Given we have two threads each belonging to a unique channel
+        $seenThread = factory(Thread::class)->create();
+        $unseenThread = factory(Thread::class)->create();
+
+        // When we navigate to the route
+        // whose channel slug corresponds to
+        // ONLY ONE of those channels
+        $route = route('threads.index', [
+            'channel' => $seenThread->channel->slug
+        ]);
+        
+        // Then we should only see the thread(s)
+        // associated with that channel
+        $this->get($route)
+            ->assertSee($seenThread->title)
+            ->assertDontSee($unseenThread->title);
+    }
     
     /** @test */
     public function a_user_can_view_a_single_thread()

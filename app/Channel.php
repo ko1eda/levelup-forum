@@ -15,4 +15,14 @@ class Channel extends Model
     {
         return 'slug';
     }
+
+    /**
+     * A channel has many threads
+     *
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function threads()
+    {
+        return $this->hasMany(Thread::class);
+    }
 }
