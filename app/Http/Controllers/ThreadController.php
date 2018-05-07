@@ -69,6 +69,8 @@ class ThreadController extends Controller
 
     /**
      * Display the specified resource.
+     * Prevents the user from accessing a
+     * thread unassociated with its given channel
      *
      * @param  \App\Channel  $channel
      * @param  \App\Thread  $thread
@@ -77,16 +79,27 @@ class ThreadController extends Controller
     public function show(Channel $channel, Thread $thread)
     {
 
-        // lazy eager load asscoaited user
-        // prevent n+1 problem
-        // in threads.show foreach loop
-        $replies = $thread
-            ->replies()
-            ->latest()
-            ->get()
-            ->load('user');
+        if ($thread->channel->id === $channel->id) {
+            // lazy eager load asscoaited user
+            // prevent n+1 problem
+            // in threads.show foreach loop
+            $replies = $thread
+                ->replies()
+                ->latest()
+                ->get()
+                ->load('user');
 
-        return view('threads.show', compact('thread', 'replies'));
+            return view(
+                'threads.show',
+                compact('thread', 'replies')
+            );
+        }
+        
+        return back()->withErrors([
+            'message' => ucfirst(
+                "{$thread->title} does not belong to this channel"
+            )
+        ]);
     }
 
     /**
