@@ -15,6 +15,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        // load all channels into the navbar dropdown
+        \View::composer('layouts.app', function ($view) {
+            $channels = \App\Channel::latest()->limit(10)->get();
+            
+            return $view->with(compact('channels'));
+        });
     }
 
     /**
