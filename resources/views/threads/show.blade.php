@@ -41,3 +41,23 @@
   </div>
 
 @endsection
+
+
+@section('sidebar')
+
+  <div class="card text-center">
+    <div class="card-body">
+      <p class="card-text">
+        Thread published on {{ $thread->created_at->toFormattedDateString() }}
+        
+      </p>
+      <p class="card-text">
+        By <a href="#">{{ $thread->user->name}}</a>
+      </p>
+      <p class="card-text">
+        Replies: {{ $thread->replies()->count() }}
+      </p>
+    </div>
+  </div>
+
+@endsection

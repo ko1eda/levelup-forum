@@ -26,13 +26,29 @@
 
     <main class="py-4">
       <div class="container">
-        <div class="row justify-content-center">
 
-          <div class="col-10">
-              @yield('content')
+        @hasSection('sidebar')
+          <div class="row">
+            
+            {{-- pos right on medium+ stacked top on small screens --}}
+            <div class="col-md-4 mb-4 order-md-2">
+                @yield('sidebar')
+            </div>
+
+            <div class="col-md-8">
+                @yield('content')
+            </div>
+
           </div>
+        @else
+          <div class="row justify-content-center">
+            
+            <div class="col-10">
+                @yield('content')
+            </div>            
 
-        </div>
+          </div>
+        @endif
       </div>
     </main>
     
