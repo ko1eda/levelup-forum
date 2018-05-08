@@ -63,20 +63,18 @@ class Thread extends Model
 
 
     /**
-     * Return a collection of threads
-     * in DESC order where user.name equal
-     * the $name passed from a query string
+     * Call the apply method of
+     * the ThreadFilters class
+     * passing in an Instance of
+     * the querybuilder
      *
-     * @param String $name
-     * @return Illuminate\Database\Eloquent\Collection
+     * @param mixed $query
+     * @param mixed $filters
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function filterByUser(String $name)
+    public function scopeFilter($query, $filters)
     {
-        return static::whereHas(
-            'user',
-            function ($query) use ($name) {
-                $query->where('name', '=', $name);
-            }
-        )->latest()->get();
+ 
+        return $filters->apply($query);
     }
 }

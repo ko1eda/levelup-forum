@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Thread;
 use Illuminate\Http\Request;
 use App\Channel;
+use App\Filters\ThreadFilter;
 
 class ThreadController extends Controller
 {
@@ -19,23 +20,18 @@ class ThreadController extends Controller
      * Display a listing of the resource.
      *
      * @param  \App\Channel  $channel
+     * @param  \App\Filters\ThreadFilter  $filters
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel = null, Request $req)
+    public function index(Channel $channel = null, ThreadFilter $filters)
     {
-        isset($channel)
-            ? $threads = $channel
-                ->threads()
-                ->latest()
-                ->limit(25)
-                ->get()
-            : ($req->get('by') !== null
-                ? $threads = Thread::filterByUser($req->get('by'))
-                : $threads = Thread::latest()
-                    ->limit(25)
-                    ->get()
-                );
+        $threads = Thread::latest()->filter($filters);
+
+        !isset($channel)
+            ?: $threads = $threads->where('channel_id', '=', $channel->id);
         
+        $threads = $threads->limit(25)->get();
+    
         return view('threads.index', compact('threads'));
     }
 
