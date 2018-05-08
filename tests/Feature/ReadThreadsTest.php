@@ -2,10 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Thread;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Thread;
 use App\Reply;
+use App\User;
 
 class ThreadsTest extends TestCase
 {
@@ -57,6 +58,28 @@ class ThreadsTest extends TestCase
         $this->get($route)
             ->assertSee($seenThread->title)
             ->assertDontSee($unseenThread->title);
+    }
+    
+    /** @test */
+    public function a_user_can_filter_threads_by_their_name()
+    {
+        // Given we have an authenticated user
+        $JohnDoe = factory(User::class)->create(['name' => 'John Doe']);
+        $this->signInUser($JohnDoe);
+
+        // And that user has a thread
+        $threadByJohnDoe = factory(Thread::class)->create([
+            'user_id' => $JohnDoe->id
+        ]);
+
+        $threadNotByJohnDoe = $this->thread;
+
+        // If that user enters a given username into
+        // the query string
+        // Then the user should only see threads by the queried user
+        $this->get('threads/?by=John Doe')
+            ->assertSee($threadByJohnDoe->title)
+            ->assertDontSee($threadNotByJohnDoe->title);
     }
     
     /** @test */

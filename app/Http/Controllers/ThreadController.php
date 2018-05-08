@@ -17,11 +17,11 @@ class ThreadController extends Controller
 
     /**
      * Display a listing of the resource.
-     * 
+     *
      * @param  \App\Channel  $channel
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel = null)
+    public function index(Channel $channel = null, Request $req)
     {
         isset($channel)
             ? $threads = $channel
@@ -29,10 +29,13 @@ class ThreadController extends Controller
                 ->latest()
                 ->limit(25)
                 ->get()
-            : $threads = Thread::latest()
-                ->limit(25)
-                ->get();
-
+            : ($req->get('by') !== null
+                ? $threads = Thread::filterByUser($req->get('by'))
+                : $threads = Thread::latest()
+                    ->limit(25)
+                    ->get()
+                );
+        
         return view('threads.index', compact('threads'));
     }
 

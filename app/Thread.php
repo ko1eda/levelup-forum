@@ -60,4 +60,23 @@ class Thread extends Model
     {
         $this->replies()->create($reply);
     }
+
+
+    /**
+     * Return a collection of threads
+     * in DESC order where user.name equal
+     * the $name passed from a query string
+     *
+     * @param String $name
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public static function filterByUser(String $name)
+    {
+        return static::whereHas(
+            'user',
+            function ($query) use ($name) {
+                $query->where('name', '=', $name);
+            }
+        )->latest()->get();
+    }
 }
