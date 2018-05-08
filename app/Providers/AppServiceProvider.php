@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
             
             return $view->with(compact('channels'));
         });
+        \Debugbar::disable();
     }
 
     /**

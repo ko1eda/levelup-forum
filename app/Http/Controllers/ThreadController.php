@@ -25,7 +25,7 @@ class ThreadController extends Controller
      */
     public function index(Channel $channel = null, ThreadFilter $filters)
     {
-        $threads = Thread::latest()->filter($filters);
+        $threads = Thread::with('channel')->latest()->filter($filters);
 
         !isset($channel)
             ?: $threads = $threads->where('channel_id', '=', $channel->id);
@@ -93,6 +93,8 @@ class ThreadController extends Controller
                 ->get()
                 ->load('user');
 
+            $thread = $thread->load('user');
+            
             return view(
                 'threads.show',
                 compact('thread', 'replies')
