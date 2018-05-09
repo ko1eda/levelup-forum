@@ -6,8 +6,9 @@
 @import "variables";
 
 // Bootstrap
-@import "vendor/bulma-theme";
+
 @import "~tailwindcss/preflight";
+@import "vendor/bulma-theme";
 @import "~tailwindcss/components";
 @import "~tailwindcss/utilities";
 

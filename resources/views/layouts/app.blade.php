@@ -24,7 +24,7 @@
   <div id="app">
     @include('shared.navbar')
 
-    <main class="py-4">
+    <main class="section">
       <div class="container">
 
         @hasSection('sidebar')
@@ -35,15 +35,15 @@
                 @yield('sidebar')
             </div>
 
-            <div class="col-md-8">
+            <div class="column is-8">
                 @yield('content')
             </div>
 
           </div>
         @else
-          <div class="row justify-content-center">
+          <div class="columns is-centered">
             
-            <div class="col-10">
+            <div class="column is-9">
                 @yield('content')
             </div>            
 
