@@ -1,7 +1,7 @@
 @extends('layouts.app') 
 
 @section('content')
-  <div class="card">
+  <div class="box">
     <div class="card-header bg-secondary text-center text-white">
       Create A Thread
     </div>

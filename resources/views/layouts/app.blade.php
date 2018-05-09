@@ -14,7 +14,7 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    {{-- <link rel="dns-prefetch" href="https://fonts.gstatic.com"> --}}
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
@@ -28,10 +28,10 @@
       <div class="container">
 
         @hasSection('sidebar')
-          <div class="row">
+          <div class="columns">
             
             {{-- pos right on medium+ stacked top on small screens --}}
-            <div class="col-md-4 mb-4 order-md-2">
+            <div class="column">
                 @yield('sidebar')
             </div>
 

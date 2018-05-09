@@ -6,7 +6,10 @@
 @import "variables";
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import "vendor/bulma-theme";
+@import "~tailwindcss/preflight";
+@import "~tailwindcss/components";
+@import "~tailwindcss/utilities";
 
 .navbar-laravel {
   background-color: #fff;
