@@ -60,7 +60,7 @@
 
 @section('sidebar')
 
-  <div class="lu-pannel tw-text-center">
+  <div class="lu-pannel tw-text-center tw-max-w-lg">
     <div class="lu-pannel-header">
       <p class="lu-pannel-text">
         Thread published on {{ $thread->created_at->toFormattedDateString() }}
@@ -73,7 +73,7 @@
       <p class="lu-pannel-text">
         Replies: {{ $thread->replies()->count() }}
       </p>
-      
+
     </div>
   </div>
 
