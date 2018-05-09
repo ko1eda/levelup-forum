@@ -886,8 +886,8 @@ module.exports = {
   */
 
   options: {
-    prefix: 'tw',
-    important: false,
+    prefix: 'tw-',
+    important: true,
     separator: ':',
   },
 

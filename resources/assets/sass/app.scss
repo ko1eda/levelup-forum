@@ -1,18 +1,21 @@
 
-// Fonts
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
-
 // Variables
 @import "variables";
 
 // Bootstrap
 
 @import "~tailwindcss/preflight";
-@import "vendor/bulma-theme";
-@import "~tailwindcss/components";
-@import "~tailwindcss/utilities";
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+@import "~tailwindcss/components";
+
+// custom components go here
+@import "vendor/bulma-theme";
+
+a {
+  // @apply  .tw-text-black ;
 }
+
+@import "components/_lu-pannel";
+
+@import "~tailwindcss/utilities";
+//custom utilities here

@@ -20,6 +20,8 @@
           <div class="navbar-dropdown is-boxed">
             <a class="navbar-item" href="/threads">All Threads</a>
             @auth
+            <div class="navbar-divider"></div>
+
             <a class="navbar-item" href="/threads/?by={{Auth::user()->name}}">My Threads</a>
             @endauth
           </div>
@@ -56,6 +58,7 @@
             </a>
 
             <div class="navbar-divider"></div>
+            
             <a class="navbar-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                 document.getElementById('logout-form').submit();">
               {{ __('Logout') }}

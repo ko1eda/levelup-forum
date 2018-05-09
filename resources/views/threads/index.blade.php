@@ -1,26 +1,25 @@
 @extends('layouts.app') 
 @section('content')
 
-  <div class="card">
+  <div class="lu-pannel">
 
-    <div class="card-header">Forum Threads</div>
-    <div class="card-body">
+    @foreach($threads as $thread) 
 
-      @foreach($threads as $thread) 
-        <article>
+      <div class="lu-pannel-header tw-text-2xl">
+        <a href={{ $thread->path() }}>
+          <h4>{{ $thread->title }}</h4>
+        </a>
+      </div>
+      
+      <div class="lu-pannel-body">
+        <p>{{ $thread->body }}</p>
+      </div>
 
-          <a href={{ $thread->path() }}>
-            <h4>{{ $thread->title }}</h4>
-          </a>
+      <hr>
+    @endforeach
 
-          <p>{{ $thread->body }}</p>
-        </article>
-        
-        <hr>
-      @endforeach
-
-    </div>
   </div>
+
  
 @endsection
 
