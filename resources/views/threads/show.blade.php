@@ -74,7 +74,7 @@
       </p>
 
       <p class="lu-pannel-text">
-        By <a href="#" class="has-text-primary tw-font-semibold">{{ $thread->user->name}}</a>
+        By <a href="#" class="tw-text-green hover:tw-text-green-dark tw-font-semibold">{{ $thread->user->name}}</a>
       </p>
 
       <p class="lu-pannel-text">

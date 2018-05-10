@@ -91,7 +91,7 @@ let colors = {
   'green-dark' : '#00c0a4',
   'green-darker' : '#00af95',
   'green-darkest' : '#008d78',
-
+  'bulma': '#4a4a4a',
   
 
   // 'green-light': '#51d88a',
