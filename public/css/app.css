@@ -8639,7 +8639,7 @@ a.navbar-item.is-active,
 .pagination-previous:focus,
 .pagination-next:focus,
 .pagination-link:focus {
-  border-color: #3273dc;
+  border-color: #363636;
 }
 
 .pagination-previous:active,
@@ -8668,8 +8668,8 @@ a.navbar-item.is-active,
 }
 
 .pagination-link.is-current {
-  background-color: #3273dc;
-  border-color: #3273dc;
+  background-color: #00d1b2;
+  border-color: #00b89c;
   color: #fff;
 }
 

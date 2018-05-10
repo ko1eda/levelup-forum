@@ -16,9 +16,16 @@ $navbar-item-hover-background-color: transparent;
 $navbar-dropdown-arrow: $primary;
 $navbar-dropdown-item-hover-background-color: $primary;
 
-
+// forms
 $input-arrow: $primary;
 $label-weight: $weight-normal;
+
+// Pagination
+$pagination-current-background-color:$primary;
+$pagination-current-border-color: darken($primary, 5%);
+$pagination-active-border-color: darken($primary, 5%);
+
+$pagination-focus-border-color: $dark;
 
 // @import "~bulma/sass/utilities/animations";
 // @import "~bulma/sass/utilities/mixins";

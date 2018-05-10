@@ -84,14 +84,11 @@ class ThreadController extends Controller
     {
 
         if ($thread->channel->id === $channel->id) {
-            // lazy eager load asscoaited user
-            // prevent n+1 problem
-            // in threads.show foreach loop
             $replies = $thread
                 ->replies()
+                ->with('user')
                 ->latest()
-                ->get()
-                ->load('user');
+                ->paginate(25);
 
             $thread = $thread->load('user');
             

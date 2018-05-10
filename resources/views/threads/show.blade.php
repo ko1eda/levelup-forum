@@ -27,36 +27,31 @@
       @guest
       <article class="message is-warning">
         <div class="message-body tw-p-4">
-          Please <a href="/login" class="tw-text-green tw-font-semibold tw-no-underline">login</a>
-          or <a href="/register" class="tw-text-green tw-font-semibold tw-no-underline">register</a>
+          Please <a href="/login" class="tw-font-semibold tw-no-underline">login</a>
+          or <a href="/register" class="tw-font-semibold tw-no-underline">register</a>
           to join this discussion.
         </div>
       </article>
       @endguest
 
-      
       <div class="tw-mb-4">
-
         @if(count($replies))
           <h3 class="tw-text-2xl">Replies:</h3>
         @endif
-
       </div> {{-- margin between the body and replies --}}
      
-      
-      <div class="tw-px-2">
+      <div class="tw-px-2 tw-pb-4">
         @foreach($replies as $reply)
-        <div class="tw-my-6">
-          @include('threads.partials.reply')
-        </div>
+          <div class="tw-my-6">
+            @include('threads.partials.reply')
+          </div>
         @endforeach
-      </div> {{-- end replies --}}
-
+  
+        {{$replies->links()}} 
+      </div> {{-- end replies and pagination --}}
     </div> {{-- end replies section --}}
 
   </div>{{-- end pannel --}}
-
-
 @endsection
 
 

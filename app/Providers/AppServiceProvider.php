@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
+use Illuminate\Pagination\Paginator;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -22,7 +24,12 @@ class AppServiceProvider extends ServiceProvider
             
             return $view->with(compact('channels'));
         });
+
         \Debugbar::disable();
+
+        // .blade templates for pagination
+        Paginator::defaultView('shared.pagination');
+        // Paginator::defaultSimpleView('pagination::simple');
     }
 
     /**
