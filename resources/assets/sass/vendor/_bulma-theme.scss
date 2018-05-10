@@ -1,0 +1,33 @@
+@import "~bulma/sass/utilities/initial-variables";
+@import "~bulma/sass/utilities/functions";
+
+
+// Custom themes here
+
+// $primary: #94A89A;
+
+@import "~bulma/sass/utilities/derived-variables";
+
+
+$navbar-height: 4.5rem;
+$navbar-background-color: $white;
+
+$navbar-item-hover-background-color: transparent;
+$navbar-dropdown-arrow: $primary;
+$navbar-dropdown-item-hover-background-color: $primary;
+
+
+$input-arrow: $primary;
+$label-weight: $weight-normal;
+
+// @import "~bulma/sass/utilities/animations";
+// @import "~bulma/sass/utilities/mixins";
+// @import "~bulma/sass/utilities/controls";
+
+// @import "~bulma/sass/components/navbar";
+// @import "~bulma/sass/elements/container";
+// @import "~bulma/sass/elements/box";
+// @import "~bulma/sass/elements/button";
+// @import "~bulma/sass/elements/form";
+
+

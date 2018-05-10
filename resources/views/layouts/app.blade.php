@@ -14,7 +14,7 @@
     <script src="{{ asset('js/app.js') }}" ></script>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    {{-- <link rel="dns-prefetch" href="https://fonts.gstatic.com"> --}}
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
@@ -24,31 +24,30 @@
   <div id="app">
     @include('shared.navbar')
 
-    <main class="py-4">
+    <main class="section">
       <div class="container">
 
         @hasSection('sidebar')
-          <div class="row">
-            
+          <div class="columns md:tw-flex-row-reverse">          
             {{-- pos right on medium+ stacked top on small screens --}}
-            <div class="col-md-4 mb-4 order-md-2">
+            <div class="column">
                 @yield('sidebar')
             </div>
 
-            <div class="col-md-8">
+            <div class="column is-8">
                 @yield('content')
             </div>
-
           </div>
         @else
-          <div class="row justify-content-center">
-            
-            <div class="col-10">
-                @yield('content')
-            </div>            
+          <div class="columns is-centered">
+            <div class="column is-10">
 
+                @yield('content')
+                
+            </div>            
           </div>
         @endif
+        
       </div>
     </main>
     

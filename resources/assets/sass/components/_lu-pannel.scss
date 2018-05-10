@@ -1,0 +1,25 @@
+@import "../vendor/_bulma-theme.scss";
+
+.lu-pannel {
+ 
+  @apply .tw-flex .tw-flex-col .tw-w-full .tw-shadow-md .tw-rounded .tw-bg-white ;
+ 
+  &-header {
+    @apply .tw-px-4 .tw-py-4 ;
+  }
+  &-body {
+    @apply .tw-pb-4 .tw-px-4 ;
+  }
+
+  &-text {
+    @apply .tw-mb-2 ;
+  }
+
+  & hr {
+    @apply .tw-mb-1 .tw-mt-0 ;
+  }
+  & hr:last-of-type {
+    visibility: hidden;
+  }
+}
+

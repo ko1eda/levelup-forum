@@ -1,15 +1,22 @@
-
 <form action="{{ $thread->path('/replies') }}" method="POST">
   {{ csrf_field() }}
-  <div class="form-group">
-    <label for="reply">Leave a reply:</label>
-    <textarea 
-      class="form-control" 
-      id="reply"
-      rows="3"
-      name="body"
-      required></textarea>
+  
+  <div class="field">
+    <label class="label">
+      <h1 class="tw-text-lg">
+        Reply:
+      </h1>
+    </label>
+    
+    <div class="control">
+      <textarea class="textarea" name="body"></textarea>
+    </div>
   </div>
- 
-  <button type="submit" class="btn btn-outline-primary">Submit</button>
+
+  <div class="field">
+    <div class="control">
+      <button type="submit" class="button is-small is-outlined is-primary">Submit</button>
+    </div>
+  </div>
+
 </form>

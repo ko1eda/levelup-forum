@@ -1,62 +1,86 @@
 @extends('layouts.app')
 @section('content')
-  <div class="card">
-    
-    <div class="card-header">
-      <a href="#">
-        <strong>
-          {{ $thread->user->name }}:
-        </strong>
-      </a> 
-        {{ $thread->title }}
-    </div>
 
-    <div class="card-body py-4">
-      <p class="card-text">
-        {{ $thread->body }}
+  <div class="lu-card">
+
+    <div class="lu-card-header">
+      <p>
+        {{ $thread->title }}
       </p>
+    </div>{{-- end header --}}
+
+
+    <div class="lu-card-body tw-leading-loose"> 
+      {{ $thread->body }}
+    </div> {{-- end body --}}
+
+    <div class="lu-card-section tw-py-0">
       @auth
-        <div class="px-2 py-2 form">
-          @include('threads.partials.reply-form')
-        </div>
+        @include('threads.partials.reply-form')
+        
+        @if(count($replies))
         <hr>
+        @endif
+
       @endauth
+
       @guest
-        <div class="alert alert-warning" role="alert">
-          Please <a href="/login" class="alert-link">login</a>
-          or <a href="/register" class="alert-link">register</a>
+      <article class="message is-warning">
+        <div class="message-body tw-p-4">
+          Please <a href="/login" class="tw-text-green tw-font-semibold tw-no-underline">login</a>
+          or <a href="/register" class="tw-text-green tw-font-semibold tw-no-underline">register</a>
           to join this discussion.
         </div>
+      </article>
       @endguest
-      <h3 class="mb-3">Replies:</h3>
-      <div class="px-2">
+
+      
+      <div class="tw-mb-4">
+
+        @if(count($replies))
+          <h3 class="tw-text-2xl">Replies:</h3>
+        @endif
+
+      </div> {{-- margin between the body and replies --}}
+     
+      
+      <div class="tw-px-2">
         @foreach($replies as $reply)
-
+        <div class="tw-my-6">
           @include('threads.partials.reply')
-
+        </div>
         @endforeach
-      </div>
-    </div>
+      </div> {{-- end replies --}}
 
-  </div>
+    </div> {{-- end replies section --}}
+
+  </div>{{-- end pannel --}}
+
 
 @endsection
 
 
+
+
+
+
+
 @section('sidebar')
 
-  <div class="card text-center">
-    <div class="card-body">
-      <p class="card-text">
+  <div class="lu-pannel tw-text-center">
+    <div class="lu-pannel-header">
+      <p class="lu-pannel-text">
         Thread published on {{ $thread->created_at->toFormattedDateString() }}
-        
       </p>
-      <p class="card-text">
-        By <a href="#">{{ $thread->user->name}}</a>
+
+      <p class="lu-pannel-text">
+        By <a href="#" class="has-text-primary tw-font-semibold">{{ $thread->user->name}}</a>
       </p>
-      <p class="card-text">
+
+      <p class="lu-pannel-text">
         Replies: {{ $thread->replies()->count() }}
       </p>
+
     </div>
   </div>
 
