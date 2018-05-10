@@ -1,71 +1,83 @@
 @extends('layouts.app') 
 
 @section('content')
-  <div class="box">
-    <div class="card-header bg-secondary text-center text-white">
-      Create A Thread
+  <div class="lu-card">
+    <div class="lu-card-header ">
+      <p>
+        Publish A Thread
+      </p>
     </div>
-    <div class="card-body">
-      <form action="/threads" method="POST">
-        {{ csrf_field() }}
-        
-          <div class="form-group">
-            <label for="thread-title">Title</label>
+    <form action="/threads" method="POST" class="lu-card-body">
+      {{ csrf_field() }}
+
+        <div class="field">
+          <label class="label">Title</label>
+          <div class="control">
             <input 
-              type="text"
-              class="form-control" 
-              id="thread-title"
-              name="title"
-              value="{{ old('title') }}"
-              required>
-
-            @if($errors->has('title'))
-             <small class="form-text text-danger">
+            type="text"
+            class="input" 
+            name="title"
+            value="{{ old('title') }}"
+            required>
+          </div>
+          @if($errors->has('title'))
+            <p class="help is-danger">
               {{$errors->first('title')}}   
-            </small>  
-            @endif
+            </p>  
+          @endif
+        </div>
+
+        <div class="field">
+          <label class="label">Channel</label>
+          <div class="control">
+            <div class="select">
+              <select name="channel_id">
+                <option>Choose one...</option>
+                
+                @foreach($channels as $channel)
+                  {{-- this makes the select option the old value --}}
+                  <option value="{{ $channel->id }}" {{ old('channel_id') === $channel->id ? 'selected' : ''}}>
+                    {{ $channel->name }}
+                  </option>
+                @endforeach
+
+              </select>
+            </div>  
           </div>
+          @if($errors->has('channel_id'))
+            <p class="help is-danger">
+              {{$errors->first('channel_id')}}   
+            </p>  
+          @endif
+        </div>
 
-          <div class="form-group">
-            <label>Channel</label>
-            <select class="form-control" name="channel_id" required>
-              <option>Choose one...</option>
-
-              @foreach($channels as $channel)
-                {{-- this makes the select option the old value --}}
-                <option value="{{ $channel->id }}" {{ old('channel_id') === $channel->id ? 'selected' : ''}}>
-                  {{ $channel->name }}
-                </option>
-              @endforeach
-            </select>  
-
-            @if($errors->has('channel_id'))
-              <small class="form-text text-danger">
-                {{$errors->first('channel_id')}}   
-              </small>  
-            @endif
-          </div>
-
-  
-        <div class="form-group">
-          <label for="thread-body">Content</label>
-          <textarea 
-            class="form-control" 
+        <div class="field">
+          <label class="label">Content</label>
+          <div class="control">
+            <textarea 
+            class="textarea" 
             id="thread-body" 
             rows="6" 
             name="body"
             required>{{ old('body') }}</textarea>
-
-          @if($errors->has('body'))
-            <small class="form-text text-danger">
-              {{$errors->first('body')}}   
-            </small>  
-          @endif
+  
+            @if($errors->has('body'))
+              <p class="help is-danger">
+                {{$errors->first('body')}}   
+              </p>  
+            @endif
+          </div>
         </div>
 
-        <button type="submit" class="btn btn-sm btn-outline-primary">Publish</button>
-        <a href="{{\URL::previous()}}" class="btn btn-sm btn-outline-secondary" role="button">Cancel</a>
-      </form>
-    </div>
+      <div class="field">
+        <div class="control is-grouped">
+        
+          <button type="submit" class="button is-small is-primary">Publish</button>
+          <a href="{{\URL::previous()}}" class="button is-small is-grey" role="button">Cancel</a>
+
+        </div>
+      </div>
+
+    </form>
   </div>
 @endsection

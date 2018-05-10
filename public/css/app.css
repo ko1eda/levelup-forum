@@ -4207,7 +4207,7 @@ a.box:active {
 }
 
 .select:not(.is-multiple):not(.is-loading)::after {
-  border-color: #3273dc;
+  border-color: #00d1b2;
   right: 1.125em;
   z-index: 4;
 }
@@ -5070,7 +5070,7 @@ a.box:active {
   color: #363636;
   display: block;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .label:not(:last-child) {
@@ -12160,7 +12160,7 @@ a:hover {
 }
 
 html {
-  background: #d0d9e0;
+  background: #e4e9ee;
 }
 
 .lu-pannel {
@@ -12202,6 +12202,80 @@ html {
 
 .lu-pannel hr:last-of-type {
   visibility: hidden;
+}
+
+/**
+* Screen md applies those stylings
+* to medium and up screens.
+* Section is for additional card content
+* for example i am using it for the replies section in threads.show
+**/
+
+.lu-card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .12), 0 2px 4px 0 rgba(0, 0, 0, .08);
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .12), 0 2px 4px 0 rgba(0, 0, 0, .08);
+  border-radius: .25rem;
+  background-color: #fff;
+}
+
+.lu-card-header {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-bottom-width: 1px;
+  border-color: #00d1b2;
+}
+
+@media (min-width: 768px) {
+  .lu-card-header {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .lu-card-header > p {
+    font-size: 1.25rem;
+  }
+}
+
+.lu-card-body {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .lu-card-body {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.lu-card-section {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .lu-card-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
 
 .tw-list-reset {

@@ -1,0 +1,42 @@
+/**
+* Screen md applies those stylings
+* to medium and up screens.
+* Section is for additional card content
+* for example i am using it for the replies section in threads.show
+**/
+
+
+.lu-card {
+  @apply .tw-flex .tw-flex-col .tw-w-full .tw-shadow-md .tw-rounded .tw-bg-white ;
+ 
+  &-header {
+    @screen md {
+      @apply .tw-px-8 ;
+
+      & > p {
+        @apply .tw-text-xl ;
+      }
+    }
+
+    @apply .tw-py-4 .tw-px-4 .tw-border-b .tw-border-green ;
+  }
+
+  &-body {
+    @screen md {
+      @apply .tw-py-8 .tw-px-8  ;
+    }
+
+    @apply .tw-py-4 .tw-px-4 ;
+  }
+
+
+  &-section {
+    @screen md {
+      @apply .tw-py-8 .tw-px-8 ;
+    }
+
+    @apply .tw-py-4 .tw-px-4 ;
+
+  }
+
+}

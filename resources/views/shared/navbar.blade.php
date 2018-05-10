@@ -1,4 +1,4 @@
-<nav class="navbar " role="navigation">
+<nav class="navbar tw-shadow" role="navigation">
   <div class="container">
     <div class="navbar-brand">
       <a class="navbar-item" href="{{ url('/') }}">

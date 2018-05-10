@@ -28,9 +28,7 @@
       <div class="container">
 
         @hasSection('sidebar')
-          <div class="columns md:tw-flex-row-reverse">
-            
-           
+          <div class="columns md:tw-flex-row-reverse">          
             {{-- pos right on medium+ stacked top on small screens --}}
             <div class="column">
                 @yield('sidebar')
@@ -39,17 +37,17 @@
             <div class="column is-8">
                 @yield('content')
             </div>
-
           </div>
         @else
           <div class="columns is-centered">
-            
-            <div class="column is-8">
-                @yield('content')
-            </div>            
+            <div class="column is-10">
 
+                @yield('content')
+                
+            </div>            
           </div>
         @endif
+        
       </div>
     </main>
     
