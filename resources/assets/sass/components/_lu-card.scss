@@ -22,8 +22,13 @@
   }
 
   &-body {
+
+    // @screen sm {
+    //   @apply .tw-py-8 .tw-px-8 .tw-text-base;
+    // }
+
     @screen md {
-      @apply .tw-py-8 .tw-px-8  ;
+      @apply .tw-py-8 .tw-px-8 ;
     }
 
     @apply .tw-py-4 .tw-px-4 ;

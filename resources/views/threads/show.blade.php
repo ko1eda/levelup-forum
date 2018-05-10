@@ -40,14 +40,19 @@
         @endif
       </div> {{-- margin between the body and replies --}}
      
-      <div class="tw-px-2 tw-pb-4">
+      
+      <div class="tw-px-2">
         @foreach($replies as $reply)
           <div class="tw-my-6">
             @include('threads.partials.reply')
           </div>
         @endforeach
-  
-        {{$replies->links()}} 
+
+        {{-- if pagination, add a padding to the bottom --}}
+        {{ $replies->links() }}
+        @if(count($replies) >= 25)
+          <div class="tw-pb-4"></div>
+        @endif
       </div> {{-- end replies and pagination --}}
     </div> {{-- end replies section --}}
 
@@ -62,7 +67,7 @@
 
 @section('sidebar')
 
-  <div class="lu-pannel tw-text-center">
+  <div class="lu-card tw-text-center">
     <div class="lu-pannel-header">
       <p class="lu-pannel-text">
         Thread published on {{ $thread->created_at->toFormattedDateString() }}

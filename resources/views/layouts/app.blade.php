@@ -15,7 +15,8 @@
 
     <!-- Fonts -->
     {{-- <link rel="dns-prefetch" href="https://fonts.gstatic.com"> --}}
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+    {{-- <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css"> --}}
+    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
