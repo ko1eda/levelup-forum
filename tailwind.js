@@ -44,6 +44,7 @@ View the full documentation at https://tailwindcss.com.
 let colors = {
   'transparent': 'transparent',
 
+
   'black': '#22292f',
   'grey-darkest': '#3d4852',
   'grey-darker': '#606f7b',
@@ -78,13 +79,24 @@ let colors = {
   'yellow-lighter': '#fff9c2',
   'yellow-lightest': '#fcfbeb',
 
-  'green-darkest': '#0f2f21',
-  'green-darker': '#1a4731',
-  'green-dark': '#1f9d55',
-  'green': '#38c172',
-  'green-light': '#51d88a',
-  'green-lighter': '#a2f5bf',
-  'green-lightest': '#e3fcec',
+  // 'green-darkest': '#0f2f21',
+  // 'green-darker': '#1a4731',
+  // 'green-dark': '#1f9d55',
+  // 'green': '#38c172',
+
+  // added
+  'green-light': '#00e2c0',
+  'green-lighter': '#00f3cf',
+  'green': '#00D1B2',
+  'green-dark' : '#00c0a4',
+  'green-darker' : '#00af95',
+  'green-darkest' : '#008d78',
+
+  
+
+  // 'green-light': '#51d88a',
+  // 'green-lighter': '#a2f5bf',
+  // 'green-lightest': '#e3fcec',
 
   'teal-darkest': '#0d3331',
   'teal-darker': '#20504f',

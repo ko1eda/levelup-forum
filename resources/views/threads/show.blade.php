@@ -1,19 +1,21 @@
 @extends('layouts.app')
 @section('content')
 
-  <div class="tw-flex tw-flex-col tw-shadow-md tw-rounded-lg tw-w-full ">
-    <div class="tw-px-8 tw-py-4 tw-border-b tw-bg-grey-lightest">
+  <div class="tw-flex tw-flex-col tw-w-full tw-shadow-md tw-rounded tw-bg-white">
+
+    <div class="tw-px-8 tw-py-4 tw-border-b tw-bg-green">
       <a href="#">
-      <span class="tw-font-semibold">
+      <span class="tw-font-bold tw-text-white tw-mr-2 hover:tw-underline">
         {{ $thread->user->name }}:
       </span>
       </a> 
-      {{ $thread->title }}
-    </div>
+      <span class="tw-text-white">{{ $thread->title }}</span>
+    </div>{{-- end header --}}
 
-    <div class="tw-py-6 tw-px-8 tw-leading-loose"> 
+
+    <div class="tw-py-6 tw-px-8 tw-leading-loose "> 
       {{ $thread->body }}
-    </div>  
+    </div> {{-- end body --}}
 
     <div class="tw-px-8">
       @auth
@@ -24,8 +26,8 @@
       @guest
       <article class="message is-warning">
         <div class="message-body tw-p-4">
-          Please <a href="/login" class="tw-text-black tw-font-semibold tw-no-underline">login</a>
-          or <a href="/register" class="tw-text-black tw-font-semibold tw-no-underline">register</a>
+          Please <a href="/login" class="has-text-primary tw-font-semibold tw-no-underline">login</a>
+          or <a href="/register" class="has-text-primary tw-font-semibold tw-no-underline">register</a>
           to join this discussion.
         </div>
       </article>
@@ -34,20 +36,18 @@
       <div class="tw-mb-4">
         <h3 class="tw-text-2xl">Replies:</h3>
       </div>
+      
       <div class="tw-px-2">
         @foreach($replies as $reply)
-
         <div class="tw-my-6">
           @include('threads.partials.reply')
         </div>
-
         @endforeach
       </div>
 
-    </div>
+    </div> {{-- end replies section --}}
 
-
-  </div>
+  </div>{{-- end pannel --}}
 
 
 @endsection
@@ -67,7 +67,7 @@
       </p>
 
       <p class="lu-pannel-text">
-        By <a href="#">{{ $thread->user->name}}</a>
+        By <a href="#" class="has-text-primary tw-font-semibold">{{ $thread->user->name}}</a>
       </p>
 
       <p class="lu-pannel-text">

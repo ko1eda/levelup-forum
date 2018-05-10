@@ -7,6 +7,16 @@
 // $primary: #94A89A;
 
 @import "~bulma/sass/utilities/derived-variables";
+
+
+$navbar-height: 4.5rem;
+$navbar-background-color: $white;
+
+$navbar-item-hover-background-color: transparent;
+$navbar-dropdown-arrow: $primary;
+$navbar-dropdown-item-hover-background-color: $primary;
+
+
 // @import "~bulma/sass/utilities/animations";
 // @import "~bulma/sass/utilities/mixins";
 // @import "~bulma/sass/utilities/controls";
@@ -17,4 +27,4 @@
 // @import "~bulma/sass/elements/button";
 // @import "~bulma/sass/elements/form";
 
-@import "~bulma/bulma.sass";
+

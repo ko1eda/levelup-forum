@@ -1,7 +1,9 @@
+@import "../vendor/_bulma-theme.scss";
+
 .lu-pannel {
  
-  @apply .tw-flex .tw-flex-col .tw-w-full .tw-shadow-md .tw-rounded ;
-
+  @apply .tw-flex .tw-flex-col .tw-w-full .tw-shadow-md .tw-rounded .tw-bg-white ;
+ 
   &-header {
     @apply .tw-px-4 .tw-py-4 ;
   }

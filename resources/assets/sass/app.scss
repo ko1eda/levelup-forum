@@ -5,14 +5,21 @@
 // Bootstrap
 
 @import "~tailwindcss/preflight";
-
 @import "~tailwindcss/components";
 
 // custom components go here
 @import "vendor/bulma-theme";
+@import "~bulma/bulma.sass";
 
 a {
-  // @apply  .tw-text-black ;
+  @apply .tw-text-black;
+  &:hover {
+    color: $link;
+  }
+}
+
+html {
+  background: #d0d9e0 ;
 }
 
 @import "components/_lu-pannel";
