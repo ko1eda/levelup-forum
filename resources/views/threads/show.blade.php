@@ -78,7 +78,7 @@
       </p>
 
       <p class="lu-pannel-text">
-        Replies: {{ $thread->replies()->count() }}
+        Replies: {{ $thread->replies_count }}
       </p>
 
     </div>

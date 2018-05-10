@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Thread extends Model
 {
@@ -12,6 +13,16 @@ class Thread extends Model
      * @var array
      */
     protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(function (Builder $builder) {
+            $builder->withCount('replies');
+        });
+    }
 
     /**
      * A thread can have many replies
