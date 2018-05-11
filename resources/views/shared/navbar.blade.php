@@ -14,19 +14,17 @@
     <div id="navbar" class="navbar-menu">
 
       <div class="navbar-start">
+        
         <div class="navbar-item has-dropdown is-hoverable ">
           <a class="navbar-link">
             Browse
           </a>
           <div class="navbar-dropdown is-boxed">
             <a class="navbar-item" href="/threads">All Threads</a>
-            @auth
-            <div class="navbar-divider"></div>
-
-            <a class="navbar-item" href="/threads/?by={{Auth::user()->name}}">My Threads</a>
-            @endauth
+            <a class="navbar-item" href="/threads/?popular=1">Popular Threads</a>
+            <a class="navbar-item" href="/threads/?trending=1">Trending Threads</a>
           </div>
-        </div>
+        </div>{{-- Browse dropdown --}}
 
         <div class="navbar-item has-dropdown is-hoverable ">
           <a class="navbar-link">
@@ -38,10 +36,10 @@
               {{$channel->name}}
             </a>
             @endforeach
-          </div>
-        </div>
-      </div>
-      {{-- end navbar-start --}}
+          </div> 
+        </div>{{-- Channels dropdown --}}
+
+      </div>{{-- end navbar-start --}}
 
       <div class="navbar-end">
         @guest
@@ -49,11 +47,15 @@
         <a class="navbar-item" href="{{ route('register') }}">{{ __('Register') }}</a>
         @else
           <div class="navbar-item has-dropdown is-hoverable ">
-            <a class="navbar-link">{{ Auth::user()->name }}</a>
+            <a class="navbar-link">
+              {{ Auth::user()->name }}
+            </a>
             <div class="navbar-dropdown is-boxed">
-
               <a href="{{route('threads.create')}}" class="navbar-item">
-                New thread
+                New Thread
+              </a>
+              <a class="navbar-item" href="/threads/?by={{Auth::user()->name}}">
+                My Threads
               </a>
 
               <div class="navbar-divider"></div>
@@ -62,15 +64,15 @@
                   document.getElementById('logout-form').submit();">
                 {{ __('Logout') }}
               </a>
-
               <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
               </form>
+
             </div>
-          </div>
+          </div>{{-- User dropdown --}}
+
         @endguest
-      </div>
-      {{-- navbar-end ends --}}
+      </div>{{-- navbar-end ends --}}
       
     </div>
   </div>
