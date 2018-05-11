@@ -14,12 +14,14 @@ class FavoriteController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * store
+     *
+     * @param Reply $reply
+     * @return void
+     */
     public function store(Reply $reply)
     {
-        Favorite::create([
-            'favoritable_id' => $reply->id,
-            'favoritable_type' => 'reply',
-            'user_id' => \Auth::user()->id
-        ]);
-    }
+        $reply->addFavorite();
+    }   
 }

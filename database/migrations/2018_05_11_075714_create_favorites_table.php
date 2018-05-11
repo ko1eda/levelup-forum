@@ -16,8 +16,13 @@ class CreateFavoritesTable extends Migration
         Schema::create('favorites', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->morphs('favoritable');
+            $table->morphs('favoritable'); //type and id
             $table->timestamps();
+
+            // This means that for any entry in the db
+            // their cannot be the same combination of these three categories
+            // ex you can't have 'user_id 1, favoritable_id 1, type reply' twice
+            $table->unique(['user_id', 'favoritable_id', 'favoritable_type']);
         });
     }
 

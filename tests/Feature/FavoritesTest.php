@@ -23,7 +23,7 @@ class FavoritesTest extends TestCase
 
         $this->checkUnauthFunctionality('post', $route, ['favoritable_id' => $reply->id]);
     }
-    
+
     /** @test */
     public function an_authenticated_user_can_favorite_a_reply()
     {
@@ -34,7 +34,7 @@ class FavoritesTest extends TestCase
         // Note: our reply factory generates an
         // associated thread
         $reply = factory(Reply::class)->create();
-        
+
         $route = route('favorites.store', [
             'id' => $reply->id
         ]);
@@ -49,5 +49,33 @@ class FavoritesTest extends TestCase
             'favoritable_type' => 'reply'
         ])
         ->assertCount(1, $reply->favorites);
+    }
+
+    /** @test */
+    public function an_authenticated_user_cannot_favorite_a_reply_twice()
+    {
+        // Given we have an authenticated user
+        $this->signInUser();
+        
+        // and a thread with a reply
+        // Note: our reply factory generates an
+        // associated thread
+        $reply = factory(Reply::class)->create();
+
+        $route = route('favorites.store', [
+            'id' => $reply->id
+        ]);
+        
+        // When that user tries to
+        // favorite the same reply twice
+        try {
+            $this->post($route);
+            $this->post($route);
+        } catch (\Exception $e) {
+            $this->fail('The same record was persisted twice');
+        }
+
+        // Then we should still see only one reply
+        $this->assertCount(1, $reply->favorites);
     }
 }

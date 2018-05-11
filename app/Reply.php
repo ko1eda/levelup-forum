@@ -35,4 +35,22 @@ class Reply extends Model
     {
         return $this->morphMany(Favorite::class, 'favoritable');
     }
+
+
+    /**
+     * Persist a favorite to the database
+     * the favoirtable id, and favoritable type
+     * are provided automatically by laravel
+     *
+     * firstOrCreate ensures if a reply exists in the db
+     * for a given user than that user cannot
+     * favorite the same reply multiple times
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function addFavorite()
+    {
+        return $this->favorites()
+            ->firstOrCreate(['user_id' => \Auth::user()->id]);
+    }
 }
