@@ -15,7 +15,7 @@ class Reply extends Model
     {
         return $this->belongsTo(Thread::class);
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -36,7 +36,6 @@ class Reply extends Model
         return $this->morphMany(Favorite::class, 'favoritable');
     }
 
-
     /**
      * Persist a favorite to the database
      * the favoirtable id, and favoritable type
@@ -52,5 +51,23 @@ class Reply extends Model
     {
         return $this->favorites()
             ->firstOrCreate(['user_id' => \Auth::user()->id]);
+    }
+
+    /**
+     * First Check if the user is authenticated
+     * if so, check to see if the
+     * user had already favorited the reply
+     *
+     * @return void
+     */
+    public function wasFavorited()
+    {
+        if (! \Auth::check()) {
+            return false;
+        }
+
+        return $this->favorites()
+            ->where('user_id', \Auth::user()->id)
+            ->exists();
     }
 }

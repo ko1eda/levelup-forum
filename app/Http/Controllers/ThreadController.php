@@ -25,7 +25,7 @@ class ThreadController extends Controller
      */
     public function index(Channel $channel = null, ThreadFilter $filters)
     {
-        $threads = Thread::with('channel')->latest()->filter($filters);
+        $threads = Thread::with('channel', 'user')->latest()->filter($filters);
 
         !isset($channel)
             ?: $threads = $threads->where('channel_id', '=', $channel->id);
@@ -86,7 +86,6 @@ class ThreadController extends Controller
         if ($thread->channel->id === $channel->id) {
             $replies = $thread
                 ->replies()
-                ->with('user')
                 ->latest()
                 ->paginate(25);
 

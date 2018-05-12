@@ -4,10 +4,9 @@
 
     <a href="#" class="username tw-py-2">
       <h1 class="sm:tw-text-base tw-text-sm tw-font-light">
-        {{$reply->user->name}}
+        {{ $reply->user->name }}
       </h1>
     </a>
-
   </div>{{-- end header --}}
 
   <div class="sm:tw-px-4 tw-px-2 tw-pt-2 sm:tw-text-base tw-text-sm tw-leading-loose">
@@ -17,22 +16,30 @@
   <div class="sm:tw-px-4 tw-px-2 tw-pb-2 ">
     <div class="tw-inline tw-align-baseline tw-mr-1 tw-text-sm ">
       {{ $reply->created_at->diffForHumans() }}
-    </div>
+    </div>{{-- end time --}}
 
     <div class="tw-inline tw-align-baseline">
-      <form action="/replies/{{$reply->id}}/favorites" method="POST" class="tw-inline tw-align-baseline">
+      <form class="tw-inline tw-align-baseline" action="/replies/{{$reply->id}}/favorites" method="POST">
         @csrf
-        <button type="submit">
-          <i class="far fa-star tw-text-xs tw-text-bulma-dark hover:tw-text-yellow-light"></i>
-        </button>
+        
+        @if($reply->wasFavorited())
+          <button type="submit" disabled>
+            <i class="fas fa-star tw-text-xs tw-text-yellow-dark"></i>
+          </button>
+        @else
+          <button type="submit">
+            <i class="far fa-star tw-text-xs tw-text-bulma-dark hover:tw-text-yellow-dark"></i>
+          </button>
+        @endif
+
       </form>
     </div>{{-- end favorites --}}
 
     <div class="tw-inline fav-pos tw-text-xs">
-      <span>110</span>
+      <span> {{ $reply->favorites_count }}</span>
     </div>
-  </div>{{-- end info bar --}}
 
+  </div>{{-- end info bar --}}
 </div>
 
 

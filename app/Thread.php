@@ -15,6 +15,11 @@ class Thread extends Model
     protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
 
 
+    /**
+     * boot
+     *
+     * @return void
+     */
     protected static function boot()
     {
         parent::boot();
@@ -24,13 +29,18 @@ class Thread extends Model
         });
     }
 
+
     /**
-     * A thread can have many replies
+     * A thread can have many replies.
+     * Load the replies favoirtes and users as well
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function replies()
     {
-        return $this->hasMany(Reply::class);
+        return $this->hasMany(Reply::class)
+            ->with('user')
+            ->withCount('favorites');
     }
     
     /**

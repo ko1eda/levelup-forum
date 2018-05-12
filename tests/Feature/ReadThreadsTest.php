@@ -80,7 +80,7 @@ class ReadThreadsTest extends TestCase
         // to our test thread
         $reply = factory(Reply::class)
             ->create(['thread_id' => $this->thread->id]);
-
+        
         // When I visit the uri for the given thread
         // Then I will see the associated reply's body
         $this->get($this->thread->path())
