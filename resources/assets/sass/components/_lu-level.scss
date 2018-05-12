@@ -1,0 +1,23 @@
+.lu-level {
+  @screen sm {
+    @apply .tw-text-sm ;
+  }
+  @apply .tw-pb-2 .tw-px-4 .tw-flex .tw-items-center .tw-text-xs ;
+
+  &-item {
+    @screen sm {
+      @apply .tw-mr-4 ;
+
+      & > .fas {
+        @apply .tw-mr-1 ;
+      }
+
+    }
+    @apply .tw-mr-4 ;
+  }
+ 
+  &-last {
+
+  }
+
+}
