@@ -10,33 +10,33 @@
   @apply .tw-flex .tw-flex-col .tw-w-full .tw-shadow-md .tw-rounded .tw-bg-white ;
  
   &-header {
-    @screen md {
+    @screen sm {
       @apply .tw-px-8 ;
 
       & > p {
-        @apply .tw-text-xl ;
+        @apply .tw-text-2xl ;
       }
     }
 
-    @apply .tw-py-4 .tw-px-4 .tw-border-b .tw-border-green ;
+    @apply .tw-py-4 .tw-px-4 .tw-border-b .tw-border-green .tw-text-xl ;
   }
 
   &-body {
 
-    // @screen sm {
-    //   @apply .tw-py-8 .tw-px-8 .tw-text-base;
-    // }
-
-    @screen md {
-      @apply .tw-py-8 .tw-px-8 ;
+    @screen sm {
+      @apply .tw-py-8 .tw-px-8 .tw-text-base ;
     }
 
-    @apply .tw-py-4 .tw-px-4 ;
+    // @screen md {
+    //   @apply .tw-py-8 .tw-px-8 ;
+    // }
+
+    @apply .tw-py-4 .tw-px-4  .tw-text-sm ;
   }
 
 
   &-section {
-    @screen md {
+    @screen sm {
       @apply .tw-py-8 .tw-px-8 ;
     }
 

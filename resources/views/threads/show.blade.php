@@ -36,7 +36,7 @@
 
       <div class="tw-mb-4">
         @if(count($replies))
-          <h3 class="tw-text-2xl">Replies:</h3>
+          <h3 class="tw-text-xl sm:tw-text-2xl">Replies:</h3>
         @endif
       </div> {{-- margin between the body and replies --}}
      

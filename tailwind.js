@@ -91,7 +91,19 @@ let colors = {
   'green-dark' : '#00c0a4',
   'green-darker' : '#00af95',
   'green-darkest' : '#008d78',
-  'bulma': '#4a4a4a',
+  
+
+  
+  'bulma-white':'#FAFAFA',
+  'bulma-lightest':'#F5F5F5',
+  'bulma-lighter':'#DBDBDB',
+  'bulma-light':'#B5B5B5',
+  'bulma': '#7A7A7A',
+  'bulma-dark': '#4a4a4a',
+  'bulma-darker': '#363636',
+  'bulma-darkest': '#242424',
+
+  'bulma-black': '#121212',
   
 
   // 'green-light': '#51d88a',

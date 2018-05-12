@@ -8,11 +8,18 @@
     @apply .tw-px-4 .tw-py-2 ;
   }
   &-body {
-    @apply .tw-pb-2 .tw-px-4 ;
+    @screen sm {
+      @apply .tw-text-base ;
+    }
+    @apply .tw-pb-2 .tw-px-4 .tw-text-sm ;
   }
 
   &-text {
-    @apply .tw-mb-2 ;
+    @screen sm {
+      @apply .tw-text-base ;
+    }
+
+    @apply .tw-mb-2 .tw-text-sm ;
   }
 
   & hr {
