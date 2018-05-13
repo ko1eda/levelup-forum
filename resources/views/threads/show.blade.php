@@ -15,16 +15,14 @@
           {{ $thread->body }}
         </div> {{-- end body --}}
     
-        <div class="lu-card-section tw-py-0">
+        <div class="lu-card-section tw-py-0 ">
           @auth
             @include('threads.partials.reply-form')
-            
             @if(count($replies))
             <hr>{{-- line break if replies --}}
             @endif
-            
           @endauth
-    
+
           @guest
           <article class="message is-warning">
             <div class="message-body tw-p-4">
@@ -34,25 +32,21 @@
             </div>
           </article>
           @endguest
-    
-        
+              
           @if(count($replies))
             <h3 class="tw-text-xl sm:tw-text-2xl">Replies:</h3>
           @endif{{-- replies heading--}}
 
-          <div class="tw-px-2">
+          <div class="tw-px-2 tw-mb-4 sm:tw-mb-8">
             @foreach($replies as $reply)
-              <div class="tw-my-4 sm:tw-my-6">
+              <div class="tw-my-4">
                 @include('threads.partials.reply')
               </div>
             @endforeach
 
-            {{-- if pagination, add a padding to the bottom --}}
             {{ $replies->links() }}
-            @if(count($replies) >= 25)
-              <div class="tw-pb-4"></div>
-            @endif
           </div> {{-- end replies and pagination --}}
+
         </div> {{-- end replies section --}}
     
       </div>{{-- end pannel --}}
