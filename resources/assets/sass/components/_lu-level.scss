@@ -7,11 +7,6 @@
   &-item {
     @screen sm {
       @apply .tw-mr-4 ;
-
-      & > .fas {
-        @apply .tw-mr-1 ;
-      }
-
     }
     @apply .tw-mr-4 ;
   }

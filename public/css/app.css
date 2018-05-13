@@ -12210,7 +12210,7 @@ html {
 }
 
 .lu-pannel hr {
-  margin-bottom: .25rem;
+  margin-bottom: 0;
   margin-top: 0;
 }
 
@@ -12321,10 +12321,6 @@ html {
 @media (min-width: 576px) {
   .lu-level-item {
     margin-right: 1rem;
-  }
-
-  .lu-level-item > .fas {
-    margin-right: .25rem;
   }
 }
 

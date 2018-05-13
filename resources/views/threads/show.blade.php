@@ -64,7 +64,7 @@
 
           <p class="lu-pannel-text">
             By
-            <a href="/profiles/{{ $thread->user->name }}" class="tw-text-green hover:tw-text-green-dark tw-font-semibold">
+            <a href={{ route('profiles.show', $thread->user) }} class="tw-text-green hover:tw-text-green-dark tw-font-semibold">
               {{ $thread->user->name}}
             </a>
           </p>

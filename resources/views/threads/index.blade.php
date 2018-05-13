@@ -26,7 +26,7 @@
             
             <div class="sm:tw-mr-6 tw-mr-4">
               <i class="fas fa-user sm:tw-text-sm tw-text-xs tw-mr-1 tw-text-grey-darker"></i>
-              <a href="/profiles/{{ $thread->user->name }}">
+              <a href={{ route('profiles.show', $thread->user) }}>
                 <span class="tw-text-green hover:tw-text-green-dark tw-font-semibold sm:tw-text-sm tw-text-xs">
                    {{ $thread->user->name }}
                 </span>
