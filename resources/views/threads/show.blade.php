@@ -1,87 +1,87 @@
 @extends('layouts.app')
+
 @section('content')
+  <div class="columns">
+    <div class="column is-8">
 
-  <div class="lu-card">
-
-    <div class="lu-card-header">
-      <p>
-        {{ $thread->title }}
-      </p>
-    </div>{{-- end header --}}
-
-
-    <div class="lu-card-body tw-leading-loose"> 
-      {{ $thread->body }}
-    </div> {{-- end body --}}
-
-    <div class="lu-card-section tw-py-0">
-      @auth
-        @include('threads.partials.reply-form')
+      <div class="lu-card">
+        <div class="lu-card-header">
+          <p>
+            {{ $thread->title }}
+          </p>
+        </div>{{-- end header --}}
+    
+        <div class="lu-card-body tw-leading-loose"> 
+          {{ $thread->body }}
+        </div> {{-- end body --}}
+    
+        <div class="lu-card-section tw-py-0">
+          @auth
+            @include('threads.partials.reply-form')
+            
+            @if(count($replies))
+            <hr>{{-- line break if replies --}}
+            @endif
+            
+          @endauth
+    
+          @guest
+          <article class="message is-warning">
+            <div class="message-body tw-p-4">
+              Please <a href="/login" class="tw-font-semibold tw-no-underline">login</a>
+              or <a href="/register" class="tw-font-semibold tw-no-underline">register</a>
+              to join this discussion.
+            </div>
+          </article>
+          @endguest
+    
         
-        @if(count($replies))
-        <hr>
-        @endif
+          @if(count($replies))
+            <h3 class="tw-text-xl sm:tw-text-2xl">Replies:</h3>
+          @endif{{-- replies heading--}}
 
-      @endauth
+          <div class="tw-px-2">
+            @foreach($replies as $reply)
+              <div class="tw-my-4 sm:tw-my-6">
+                @include('threads.partials.reply')
+              </div>
+            @endforeach
 
-      @guest
-      <article class="message is-warning">
-        <div class="message-body tw-p-4">
-          Please <a href="/login" class="tw-font-semibold tw-no-underline">login</a>
-          or <a href="/register" class="tw-font-semibold tw-no-underline">register</a>
-          to join this discussion.
-        </div>
-      </article>
-      @endguest
-
-      <div class="tw-mb-4">
-        @if(count($replies))
-          <h3 class="tw-text-xl sm:tw-text-2xl">Replies:</h3>
-        @endif
-      </div> {{-- margin between the body and replies --}}
-     
+            {{-- if pagination, add a padding to the bottom --}}
+            {{ $replies->links() }}
+            @if(count($replies) >= 25)
+              <div class="tw-pb-4"></div>
+            @endif
+          </div> {{-- end replies and pagination --}}
+        </div> {{-- end replies section --}}
+    
+      </div>{{-- end pannel --}}
       
-      <div class="tw-px-2">
-        @foreach($replies as $reply)
-          <div class="tw-my-6">
-            @include('threads.partials.reply')
-          </div>
-        @endforeach
-
-        {{-- if pagination, add a padding to the bottom --}}
-        {{ $replies->links() }}
-        @if(count($replies) >= 25)
-          <div class="tw-pb-4"></div>
-        @endif
-      </div> {{-- end replies and pagination --}}
-    </div> {{-- end replies section --}}
-
-  </div>{{-- end pannel --}}
-@endsection
-
-
-
-
-
-
-
-@section('sidebar')
-
-  <div class="lu-card tw-text-center">
-    <div class="lu-pannel-header">
-      <p class="lu-pannel-text">
-        Thread published on {{ $thread->created_at->toFormattedDateString() }}
-      </p>
-
-      <p class="lu-pannel-text">
-        By <a href="#" class="tw-text-green hover:tw-text-green-dark tw-font-semibold">{{ $thread->user->name}}</a>
-      </p>
-
-      <p class="lu-pannel-text">
-        Replies: {{ $thread->replies_count }}
-      </p>
-
     </div>
-  </div>
 
+    {{-- side widget --}}
+    <div class="column">
+      <div class="lu-card tw-text-center">
+        <div class="lu-pannel-header">
+          
+          <p class="lu-pannel-text">
+            Thread published on {{ $thread->created_at->toFormattedDateString() }}
+          </p>
+
+          <p class="lu-pannel-text">
+            By
+            <a href="/profiles/{{ $thread->user->name }}" class="tw-text-green hover:tw-text-green-dark tw-font-semibold">
+              {{ $thread->user->name}}
+            </a>
+          </p>
+
+          <p class="lu-pannel-text">
+            Replies: {{ $thread->replies_count }}
+          </p>
+
+        </div>
+      </div>{{-- end side widget --}}
+    </div>{{-- end column --}}
+
+  </div>
 @endsection
