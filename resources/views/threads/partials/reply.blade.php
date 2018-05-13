@@ -22,7 +22,7 @@
       <form class="tw-inline tw-align-baseline" action="/replies/{{$reply->id}}/favorites" method="POST">
         @csrf
         
-        @if($reply->wasFavorited())
+        @if($reply->isFavorited())
           <button type="submit" disabled>
             <i class="fas fa-star tw-text-xs tw-text-yellow-dark"></i>
           </button>
