@@ -3,10 +3,27 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Reply extends Model
 {
     protected $fillable = ['user_id', 'body'];
+
+    protected $withCount=['favorites'];
+
+     /**
+     * boot
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(function (Builder $builder) {
+            $builder->with('favorites', 'user');
+        });
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -56,8 +73,13 @@ class Reply extends Model
     /**
      * First Check if the user is authenticated
      * if so, check to see if the
-     * user had already favorited the reply
+     * user had already favorited the reply count(1) true
+     * count(0) false 
      *
+     * NOTE THIS WHERE METHOD IS ON THE COLLECTION CLASS
+     * SINCE WE EAGER LOAD USER in the boot method
+     * we can then access user_id as a property on the model
+     * 
      * @return void
      */
     public function wasFavorited()
@@ -66,8 +88,6 @@ class Reply extends Model
             return false;
         }
 
-        return $this->favorites()
-            ->where('user_id', \Auth::user()->id)
-            ->exists();
+        return $this->favorites->where('user_id', \Auth::user()->id)->count();
     }
 }

@@ -25,12 +25,12 @@ class ThreadController extends Controller
      */
     public function index(Channel $channel = null, ThreadFilter $filters)
     {
-        $threads = Thread::with('channel', 'user')->latest()->filter($filters);
+        $threads = Thread::latest()->filter($filters);
 
         !isset($channel)
             ?: $threads = $threads->where('channel_id', '=', $channel->id);
         
-        $threads = $threads->limit(25)->get();
+        $threads = $threads->paginate(25);
     
         return view('threads.index', compact('threads'));
     }
@@ -83,13 +83,11 @@ class ThreadController extends Controller
     public function show(Channel $channel, Thread $thread)
     {
 
-        if ($thread->channel->id === $channel->id) {
+        if ($thread->channel_id === $channel->id) {
             $replies = $thread
                 ->replies()
                 ->latest()
                 ->paginate(25);
-
-            $thread = $thread->load('user');
             
             return view(
                 'threads.show',

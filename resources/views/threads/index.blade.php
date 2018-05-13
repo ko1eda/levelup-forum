@@ -1,6 +1,11 @@
 @extends('layouts.app') 
 @section('content')
 
+
+  <div class="tw-flex tw-mb-2 tw-full-width tw-justify-end ">
+    {{ $threads->links() }}
+  </div>
+  
   <div class="lu-pannel">
 
     @foreach($threads as $thread) 
