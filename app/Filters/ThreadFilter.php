@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 
 class ThreadFilter extends Filter
 {
-    
+
     protected $filters = ['by', 'popular', 'trending'];
-    
+
     /**
      * Return all threads for a given
      * user
@@ -42,11 +42,9 @@ class ThreadFilter extends Filter
 
     /**
      * Return only Threads created on the current date
-     * having 100 or more replies ordered by reply count
-     *
-     * Note that the commented out portion
-     * returns the same results
-     * it's just split into two queries
+     * Where the reply count is 50 or greater, counting only
+     * replies posted on the current date.
+     * Then order those threads by reply count DESC
      *
      * @return Builder
      */
@@ -55,20 +53,11 @@ class ThreadFilter extends Filter
         // clear out any pre-existing order by clause
         $this->builder->getQuery()->orders = [];
 
-        return $this->builder->whereHas(
-            'replies',
-            function ($query) {
-                // $query->havingRaw('count(*) >= 25');
-                $query->whereDate('created_at', '=', \Carbon\Carbon::today())
-                    ->orderBy('count(*)', 'desc');
-            },'>=', 100
-        );
-
-        // ->whereHas(
-        //     'replies',
-        //     function ($query) {
-        //         $query->whereDate('created_at', '=', \Carbon\Carbon::today());
-        //     }
-        // );
+        return $this->builder
+            ->whereRaw('threads.created_at >= CURDATE()')
+            ->whereHas('replies', function ($query) {
+                $query->whereRaw('replies.created_at >= CURDATE()');
+            }, '>=', 50)
+            ->orderBy('replies_count', 'desc');
     }
 }

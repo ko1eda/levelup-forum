@@ -49,13 +49,13 @@ class FilterThreadsTest extends TestCase
          // And one with sub100 replies
         $notTrendingThread = factory(Thread::class)->create();
 
-        for ($i = 0; $i < 105; $i++) {
+        for ($i = 0; $i < 55; $i++) {
             factory(Reply::class)->create([
                 'thread_id' => $trendingThread->id
             ]);
         }
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             factory(Reply::class)->create([
                 'thread_id' => $trendingThreadLessReplies->id
             ]);
