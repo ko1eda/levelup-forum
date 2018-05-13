@@ -54,6 +54,9 @@
               <a href="{{route('threads.create')}}" class="navbar-item">
                 New Thread
               </a>
+              <a class="navbar-item" href="/profiles/{{Auth::user()->name}}">
+                My Profile
+              </a>
               <a class="navbar-item" href="/threads/?by={{Auth::user()->name}}">
                 My Threads
               </a>
