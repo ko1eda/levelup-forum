@@ -27,6 +27,18 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+
+    /**
+     * For Route model binding 
+     *
+     * @return void
+     */
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
+
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
