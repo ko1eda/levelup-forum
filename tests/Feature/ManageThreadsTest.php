@@ -9,7 +9,7 @@ use App\User;
 use App\Thread;
 use App\Channel;
 
-class CreateThreadsTest extends TestCase
+class ManageThreadsTest extends TestCase
 {
     use RefreshDatabase;
     
@@ -46,6 +46,51 @@ class CreateThreadsTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_can_delete_their_thread()
+    {
+        // Given we have an authenticated user
+        $user = factory(User::class)->create();
+        $this->signInUser($user);
+
+        // And that user has a thread
+        $thread = factory(Thread::class)->create([
+            'user_id' => $user->id,
+        ]);
+     
+        // When that user sends a DELETE request to threads.show for
+        // the given threads id
+        $route = route('threads.destroy', [$thread->channel, $thread]);
+
+        // Then the user should be redirected to the homepage
+        $this->json('DELETE', $route);
+            // ->assertRedirect(route('threads.index'));
+        
+        // Then the thread should be deleted from the database
+        // Note that makeHidden removes the channel information
+        // from the array because it is not relevant to the array record
+        // the channel information is bound to the array via route model binding
+        $this->assertDatabaseMissing(
+            'threads',
+            $thread->makeHidden('channel')->toArray()
+        );
+
+        // Then the associated information should be deleted from the database
+    }
+
+    // /** @test */
+    // public function an_authenticated_user_cannot_delete_another_users_thread()
+    // {
+    //     //
+    // }
+
+
+    /**
+     *
+     * Validation tests start here
+     *
+     */
+
+    /** @test */
     public function a_published_thread_must_have_a_title()
     {
 
@@ -74,6 +119,10 @@ class CreateThreadsTest extends TestCase
              ->assertSessionHasErrors(['channel_id']);
     }
 
+
+    // This method is not a test it is being used
+    // by the various validation tests 
+    // above to publish threads
     public function publishThread($override)
     {
 

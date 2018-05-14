@@ -58,18 +58,18 @@ class ThreadTest extends TestCase
     {
         // Given we have a thread,
         // and a reply associated with that thread
-       
+        $user = factory(User::class)->create();
         // When the threads addReply method is called
         $this->thread->addReply([
             'body' => 'jhfkjsld',
-            'user_id' => 1
+            'user_id' => $user->id
         ]);
 
         // Then we should see the associated reply in
         // the replies table of the database
         $this->assertDatabaseHas('replies', [
             'body' => 'jhfkjsld',
-            'user_id' => 1,
+            'user_id' => $user->id,
             'thread_id' => $this->thread->id
         ]);
     }

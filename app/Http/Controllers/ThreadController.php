@@ -128,11 +128,19 @@ class ThreadController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * Return response 204 meaning the 
+     * request was fufilled but there is
+     * no data to include with the response
+     * i.e b/c it was deleted (though this isn't always for deletion)
+     * https://stackoverflow.com/questions/34312023/http-get-request-status-204-vs-404
+     * @param  \App\Channel $channel
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Thread $thread)
+    public function destroy(Channel $channel, Thread $thread)
     {
-        //
+        $thread->delete();
+
+        return response('', 204);
     }
 }
