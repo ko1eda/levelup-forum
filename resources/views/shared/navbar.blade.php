@@ -20,7 +20,7 @@
             Browse
           </a>
           <div class="navbar-dropdown is-boxed">
-            <a class="navbar-item" href="/threads">All Threads</a>
+            <a class="navbar-item" href="{{ route('threads.index') }}">All Threads</a>
             <a class="navbar-item" href="/threads/?popular=1">Popular Threads</a>
             <a class="navbar-item" href="/threads/?trending=1">Trending Threads</a>
           </div>
@@ -32,7 +32,7 @@
           </a>
           <div class="navbar-dropdown is-boxed">
             @foreach ($channels as $channel)
-            <a class="navbar-item" href="/threads/{{$channel->slug}}">
+            <a class="navbar-item" href="{{ route('threads.index', $channel) }}">
               {{$channel->name}}
             </a>
             @endforeach
@@ -51,13 +51,13 @@
               {{ Auth::user()->name }}
             </a>
             <div class="navbar-dropdown is-boxed">
-              <a href="{{route('threads.create')}}" class="navbar-item">
+              <a href="{{ route('threads.create') }}" class="navbar-item">
                 New Thread
               </a>
-              <a class="navbar-item" href="/profiles/{{Auth::user()->name}}">
+              <a class="navbar-item" href="{{ route('profiles.show', Auth::user()) }}">
                 My Profile
               </a>
-              <a class="navbar-item" href="/threads/?by={{Auth::user()->name}}">
+              <a class="navbar-item" href="/threads/?by={{ Auth::user()->name }}">
                 My Threads
               </a>
 

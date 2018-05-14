@@ -81,9 +81,11 @@
         @endforeach
       </div>
 
-      <div class="tw-flex tw-mt-4 tw-full-width tw-justify-end">
-        {{ $threads->links() }}
-      </div>{{-- pagination --}}
+      @if(count($threads) >= 10)
+        <div class="tw-flex tw-mt-4 tw-full-width tw-justify-end">
+          {{ $threads->links() }}
+        </div>
+      @endif {{-- pagination --}}
 
     </div>{{-- end threads column--}}
 

@@ -9,13 +9,18 @@ class ProfileController extends Controller
 {
     
 
+    /**
+     * show
+     *
+     * @param User $user
+     * @return void
+     */
     public function show(User $user)
     {
-        $threads = $user->threads()->latest()->paginate(1);
+        $threads = $user
+            ->threads()
+            ->paginate(10);
 
-        // $user->load(['threads'=> function($query){
-        //     $query->latest();
-        // }])->get();
         return view('profiles.show', compact('user', 'threads'));
     }
 }
