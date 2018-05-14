@@ -2,7 +2,7 @@
 
 @section('content')
   <div class="columns is-centered">
-    <div class="column is-10">
+    <div class="column is-8">
       <div class="lu-card">
         <div class="lu-card-header ">
           <p>
