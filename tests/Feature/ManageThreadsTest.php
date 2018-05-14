@@ -8,11 +8,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
 use App\Thread;
 use App\Channel;
+use App\Reply;
 
 class ManageThreadsTest extends TestCase
 {
     use RefreshDatabase;
-    
+
 
     /** @test */
     public function an_unauthenticated_user_cannot_create_a_thread()
@@ -45,6 +46,18 @@ class ManageThreadsTest extends TestCase
             ->assertSee($thread->body);
     }
 
+
+    /** @test */
+    public function an_unauthenticated_user_cannot_delete_a_thread()
+    {
+        $thread = factory(Thread::class)->create();
+        
+        $this->checkUnauthFunctionality(
+            'delete',
+            route('threads.destroy', [$thread->channel, $thread])
+        );
+    }
+
     /** @test */
     public function an_authenticated_user_can_delete_their_thread()
     {
@@ -56,33 +69,27 @@ class ManageThreadsTest extends TestCase
         $thread = factory(Thread::class)->create([
             'user_id' => $user->id,
         ]);
-     
-        // When that user sends a DELETE request to threads.show for
-        // the given threads id
+
+        // And that thread has replies
+        $reply = factory(Reply::class)->create([
+            'thread_id' => $thread->id
+        ]);
+        
+        // When the user deletes their thread
         $route = route('threads.destroy', [$thread->channel, $thread]);
 
-        // Then the user should be redirected to the homepage
-        $this->json('DELETE', $route);
-            // ->assertRedirect(route('threads.index'));
+        $this->json('DELETE', $route)
+            ->assertStatus(204);
         
         // Then the thread should be deleted from the database
         // Note that makeHidden removes the channel information
         // from the array because it is not relevant to the array record
         // the channel information is bound to the array via route model binding
-        $this->assertDatabaseMissing(
-            'threads',
-            $thread->makeHidden('channel')->toArray()
-        );
+        $this->assertDatabaseMissing('threads', $thread->makeHidden('channel')->toArray());
 
         // Then the associated information should be deleted from the database
+        $this->assertDatabaseMissing('replies', $reply->toArray());
     }
-
-    // /** @test */
-    // public function an_authenticated_user_cannot_delete_another_users_thread()
-    // {
-    //     //
-    // }
-
 
     /**
      *
@@ -116,7 +123,7 @@ class ManageThreadsTest extends TestCase
 
         // The channel_id must be a valid entry
         $this->publishThread(['channel_id' => 99999999848])
-             ->assertSessionHasErrors(['channel_id']);
+            ->assertSessionHasErrors(['channel_id']);
     }
 
 

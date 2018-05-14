@@ -127,20 +127,29 @@ class ThreadController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * Note: that there is a deleting event
+     * on the thread model that also
+     * removes its replies
      *
-     * Return response 204 meaning the 
+     * Return response 204 meaning the
      * request was fufilled but there is
      * no data to include with the response
-     * i.e b/c it was deleted (though this isn't always for deletion)
-     * https://stackoverflow.com/questions/34312023/http-get-request-status-204-vs-404
+     * if the request was a json request
+     *
      * @param  \App\Channel $channel
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
     public function destroy(Channel $channel, Thread $thread)
     {
-        $thread->delete();
 
-        return response('', 204);
+        $thread->delete();
+  
+        if (request()->wantsJson()) {
+            return response('', 204);
+        }
+
+        return redirect()
+            ->route('threads.index');
     }
 }

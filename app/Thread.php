@@ -27,6 +27,12 @@ class Thread extends Model
         static::addGlobalScope(function (Builder $builder) {
             $builder->with('channel', 'user')->withCount('replies');
         });
+
+        // When a thread is delete also delete its
+        // replies
+        static::deleting(function ($thread) {
+            $thread->replies()->delete();
+        });
     }
 
 
