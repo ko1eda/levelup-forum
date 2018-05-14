@@ -18,13 +18,13 @@ class ManageThreadsTest extends TestCase
     /** @test */
     public function an_unauthenticated_user_cannot_create_a_thread()
     {
-        $this->checkUnauthFunctionality('post', '/threads');
+        $this->checkUnauthFunctionality('post', route('threads.index'));
     }
 
     /** @test */
     public function an_unauthenticated_user_cannot_see_create_thread_page()
     {
-        $this->checkUnauthFunctionality('get', '/threads/create');
+        $this->checkUnauthFunctionality('get', route('threads.create'));
     }
 
     /** @test */
@@ -35,7 +35,7 @@ class ManageThreadsTest extends TestCase
 
         // And that user makes a POST request to our endpoint
         $thread = factory(Thread::class)->make();
-        $response = $this->post('/threads', $thread->toArray());
+        $response = $this->post(route('threads.index'), $thread->toArray());
         
         // And when the user visits the threads page
         // Then the user should see this new thread.
@@ -91,9 +91,11 @@ class ManageThreadsTest extends TestCase
         $this->assertDatabaseMissing('replies', $reply->toArray());
     }
 
+
+
     /**
      *
-     * Validation tests start here
+     * Validation tests
      *
      */
 
@@ -144,6 +146,6 @@ class ManageThreadsTest extends TestCase
         // Note : we turn exception handling off here so we don't just get
         //   a ValidationException thrown
         return $this->withExceptionHandling()
-            ->post('/threads', $thread->toArray());
+            ->post(route('threads.index'), $thread->toArray());
     }
 }
