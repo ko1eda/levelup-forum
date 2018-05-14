@@ -1,4 +1,11 @@
 @extends('layouts.app') 
+
+@section('hero')
+
+  @include('profiles.partials.hero')
+
+@endsection
+
 @section('content')
 
   <div class="columns">
@@ -73,10 +80,12 @@
         <hr>
         @endforeach
       </div>
+
       <div class="tw-flex tw-mt-4 tw-full-width tw-justify-end">
         {{ $threads->links() }}
-      </div>
-    </div>
+      </div>{{-- pagination --}}
+
+    </div>{{-- end threads column--}}
 
   </div>
 

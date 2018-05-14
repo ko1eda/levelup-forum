@@ -25,6 +25,12 @@
   <div id="app">
     @include('shared.navbar')
 
+    @hasSection('hero')
+
+      @yield('hero')
+
+    @endif
+
     <main class="section">
       <div class="container">
         
@@ -32,7 +38,6 @@
         
       </div>
     </main>
-    
   </div>
 </body>
 </html>
