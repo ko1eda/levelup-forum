@@ -2,7 +2,7 @@
 <div class="tw-flex tw-flex-col tw-w-full tw-border tw-border-bulma ">
   <div class="tw-py-2 sm:tw-px-4 tw-px-2 tw-border-b tw-bg-bulma-lightest">
 
-    <a href="#" class="username tw-py-2">
+    <a href="{{ route('profiles.show', $reply->user) }}" class="username tw-py-2">
       <h1 class="sm:tw-text-base tw-text-sm tw-font-light">
         {{ $reply->user->name }}
       </h1>
@@ -13,30 +13,28 @@
     {{ $reply->body }}
   </div>{{-- end body --}}
 
-  <div class="sm:tw-px-4 tw-px-2 tw-pb-2 ">
-    <div class="tw-inline tw-align-baseline tw-mr-1 tw-text-sm ">
+  <div class="sm:tw-px-4 tw-px-2 tw-pb-2 tw-flex tw-items-center ">
+    <div class="tw-mr-2 tw-text-xs sm:tw-text-sm ">
       {{ $reply->created_at->diffForHumans() }}
     </div>{{-- end time --}}
 
-    <div class="tw-inline tw-align-baseline">
-      <form class="tw-inline tw-align-baseline" action="/replies/{{$reply->id}}/favorites" method="POST">
+      <form class="tw-mr-1" action="/replies/{{$reply->id}}/favorites" method="POST">
         @csrf
         
         @if($reply->isFavorited())
-          <button type="submit" disabled>
+          <button class="tw-flex tw-items-center" type="submit" disabled>
             <i class="fas fa-star tw-text-xs tw-text-yellow-dark"></i>
           </button>
         @else
-          <button type="submit">
+          <button type="submit" class="tw-flex tw-items-center">
             <i class="far fa-star tw-text-xs tw-text-bulma-dark hover:tw-text-yellow-dark"></i>
           </button>
         @endif
 
       </form>
-    </div>{{-- end favorites --}}
-
-    <div class="tw-inline fav-pos tw-text-xs">
-      <span> {{ $reply->favorites_count }}</span>
+  
+    <div class="tw-text-xs sm:tw-text-sm ">
+      {{ $reply->favorites_count }}
     </div>
 
   </div>{{-- end info bar --}}
