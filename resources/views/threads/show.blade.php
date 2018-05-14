@@ -5,10 +5,19 @@
     <div class="column is-8">
 
       <div class="lu-card">
-        <div class="lu-card-header">
+        <div class="lu-card-header tw-flex tw-justify-between tw-items-center">
           <p>
             {{ $thread->title }}
           </p>
+          <form action="{{ route('threads.destroy', [$thread->channel, $thread]) }}" method="POST">
+            @csrf
+            @method('delete'){{-- delete method spoofing --}}
+
+            <button type="submit" class="tw-flex tw-items-center">
+              <a class="delete"></a>
+            </button>
+          </form>{{-- end delete button --}}
+
         </div>{{-- end header --}}
     
         <div class="lu-card-body tw-leading-loose"> 
