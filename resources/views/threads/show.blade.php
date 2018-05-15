@@ -9,14 +9,18 @@
           <p>
             {{ $thread->title }}
           </p>
-          <form action="{{ route('threads.destroy', [$thread->channel, $thread]) }}" method="POST">
-            @csrf
-            @method('delete'){{-- delete method spoofing --}}
 
-            <button type="submit" class="tw-flex tw-items-center">
-              <a class="delete"></a>
-            </button>
-          </form>{{-- end delete button --}}
+          {{-- if the user has permission to update/delete the thread  --}}
+          @can('update', $thread)
+            <form action="{{ route('threads.destroy', [$thread->channel, $thread]) }}" method="POST">
+              @csrf
+              @method('delete'){{-- delete method spoofing --}}
+
+              <button type="submit" class="tw-flex tw-items-center">
+                <a class="delete"></a>
+              </button>
+            </form>{{-- end delete button --}}
+          @endcan
 
         </div>{{-- end header --}}
     
@@ -46,7 +50,7 @@
             <h3 class="tw-text-xl sm:tw-text-2xl">Replies:</h3>
           @endif{{-- replies heading--}}
 
-          <div class="tw-px-2 tw-mb-4 sm:tw-mb-8">
+          <div class="tw-px-2 tw-mb-4">
             @foreach($replies as $reply)
               <div class="tw-my-4">
                 @include('threads.partials.reply')

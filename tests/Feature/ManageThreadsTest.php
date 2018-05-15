@@ -46,28 +46,42 @@ class ManageThreadsTest extends TestCase
             ->assertSee($thread->body);
     }
 
+    /**
+     * Deletion tests
+     *
+     */
 
     /** @test */
-    public function an_unauthenticated_user_cannot_delete_a_thread()
+    public function an_unautherized_user_cannot_delete_a_thread()
     {
+        // given we have a thread
         $thread = factory(Thread::class)->create();
         
+        // and an unathenticated user tries
+        // to delete that thread
+        // then they will be redirected to the login page
         $this->checkUnauthFunctionality(
             'delete',
             route('threads.destroy', [$thread->channel, $thread])
         );
+
+        // Given a user is logged in and tries to delete
+        // a thread that does not belong to them
+        // Assert 403 forbidden, response
+        $this->signInUser()
+            ->delete(route('threads.destroy', [$thread->channel, $thread]))
+            ->assertStatus(403);
     }
 
     /** @test */
-    public function an_authenticated_user_can_delete_their_thread()
+    public function an_autherized_user_can_delete_their_thread()
     {
         // Given we have an authenticated user
-        $user = factory(User::class)->create();
-        $this->signInUser($user);
+        $this->signInUser();
 
         // And that user has a thread
         $thread = factory(Thread::class)->create([
-            'user_id' => $user->id,
+            'user_id' => \Auth::user()->id
         ]);
 
         // And that thread has replies

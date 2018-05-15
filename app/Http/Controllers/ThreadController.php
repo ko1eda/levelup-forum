@@ -143,6 +143,13 @@ class ThreadController extends Controller
     public function destroy(Channel $channel, Thread $thread)
     {
 
+        // Checks ThreadPolicy to make sure
+        // the user has permission aka owns
+        // the thread
+        // if not it will automatically
+        // throw a 403 forbidden response
+        $this->authorize('update', $thread);
+        
         $thread->delete();
   
         if (request()->wantsJson()) {

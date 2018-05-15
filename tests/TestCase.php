@@ -29,12 +29,13 @@ abstract class TestCase extends BaseTestCase
     protected function checkUnauthFunctionality(
         String $requestType = 'get',
         String $endpoint = '',
-        array $data = []
+        array $data = [],
+        String $redirectRoute = 'login'
     ) {
         // Enable http exception handling
         $this->withExceptionHandling()
             ->$requestType($endpoint, $data)
-            ->assertRedirect('/login');
+            ->assertRedirect(route($redirectRoute));
 
         return $this; // Return the instance for chaining
     }
