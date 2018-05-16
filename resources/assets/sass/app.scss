@@ -13,9 +13,12 @@
 
 a {
   @apply .tw-text-bulma-black ;
+  text-decoration: none !important;
+
   &:hover {
     color: $link;
   }
+
 }
 
 html {
@@ -28,6 +31,8 @@ html {
 @import "components/_lu-card";
 @import "components/_lu-level";
 @import "components/_lu-hero";
+@import "components/_lu-activity";
+
 
 
 @import "~tailwindcss/utilities";

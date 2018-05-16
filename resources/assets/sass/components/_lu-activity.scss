@@ -1,0 +1,13 @@
+.lu-activity {
+
+  @apply .tw-my-2 .tw-border .tw-border-grey-light ;
+
+  &-body {
+    @apply .tw-py-2 .tw-px-4 .tw-text-xs ;
+  }
+
+  &-header {
+    @apply .tw-font-semibold .tw-mr-1 ;
+  }
+
+}

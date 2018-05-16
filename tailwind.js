@@ -92,8 +92,6 @@ let colors = {
   'green-darker' : '#00af95',
   'green-darkest' : '#008d78',
   
-
-  
   'bulma-white':'#FAFAFA',
   'bulma-lightest':'#F5F5F5',
   'bulma-lighter':'#DBDBDB',
@@ -104,6 +102,13 @@ let colors = {
   'bulma-darkest': '#242424',
 
   'bulma-black': '#121212',
+
+  // activity feed
+  'bulma-warning-light' : '#fffdf5',
+  'bulma-info-light' : '#f6fbfe',
+  'bulma-success-light' : '#f6fef9',
+  'bulma-primary-light' : '#f5fffd',
+  'bulma-danger-light' : '#fff5f7',
   
 
   // 'green-light': '#51d88a',

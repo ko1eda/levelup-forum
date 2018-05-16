@@ -29,7 +29,7 @@ class User extends Authenticatable
 
 
     /**
-     * For Route model binding 
+     * For Route model binding
      *
      * @return void
      */
@@ -38,6 +38,23 @@ class User extends Authenticatable
         return 'name';
     }
 
+
+    /**
+     * Note this is a one to many relationship
+     * Where as the others are a polymorphic one to many
+     * A user has many activties, and an activity can be of
+     * many different types
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function activities()
+    {
+        return $this->hasMany(Activity::class)
+                ->with(['subject' => function ($q) {
+                    $q->withoutGlobalScope('user');
+                }])
+                ->latest();
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

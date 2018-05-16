@@ -19,8 +19,12 @@
           <img src="https://imgplaceholder.com/420x320" alt="profile picture">
         </div>{{-- end profile pic --}}
 
-        <hr class="tw-mx-4 tw-my-4">
+        <hr class="tw-mx-4 tw-mt-4 tw-mb-0">
 
+        <h1 class="tw-mb-2 tw-text-center tw-text-2xl tw-font-light">
+          Contact
+        </h1> {{-- end contact header --}}
+        
         <ul class="tw-px-6">
           <li class="tw-">
             <div class="lu-level">
@@ -44,10 +48,28 @@
             </div>
           </li>
         </ul>{{-- end icons section --}}
+        
+        <hr class="tw-mx-4 tw-mt-4 tw-mb-0">
+        <h1 class="tw-mb-2 tw-text-center tw-text-2xl tw-font-light">
+          Recent Activity
+        </h1>
+
+        <ul class="tw-px-6">
+          @foreach($activities as $activity)
+            <li>
+              @include("profiles.activities.{$activity->type}")
+            </li>
+          @endforeach
+        </ul> 
+        
+        {{-- end activity feed --}}
+
+
       </div>{{-- end lu-card  --}}
     </div>{{-- end info widget column --}}
 
     <div class="column is-8">
+
       <div class="lu-pannel">
         @foreach($threads as $thread)
 

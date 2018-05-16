@@ -32,11 +32,20 @@ trait RecordActivity
     }
 
     /**
-     * activities
+     * Note this is a polymorphic one-to-many relationship
+     * although i denoted it as activity.
+     * I did this because user has a regular one-to-many
+     * relationship with the Activity table on its user_id column
+     *
+     * So a user can have many activities,
+     * and each Model that uses this trait can have many activties
+     * however you can think of it as the model creates theses activity
+     * singular.
+     * And a user owns those created activities, plural.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function activities()
+    public function activity()
     {
         return $this->morphMany(Activity::class, 'subject');
     }
@@ -52,7 +61,7 @@ trait RecordActivity
     protected function recordActivity(String $event)
     {
         if (\Auth::check()) {
-            $this->activities()->create([
+            $this->activity()->create([
                 'type' => $this->getActivityType($event),
                 'user_id' => \Auth::user()->id
             ]);

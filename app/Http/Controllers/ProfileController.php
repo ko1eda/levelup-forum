@@ -17,10 +17,13 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        $threads = $user
-            ->threads()
-            ->paginate(10);
+        $activities = $user->activities;
+        $threads = $user->threads()
+                ->paginate(10);
 
-        return view('profiles.show', compact('user', 'threads'));
+        return view(
+            'profiles.show',
+            compact('user', 'activities', 'threads')
+        );
     }
 }
