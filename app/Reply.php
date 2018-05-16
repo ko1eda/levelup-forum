@@ -23,8 +23,12 @@ class Reply extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(function (Builder $builder) {
-            $builder->with('favorites', 'user');
+        static::addGlobalScope('favorites', function (Builder $builder) {
+            $builder->with('favorites');
+        });
+
+        static::addGlobalScope('user', function (Builder $builder) {
+            $builder->with('user');
         });
     }
 

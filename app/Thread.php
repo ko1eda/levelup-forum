@@ -16,7 +16,7 @@ class Thread extends Model
      * @var array
      */
     protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
-
+    protected $withCount = ['replies'];
 
     /**
      * boot
@@ -27,8 +27,14 @@ class Thread extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(function (Builder $builder) {
-            $builder->with('channel', 'user')->withCount('replies');
+        // Note global scopes need to be named,
+        // In order to use withoutGlobalscope(s) function
+        static::addGlobalScope('channel', function (Builder $builder) {
+            $builder->with('channel');
+        });
+
+        static::addGlobalScope('user', function (Builder $builder) {
+            $builder->with('user');
         });
 
         // These are called model events
