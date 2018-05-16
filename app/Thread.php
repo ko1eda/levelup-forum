@@ -4,9 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use App\Traits\RecordActivity;
 
 class Thread extends Model
 {
+
+    use RecordActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -28,13 +31,14 @@ class Thread extends Model
             $builder->with('channel', 'user')->withCount('replies');
         });
 
+        // These are called model events
         // When a thread is delete also delete its
         // replies
         static::deleting(function ($thread) {
             $thread->replies()->delete();
         });
-    }
 
+    }
 
     /**
      * A thread can have many replies.

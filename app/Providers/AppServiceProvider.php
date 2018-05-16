@@ -35,7 +35,8 @@ class AppServiceProvider extends ServiceProvider
         // Store polymorphic relationships by
         // name, not class path
         Relation::morphMap([
-            'reply' => \App\Reply::class //favoritable
+            'reply' => \App\Reply::class, //favoritable
+            'thread' => \App\Thread::class //activity
         ]);
     }
 

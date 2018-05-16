@@ -5,10 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\Favoritable;
+use App\Traits\RecordActivity;
 
 class Reply extends Model
 {
-    use Favoritable;
+    use Favoritable, RecordActivity;
     
     protected $fillable = ['user_id', 'body'];
     protected $withCount=['favorites'];
