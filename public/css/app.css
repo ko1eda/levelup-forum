@@ -12222,7 +12222,7 @@ html {
 }
 
 .lu-pannel hr:last-of-type {
-  visibility: hidden;
+  display: none;
 }
 
 /**
@@ -25221,7 +25221,7 @@ html {
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .lg\:tw-list-reset {
     list-style: none !important;
     padding: 0 !important;
@@ -29506,7 +29506,7 @@ html {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1216px) {
   .xl\:tw-list-reset {
     list-style: none !important;
     padding: 0 !important;

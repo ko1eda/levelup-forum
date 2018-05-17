@@ -49,7 +49,7 @@
           </li>
         </ul>{{-- end icons section --}}
       </div>{{-- end lu-card  --}}
-    </div>{{-- end info widget column --}}
+    </div>{{-- end left column --}}
 
     <div class="column is-offset-1-desktop">
 
@@ -57,15 +57,17 @@
         Recent Activity
       </h1>{{-- end feed header --}}
 
-      <div class="lu-card tw-py-4 tw-mb-4">
+      <div class="lu-card tw-py-4 tw-mb-6">
         <ul class="tw-px-6">
           @foreach($activities as $date => $activity)
-            <span class="tw-text-xs">{{$date}}</span>
+            <span class="tw-text-sm">{{$date}}</span>
+
             @foreach($activity as $record)
               <li>
                 @include("profiles.activities.{$record->type}", ['activity' => $record])
               </li>
             @endforeach
+
           @endforeach
         </ul> 
       </div>{{-- end activity feed widget --}}
@@ -76,19 +78,19 @@
         Top Threads
       </h1>
 
-      <div class="lu-pannel">
+      <div class="lu-pannel tw-px-6 tw-py-4 ">
         @foreach($threads as $thread)
 
-        <div class="lu-pannel-header tw-text-2xl">
+        <div class="tw-pb-2 tw-text-xl">
           <a href={{ $thread->path() }}>
             <h4 class="tw-font-light">{{ $thread->title }}</h4>
           </a>
         </div>
-        <div class="lu-pannel-body">
+        <div class="tw-pb-2 tw-text-sm lg:tw-text-base">
           {{$thread->body}}
         </div>
         
-        <div class="lu-level">
+        <div class="lu-level tw-px-0">
       
           <div class="lu-level-item tw-text-grey-darker ">
             <i class="fas fa-clock tw-mr-1 tw-text-grey-darker tw-align-middle"></i>
@@ -105,7 +107,7 @@
           </div>
         </div>{{-- end level --}}
 
-        <hr>
+        <hr class="tw-my-2 ">
         @endforeach
       </div>
 
