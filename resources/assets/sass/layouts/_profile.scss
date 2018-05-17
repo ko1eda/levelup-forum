@@ -1,0 +1,13 @@
+// THis brings the users
+// profile widget down 
+// exactly match the height
+// of the activity widget
+// while on mobile and up screens
+
+.offset-t {
+
+  @media(min-width: 768px ) {
+    margin-top: 2.6875rem;
+  }
+
+}

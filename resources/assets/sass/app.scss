@@ -1,15 +1,13 @@
 
-// Variables
-@import "variables";
-
-// Bootstrap
-
+// Tailwid
 @import "~tailwindcss/preflight";
 @import "~tailwindcss/components";
 
 // custom components go here
 @import "vendor/bulma-theme";
 @import "~bulma/bulma.sass";
+
+@import "layouts/profile";
 
 a {
   @apply .tw-text-bulma-black ;

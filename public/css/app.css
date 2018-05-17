@@ -12151,6 +12151,12 @@ label.panel-block:hover {
   padding: 3rem 1.5rem 6rem;
 }
 
+@media (min-width: 768px) {
+  .offset-t {
+    margin-top: 2.6875rem;
+  }
+}
+
 a {
   color: #121212;
   text-decoration: none !important;
