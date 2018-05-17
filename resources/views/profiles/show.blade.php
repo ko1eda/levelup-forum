@@ -56,12 +56,13 @@
         </h1>
 
         <ul class="tw-px-6">
-          @foreach($activities as $activity)
-            @isset($activity->subject)
+          @foreach($activities as $date => $activity)
+          <span class="tw-text-xs">{{$date}}</span>
+            @foreach($activity as $record)
               <li>
-                @include("profiles.activities.{$activity->type}")
+                @include("profiles.activities.{$record->type}", ['activity' => $record])
               </li>
-            @endif {{-- make sure the content corresponding to the log hasn't been deleted --}}
+            @endforeach
           @endforeach
         </ul> 
         

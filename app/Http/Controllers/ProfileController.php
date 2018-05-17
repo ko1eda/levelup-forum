@@ -18,8 +18,12 @@ class ProfileController extends Controller
     public function show(User $user)
     {
         $activities = $user->activities()
-            ->where('created_at', '<=', \Carbon\Carbon::today()->subDays(7))
-            ->paginate(1);
+            ->where('created_at', '>=', \Carbon\Carbon::today()->subDays(3))
+            ->limit(15)
+            ->get()
+            ->groupBy(function ($activity) {
+                return $activity->created_at->format('l jS F Y');
+            });
             
         $threads = $user->threads()
                 ->paginate(10);

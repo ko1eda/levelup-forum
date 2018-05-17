@@ -1,13 +1,35 @@
-<div class="lu-activity">
+@isset($activity->subject)
+  @component('profiles.activities.activity')
+
+    @slot('backgroundColor')
+      bulma-primary-light
+    @endslot
+
+    @slot('link')
+      {{ $activity->subject->path() }}
+    @endslot
+
+    @slot('header')
+      Published:
+    @endslot
+
+    @slot('body')
+      {{$activity->subject->body}}
+    @endslot
+
+  @endcomponent
+@endif
+
+
+
+
+{{-- <div class="lu-activity">
   <div class="lu-activity-body tw-bg-bulma-primary-light">
 
-    <a href="{{ $activity->subject->path() }}" class="">
+    <a href="{{ $record->subject->path() }}" class="">
       <span class="lu-activity-header">Published:</span>
     </a>
-    <span class="tw-italic">{{ $activity->subject->body }}</span>
+    <span class="tw-italic">{{ $record->subject->body }}</span>
 
   </div>
-</div>
-  
-
-
+</div> --}}
