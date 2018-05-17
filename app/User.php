@@ -49,11 +49,7 @@ class User extends Authenticatable
      */
     public function activities()
     {
-        return $this->hasMany(Activity::class)
-                ->with(['subject' => function ($q) {
-                    $q->withoutGlobalScope('user');
-                }])
-                ->latest();
+        return $this->hasMany(Activity::class);
     }
 
     /**

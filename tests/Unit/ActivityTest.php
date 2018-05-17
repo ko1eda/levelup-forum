@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Thread;
 use App\Activity;
 use App\Reply;
+use App\User;
 
 class ActivityTest extends TestCase
 {
@@ -72,5 +73,45 @@ class ActivityTest extends TestCase
         ]);
 
         $this->assertEquals(2, Activity::count());
+    }
+
+    /** @test */
+    public function it_fetches_an_activity_feed_for_any_user()
+    {
+        // Given we have a user
+        $this->signInUser();
+        
+        // And that user has created an older threa
+        $olderThread = factory(Thread::class)->create([
+            'user_id' => \Auth::user()->id,
+            'created_at' => \Carbon\Carbon::now()->subDay()
+        ]);
+
+        // Because an activity will be created
+        // at the exact time we run the test, regardless
+        // of when we set a threads created date
+        Activity::first()->update([
+            'created_at' => \Carbon\Carbon::now()->subDay()
+        ]);
+
+        // And that user has created a newer thread
+        $newerThread = factory(Thread::class)->create([
+            'user_id' => \Auth::user()->id
+        ]);
+
+        // If we fetch the activity feed for that user
+        $feed = Activity::feed(\Auth::user(), 15);
+
+        // Then the older thread should be in the returned collection
+        // with the given format
+        $this->assertTrue($feed->keys()->contains(
+            \Carbon\Carbon::now()->subDay()->format('l jS F Y')
+        ));
+
+        // And the newer thread should be in the
+        // collection with the given format
+        $this->assertTrue($feed->keys()->contains(
+            \Carbon\Carbon::now()->format('l jS F Y')
+        ));
     }
 }
