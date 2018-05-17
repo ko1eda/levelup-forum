@@ -14,7 +14,7 @@
     @endslot
 
     @slot('body')
-      {{$activity->subject->body}}
+      {{$activity->subject->title}}
     @endslot
 
   @endcomponent

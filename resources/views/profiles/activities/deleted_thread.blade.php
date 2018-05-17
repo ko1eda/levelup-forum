@@ -13,7 +13,7 @@
   @endslot
 
   @slot('body')
-    Thread
+    A Thread
   @endslot
 
 @endcomponent
