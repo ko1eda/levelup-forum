@@ -58,7 +58,7 @@ class User extends Authenticatable
     public function threads()
     {
         return $this->hasMany(Thread::class)
-            ->latest();
+            ->withoutGlobalScope('user');
     }
 
     /**

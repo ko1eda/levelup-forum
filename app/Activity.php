@@ -31,7 +31,7 @@ class Activity extends Model
     {
         return static::with([
             'subject' => function ($q) {
-                $q->withoutGlobalScope('user');
+                $q->withoutGlobalScopes(['user', 'favorites']);
             }
         ])
         ->where([

@@ -10,23 +10,19 @@ class ProfileController extends Controller
     
 
     /**
-     * show
+     * Display the users top threads
+     * and activity feed
      *
      * @param User $user
      * @return void
      */
     public function show(User $user)
     {
-        // $activities = $user->activities()
-        //     ->where('created_at', '>=', \Carbon\Carbon::today()->subDays(3))
-        //     ->limit(15)
-        //     ->get()
-        //     ->groupBy(function ($activity) {
-        //         return $activity->created_at->format('l jS F Y');
-        //     });
-            
+
         $threads = $user->threads()
-                ->paginate(10);
+                ->orderBy('replies_count', 'desc')
+                ->limit(5)
+                ->get();
 
         return view('profiles.show', [
             'user' => $user,
