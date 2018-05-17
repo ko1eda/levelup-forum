@@ -50,15 +50,18 @@
         </ul>{{-- end icons section --}}
         
         <hr class="tw-mx-4 tw-mt-4 tw-mb-0">
+
         <h1 class="tw-mb-2 tw-text-center tw-text-2xl tw-font-light">
           Recent Activity
         </h1>
 
         <ul class="tw-px-6">
           @foreach($activities as $activity)
-            <li>
-              @include("profiles.activities.{$activity->type}")
-            </li>
+            @isset($activity->subject)
+              <li>
+                @include("profiles.activities.{$activity->type}")
+              </li>
+            @endif {{-- make sure the content corresponding to the log hasn't been deleted --}}
           @endforeach
         </ul> 
         

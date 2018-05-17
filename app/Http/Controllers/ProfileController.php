@@ -17,7 +17,10 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        $activities = $user->activities;
+        $activities = $user->activities()
+            ->where('created_at', '<=', \Carbon\Carbon::today()->subDays(7))
+            ->paginate(1);
+            
         $threads = $user->threads()
                 ->paginate(10);
 
