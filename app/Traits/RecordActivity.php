@@ -7,7 +7,7 @@ use App\Activity;
 trait RecordActivity
 {
 
-    protected static $events = ['created', 'deleted'];
+    protected static $events = ['created'];
 
     /**
      * Laravel will trigger anything
@@ -15,20 +15,25 @@ trait RecordActivity
      * as if it were in the boot
      * method of the models that use this trait
      *
-     * So we loop through the whitelisted events
-     * in the protected array and create a record
-     * for each event if it occurs on any model
-     * that uses this trait
-     *
      * @return void
      */
     protected static function bootRecordActivity()
     {
+        // Loop through the whitelisted events
+        // in the protected array and create a record
+        // for each event if it occurs on any model
+        // that uses this trait
         foreach (static::$events as $event) {
             static::$event(function ($model) use ($event) {
                 $model->recordActivity($event);
             });
         }
+
+        // Delete all recorded activity for any
+        // subscribed model
+        static::deleting(function ($model) {
+            $model->activity()->delete();
+        });
     }
 
     /**

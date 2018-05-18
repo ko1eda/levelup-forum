@@ -38,12 +38,22 @@ class Thread extends Model
         });
 
         // These are called model events
+
         // When a thread is delete also delete its
         // replies
+        // Note:
+        // you have to use an each on the replies collection because
+        // if you just delete the threads->replies()->delete()
+        // then it will not trigger the deleted event
+        // on the reply model which intern means
+        // that replies favorites will not be deleted
+        // by the favoritable trait and its activites
+        // will not be deleted
         static::deleting(function ($thread) {
-            $thread->replies()->delete();
+            $thread->replies->each(function ($reply) {
+                $reply->delete();
+            });
         });
-
     }
 
     /**

@@ -8,6 +8,20 @@ trait Favoritable
 {
 
     /**
+     * Delete all favorites associated with
+     * Any model who uses Favoritable trait
+     *
+     * @return void
+     */
+    protected static function bootFavoritable()
+    {
+        static::deleting(function ($model) {
+            $model->favorites()->delete();
+        });
+    }
+
+
+    /**
      * An entity can have many favorites
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany

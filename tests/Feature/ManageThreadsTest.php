@@ -52,7 +52,7 @@ class ManageThreadsTest extends TestCase
      */
 
     /** @test */
-    public function an_unautherized_user_cannot_delete_a_thread()
+    public function an_unauthorized_user_cannot_delete_a_thread()
     {
         // given we have a thread
         $thread = factory(Thread::class)->create();
@@ -74,7 +74,7 @@ class ManageThreadsTest extends TestCase
     }
 
     /** @test */
-    public function an_autherized_user_can_delete_their_thread()
+    public function an_authorized_user_can_delete_their_thread()
     {
         // Given we have an authenticated user
         $this->signInUser();
@@ -100,11 +100,51 @@ class ManageThreadsTest extends TestCase
         // from the array because it is not relevant to the array record
         // the channel information is bound to the array via route model binding
         $this->assertDatabaseMissing('threads', $thread->makeHidden('channel')->toArray());
-
-        // Then the associated information should be deleted from the database
-        $this->assertDatabaseMissing('replies', $reply->toArray());
     }
 
+    /** @test */
+    public function when_a_thread_is_deleted_so_is_its_associated_data()
+    {
+
+        // Given we have an authorized user
+        $this->signInUser();
+
+        // And that user creates a thread
+        $thread = factory(Thread::class)->create([
+            'user_id' => \Auth::user()->id
+        ]);
+
+        // And that thread has replies
+        $reply = factory(Reply::class)->create([
+            'thread_id' => $thread->id
+        ]);
+
+        // And that reply has a favorite
+        $favorite = $reply->addFavorite();
+        
+        // If that user
+        $route = route('threads.destroy', [$thread->channel, $thread]);
+
+        // When the user deletes the thread
+        $this->delete($route);
+
+        // Then the favorite and reply are also deleted
+        $this->assertDatabaseMissing('threads', $thread->makeHidden('channel')->toArray());
+        $this->assertDatabaseMissing('replies', $reply->toArray());
+        $this->assertDatabaseMissing('favorites', $favorite->toArray());
+        
+        // Then the associated thread record is deleted
+        $this->assertDatabaseMissing('activities', [
+            'subject_id' => $thread->id,
+            'subject_type' => 'thread'
+        ]);
+
+        // Then the associated reply record is also deleted
+        $this->assertDatabaseMissing('activities', [
+            'subject_id' => $reply->id,
+            'subject_type' => 'reply'
+        ]);
+    }
 
 
     /**
