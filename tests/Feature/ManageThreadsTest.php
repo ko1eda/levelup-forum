@@ -144,6 +144,12 @@ class ManageThreadsTest extends TestCase
             'subject_id' => $reply->id,
             'subject_type' => 'reply'
         ]);
+
+        // Then the associated favorites for that reply are also deleted
+        $this->assertDatabaseMissing('activities', [
+            'subject_id' => $favorite->id,
+            'subject_type' => 'favorite'
+        ]);
     }
 
 
