@@ -55,18 +55,3 @@
 </div>
 
 --}}
-
-<style>
-  .reply-pos {
-    top: 9px;
-    right: -10px;
-  }
-  .icon-size {
-    font-size: .65rem;
-  }
-
-  .fav-pos {
-    vertical-align: -1px;
-    margin-left: -1.5px;
-  }
-</style>

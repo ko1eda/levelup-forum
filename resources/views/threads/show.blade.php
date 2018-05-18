@@ -13,12 +13,13 @@
           {{-- if the user has permission to update/delete the thread  --}}
           @can('update', $thread)
             <form action="{{ route('threads.destroy', [$thread->channel, $thread]) }}" method="POST">
-              @csrf
               @method('delete'){{-- delete method spoofing --}}
+              @csrf
 
               <button type="submit" class="tw-flex tw-items-center">
                 <a class="delete"></a>
               </button>
+              
             </form>{{-- end delete button --}}
           @endcan
 

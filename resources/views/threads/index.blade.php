@@ -19,7 +19,7 @@
         <div class="lu-pannel">
           @foreach($threads as $thread) 
       
-            <div class="lu-pannel-header tw-text-2xl">
+            <div class="lu-pannel-header tw-text-lg md:tw-text-2xl">
               <a href={{ $thread->path() }}>
                 <h4 class="tw-font-light">{{ $thread->title }}</h4>
               </a>
