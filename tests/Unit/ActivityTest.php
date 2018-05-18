@@ -76,6 +76,29 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
+    public function it_records_activity_when_a_favorite_is_created()
+    {
+        // Given we have an authenticated user
+        $this->signInUser();
+
+        // And that user replies to a thread
+        $reply = factory(Reply::class)->create();
+        
+        // And that reply is then favorited
+        // by the user
+        $favorite = $reply->addFavorite();
+        
+        // Then their should be an activity
+        // recorded in the database for that creation
+        $this->assertDatabaseHas('activities', [
+            'type' => 'created_favorite',
+            'user_id' => \Auth::user()->id,
+            'subject_id' => $favorite->id,
+            'subject_type' => 'favorite'
+        ]);
+    }
+
+    /** @test */
     public function it_fetches_an_activity_feed_for_any_user()
     {
         // Given we have a user

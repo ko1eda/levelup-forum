@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\RecordActivity;
 
 class Favorite extends Model
 {
+    use RecordActivity;
+    
     protected $fillable = ['favoritable_id', 'favoritable_type', 'user_id'];
 
     /**

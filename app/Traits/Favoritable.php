@@ -11,12 +11,19 @@ trait Favoritable
      * Delete all favorites associated with
      * Any model who uses Favoritable trait
      *
+     * Note it deletes all favorites individually
+     * so that it will trigger the favorites delete
+     * method -- this is so any Activity related
+     * to a favorite will also be deleted 
+     *
      * @return void
      */
     protected static function bootFavoritable()
     {
         static::deleting(function ($model) {
-            $model->favorites()->delete();
+            $model->favorites->each(function ($favorite) {
+                $favorite->delete();
+            });
         });
     }
 
