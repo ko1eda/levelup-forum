@@ -68,7 +68,8 @@ class ThreadController extends Controller
             'channel_id' => $req->get('channel_id')
         ]);
         
-        return redirect($thread->path());
+        return redirect($thread->path())
+            ->with('flash', 'Published A Thread');
     }
 
     /**
@@ -95,11 +96,8 @@ class ThreadController extends Controller
             );
         }
         
-        return back()->withErrors([
-            'message' => ucfirst(
-                "{$thread->title} does not belong to this channel"
-            )
-        ]);
+        return back()
+            ->with('flash', 'Activity Forbidden');
     }
 
     /**

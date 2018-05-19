@@ -1,3 +1,3 @@
-{{-- @if(isset($flash)) --}}
-  <lu-flash-message message="d"></flash-message>
-{{-- @endif --}}
+
+  {{-- Get flash messages from a session --}}
+  <lu-flash-message message="{{ session('flash') }}"></flash-message>
