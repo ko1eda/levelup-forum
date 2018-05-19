@@ -51,9 +51,11 @@
             <h3 class="tw-text-xl sm:tw-text-2xl">Replies:</h3>
           @endif{{-- replies heading--}}
 
+          {{-- Note the id is so that we can navigate to a given reply --}}
+          {{-- on the page using a hash link ex /#reply-4 --}}
           <div class="tw-px-2 tw-mb-4">
             @foreach($replies as $reply)
-              <div class="tw-my-4">
+              <div class="tw-my-4" id="reply-{{ $reply->id }}">
                 @include('threads.partials.reply')
               </div>
             @endforeach
