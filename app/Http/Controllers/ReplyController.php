@@ -16,6 +16,14 @@ class ReplyController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * store
+     *
+     * @param Channel $channel
+     * @param Thread $thread
+     * @param Request $req
+     * @return void
+     */
     public function store(Channel $channel, Thread $thread, Request $req)
     {
         // Remember that $thread
@@ -31,5 +39,18 @@ class ReplyController extends Controller
         ]);
 
         return back();
+    }
+
+    public function destroy(Request $req, Reply $reply)
+    {
+        if ($reply->user_id !== \Auth::user()->id) {
+            abort(403);
+        }
+
+        $reply->delete();
+
+        if ($req->wantsJson()) {
+            return response('', 204);
+        }
     }
 }

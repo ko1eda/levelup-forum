@@ -152,6 +152,38 @@ class ManageThreadsTest extends TestCase
         ]);
     }
 
+    /** @test */
+    public function an_authorized_user_can_only_delete_their_replies()
+    {
+        // Given we have a user
+        $this->withExceptionHandling()
+            ->signInUser();
+
+        // And two replies one by that user
+        $reply = factory(Reply::class)->create([
+            'user_id' => \Auth::user()->id
+        ]);
+
+         // And one by another user
+         $replyNotByUser = factory(Reply::class)->create();
+
+        // If that user sends a deletes their reply
+        // Then they should get 204 response
+        $this->json('DELETE', route('replies.destroy', $reply))
+            ->assertStatus(204);
+
+        // Then the database should no longer have the reply
+        $this->assertDatabaseMissing('replies', $reply->toArray());
+        
+       
+        // However if a the same user tries to delete another users reply
+        // Then they should recieve a 403 forbidden response
+        $this->json('DELETE', route('replies.destroy', $replyNotByUser))
+            ->assertStatus(403);
+    }
+
+
+
 
     /**
      *
@@ -192,7 +224,7 @@ class ManageThreadsTest extends TestCase
     // This method is not a test it is being used
     // by the various validation tests 
     // above to publish threads
-    public function publishThread($override)
+    protected function publishThread($override)
     {
 
         // Given that we have an authenticated user
