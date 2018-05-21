@@ -42,9 +42,7 @@ class ThreadPolicy
      */
     public function update(User $user, Thread $thread)
     {
-        // only the threads owner can edit, delete
-        // or update the thread in any way
-        return $thread->user_id === $user->id;
+       //
     }
 
     /**
@@ -56,6 +54,8 @@ class ThreadPolicy
      */
     public function delete(User $user, Thread $thread)
     {
-        //
+        // only the threads owner can edit, delete
+        // or update the thread in any way
+        return $thread->user_id === $user->id;
     }
 }

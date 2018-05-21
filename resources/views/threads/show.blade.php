@@ -11,7 +11,7 @@
           </p>
 
           {{-- if the user has permission to update/delete the thread  --}}
-          @can('update', $thread)
+          @can('delete', $thread)
             <form action="{{ route('threads.destroy', [$thread->channel, $thread]) }}" method="POST">
               @method('delete'){{-- delete method spoofing --}}
               @csrf

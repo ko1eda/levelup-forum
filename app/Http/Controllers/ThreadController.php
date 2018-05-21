@@ -146,12 +146,12 @@ class ThreadController extends Controller
         // the thread
         // if not it will automatically
         // throw a 403 forbidden response
-        $this->authorize('update', $thread);
+        $this->authorize('delete', $thread);
         
         $thread->delete();
   
         if (request()->wantsJson()) {
-            return response('', 204);
+            return response([], 204);
         }
 
         return redirect()
