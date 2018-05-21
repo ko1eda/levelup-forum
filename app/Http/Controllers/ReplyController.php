@@ -41,16 +41,33 @@ class ReplyController extends Controller
         return back();
     }
 
+    /**
+     * Determine if user has permission
+     * to delete a given reply.
+     * If so redirect them back to
+     * the current page or return
+     * a status 204.
+     * If not return a status 403 forbidden
+     *
+     * @param Request $req
+     * @param Reply $reply
+     * @return void
+     */
     public function destroy(Request $req, Reply $reply)
     {
-        if ($reply->user_id !== \Auth::user()->id) {
-            abort(403);
-        }
+        // Checks the delete policy to make sure
+        // the user has the proper credentials
+        // before they can proceed to delete a post
+        // NOTE MAKE SURE YOU REGISTER ANY POLICY
+        // IN THE AUTHSERVICEPROVIDER or it wont work
+        $this->authorize('delete', $reply);
 
         $reply->delete();
 
         if ($req->wantsJson()) {
-            return response('', 204);
+            return response([], 204);
         }
+
+        return back();
     }
 }

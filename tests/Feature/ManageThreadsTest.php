@@ -9,6 +9,7 @@ use App\User;
 use App\Thread;
 use App\Channel;
 use App\Reply;
+use App\Favorite;
 
 class ManageThreadsTest extends TestCase
 {
@@ -152,28 +153,47 @@ class ManageThreadsTest extends TestCase
         ]);
     }
 
+
+
     /** @test */
-    public function an_authorized_user_can_only_delete_their_replies()
+    public function an_unauthenticated_user_cannot_delete_a_reply()
+    {
+        $reply = factory(Reply::class)->create();
+
+        $this->checkUnauthFunctionality('delete', route('replies.destroy', $reply));
+    }
+
+    
+    /** @test */
+    public function an_authorized_user_can_only_delete_their_own_replies_and_all_the_associated_data()
     {
         // Given we have a user
         $this->withExceptionHandling()
             ->signInUser();
 
-        // And two replies one by that user
+        // And and two replies
+
+        // a reply by the current logged user
         $reply = factory(Reply::class)->create([
             'user_id' => \Auth::user()->id
         ]);
 
-         // And one by another user
+        // which was favorited 
+        $favorite = $reply->addFavorite();
+
+         // And a reply buy another another user
          $replyNotByUser = factory(Reply::class)->create();
 
-        // If that user sends a deletes their reply
-        // Then they should get 204 response
+        // If that user deletes their reply
+        // Then they should get 204 sucess response
         $this->json('DELETE', route('replies.destroy', $reply))
             ->assertStatus(204);
 
         // Then the database should no longer have the reply
         $this->assertDatabaseMissing('replies', $reply->toArray());
+        
+        // Or its aassociated favorites 
+        $this->assertDatabaseMissing('favorites', $favorite->toArray());
         
        
         // However if a the same user tries to delete another users reply
@@ -181,8 +201,6 @@ class ManageThreadsTest extends TestCase
         $this->json('DELETE', route('replies.destroy', $replyNotByUser))
             ->assertStatus(403);
     }
-
-
 
 
     /**

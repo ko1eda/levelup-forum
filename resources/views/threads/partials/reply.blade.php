@@ -2,11 +2,23 @@
 <div class="tw-flex tw-flex-col tw-w-full tw-border tw-border-bulma ">
   <div class="tw-py-2 sm:tw-px-4 tw-px-2 tw-border-b tw-bg-bulma-lightest">
 
-    <a href="{{ route('profiles.show', $reply->user) }}" class="username tw-py-2">
-      <h1 class="sm:tw-text-base tw-text-sm tw-font-light">
-        {{ $reply->user->name }}
-      </h1>
-    </a>
+    <div class="tw-flex tw-justify-between tw-items-center">
+      <a href="{{ route('profiles.show', $reply->user) }}" class="username tw-py-2">
+        <h1 class="sm:tw-text-base tw-text-sm tw-font-light">
+          {{ $reply->user->name }}
+        </h1>
+      </a>
+      
+      @can('delete', $reply)
+        <form class="tw-mr-1" action="{{ route('replies.destroy', $reply) }}" method="POST">
+            @csrf
+            @method('delete')
+          <button class="delete is-small hover:tw-bg-red-light"></button>
+        </form>
+      @endcan
+      {{-- only show the delete button for the user who owns the reply --}}
+      
+    </div>
   </div>{{-- end header --}}
 
   <div class="sm:tw-px-4 tw-px-2 tw-pt-2 sm:tw-text-base tw-text-sm tw-leading-loose">
