@@ -20,7 +20,8 @@ export default {
     // Send patch request to endpoint
     // Update reply body with edited content
     // returned from the response
-    // Change editing to false to close the edit form 
+    // Change editing to false to close the edit form
+    // Flash message to the screen using window function 
     handleReplyUpdate() {
       axios.patch(`/replies/${this.attributes.id}`, {
         body: this.body
@@ -28,6 +29,7 @@ export default {
         .then(({data}) => {
           this.body = data.body;
           this.editing = false
+          flash('Updated Reply!')
         });
     },
 
