@@ -85,9 +85,8 @@
             </a>
           </p>
 
-          <p class="lu-pannel-text">
-            Replies: {{ $thread->replies_count }}
-          </p>
+        
+        <lu-counter :initial-count={{ $thread->replies_count }}></lu-counter> {{-- end Vue reply count component --}}
 
         </div>
       </div>{{-- end side widget --}}

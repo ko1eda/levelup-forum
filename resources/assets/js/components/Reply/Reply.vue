@@ -12,7 +12,8 @@ export default {
   data () {
     return {
       editing: false,
-      body: this.attributes.body
+      body: this.attributes.body,
+      deleted: false,
     }
   },
 
@@ -29,13 +30,27 @@ export default {
         .then(({data}) => {
           this.body = data.body;
           this.editing = false
-          flash('Updated Reply!')
+          flash('Updated a Reply!')
         });
     },
-
     handleReplyCancel() {
       this.body = this.attributes.body;
       this.editing = false;
+    },
+
+    // Delete the given reply
+    // Then hide it
+    // Emit a global deleted reply event
+    // which will then update the vue reply counter
+    // component 
+    // Then flash a message 
+    handleReplyDelete() {
+      axios.delete(`/replies/${this.attributes.id}`)
+        .then(() =>  {
+          this.deleted = true;
+          window.events.$emit('deletedReply');
+          flash('Deleted a Reply!')
+        });
     }
 
   }

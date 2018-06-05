@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import axios from 'axios';
-import FlashMessage from './components/FlashMessage.vue';
-import Reply from './components/Reply.vue';
+import FlashMessage from './components/Flash/FlashMessage.vue';
+import Reply from './components/Reply/Reply.vue';
+import ReplyCounter from './components/Reply/ReplyCounter.vue';
 
 // Global Vue event bus
 window.events = new Vue;
@@ -19,7 +20,8 @@ const app = new Vue({
     
     components: {
       'lu-flash-message' : FlashMessage,
-      'lu-reply' : Reply
+      'lu-reply' : Reply,
+      'lu-counter' : ReplyCounter
     }
 });
 

@@ -38,6 +38,8 @@ class ReplyController extends Controller
             'user_id' => \Auth::user()->id
         ]);
 
+        $req->session()->flash('flash', 'Posted a Reply!');
+
         return back();
     }
 

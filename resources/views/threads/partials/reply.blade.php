@@ -1,7 +1,7 @@
 
 <lu-reply :attributes="{{ $reply->makeHidden('user') }}" inline-template>
 
-  <div class="tw-flex tw-flex-col tw-w-full tw-border tw-border-bulma ">
+  <div class="tw-flex tw-flex-col tw-w-full tw-border tw-border-bulma " v-if="!deleted">
     <div class="tw-py-2 sm:tw-px-4 tw-px-2 tw-border-b tw-bg-bulma-lightest">
       <div class="tw-flex tw-justify-between tw-items-center">
 
@@ -12,11 +12,7 @@
         </a>{{-- end header left-side (username) --}}
         
         @can('delete', $reply)
-          <form class="tw-mr-1 tw-flex tw-items-center" action="{{ route('replies.destroy', $reply) }}" method="POST">
-              @csrf
-              @method('delete')
-            <button class="delete is-small hover:tw-bg-red-light"></button>
-          </form>
+          <button class="delete is-small hover:tw-bg-red-light" @click="handleReplyDelete"></button>
         @endcan{{-- only show the delete button for the user who owns the reply --}}
 
       </div>{{-- end level --}}
