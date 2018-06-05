@@ -25,6 +25,11 @@ html {
   // background: #e4e9ee;
 }
 
+[v-cloak] {
+  display: none ; 
+}
+
+
 @import "components/_lu-pannel";
 @import "components/_lu-card";
 @import "components/_lu-level";

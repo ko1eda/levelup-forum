@@ -32,13 +32,39 @@ class ReplyController extends Controller
         $this->validate($req, [
             'body' => 'required'
         ]);
-        
+
         $thread->addReply([
             'body' => $req->get('body'),
             'user_id' => \Auth::user()->id
         ]);
 
         return back();
+    }
+
+    /**
+     * update
+     *
+     * @param Reply $req
+     * @param Request $req
+     * @return void
+     */
+    public function update(Reply $reply, Request $req)
+    {
+        // Check if user is authorized to update the given reply
+        $this->authorize('update', $reply);
+
+        // Validate the reply
+        $this->validate($req, [
+            'body' => 'required'
+        ]);
+
+        // Update the reply
+        $reply->update([
+            'body' => $req->get('body')
+        ]);
+
+        // hide user info from json response, return code 200
+        return response($reply->makeHidden('user')->toJson(), 200);
     }
 
     /**

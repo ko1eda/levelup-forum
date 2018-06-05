@@ -1,8 +1,11 @@
 import Vue from 'vue';
+import axios from 'axios';
 import FlashMessage from './components/FlashMessage.vue';
+import Reply from './components/Reply.vue';
 
 // Global Vue event bus
 window.events = new Vue;
+window.axios = axios;
 
 // Global flash function for emiting
 // flash messages 
@@ -15,7 +18,8 @@ const app = new Vue({
     el: '#app',
     
     components: {
-      'lu-flash-message' : FlashMessage
+      'lu-flash-message' : FlashMessage,
+      'lu-reply' : Reply
     }
 });
 
