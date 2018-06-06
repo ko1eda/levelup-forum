@@ -4,9 +4,20 @@ import FlashMessage from './components/Flash/FlashMessage.vue';
 import Reply from './components/Reply/Reply.vue';
 import ReplyCounter from './components/Reply/ReplyCounter.vue';
 
+// Global axios instance with csrf token
+window.axios = axios;
+
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+let token = document.head.querySelector('meta[name="csrf-token"]');
+
+if (token) {
+    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+} else {
+    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+}
+
 // Global Vue event bus
 window.events = new Vue;
-window.axios = axios;
 
 // Global flash function for emiting
 // flash messages 
