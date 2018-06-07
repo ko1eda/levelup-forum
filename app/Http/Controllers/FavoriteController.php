@@ -20,10 +20,33 @@ class FavoriteController extends Controller
      * @param Reply $reply
      * @return void
      */
-    public function store(Reply $reply)
+    public function store(Reply $reply, Request $req)
     {
         $reply->addFavorite();
+
+        if ($req->wantsJson()) {
+            return response($reply->makeHidden(['user', 'favorites', 'favorites_count']), 200);
+        }
         
         return back();
+    }
+
+    /**
+     * destroy
+     *
+     * Call the removeFavorite method
+     * located on the favoritable trait
+     *
+     * Thorw a 404 exception if no favorite
+     * exists for the given user
+     *
+     * @param Reply $reply
+     * @return void
+     */
+    public function destroy(Reply $reply)
+    {
+        $reply->removeFavorite();
+        
+        return response('', 204);
     }
 }

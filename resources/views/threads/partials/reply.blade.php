@@ -59,20 +59,7 @@
         @endif {{-- end edit/ Vue Edit Button --}}
         
 
-        <form class="tw-mr-1" action="/replies/{{$reply->id}}/favorites" method="POST">
-          @csrf     
-          @if($reply->isFavorited())
-            <button class="tw-flex tw-items-center" type="submit" disabled>
-              <i class="fas fa-star tw-text-xs tw-text-yellow-dark"></i>
-              <span class="tw-ml-1 tw-text-xs sm:tw-text-sm"> {{ $reply->favorites_count }} </span>
-            </button>
-          @else
-            <button type="submit" class="tw-flex tw-items-center">
-              <i class="far fa-star tw-text-xs tw-text-bulma-dark hover:tw-text-yellow-dark"></i>
-              <span class="tw-ml-1 tw-text-xs sm:tw-text-sm"> {{ $reply->favorites_count }} </span>
-            </button>
-          @endif
-        </form>{{-- end favorites button --}}
+      <lu-favorite :reply-data="{{ $reply }}"></lu-favorite>{{-- end favorites widget --}}
   
       </div>{{-- end info level --}}
   

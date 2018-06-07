@@ -32,7 +32,7 @@ const app = new Vue({
     components: {
       'lu-flash-message' : FlashMessage,
       'lu-reply' : Reply,
-      'lu-counter' : ReplyCounter
+      'lu-counter' : ReplyCounter,
     }
 });
 

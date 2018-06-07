@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Thread;
 use App\Reply;
+use App\Favorite;
 
 class FavoritesTest extends TestCase
 {
@@ -77,5 +78,29 @@ class FavoritesTest extends TestCase
 
         // Then we should still see only one reply
         $this->assertCount(1, $reply->favorites);
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_remove_their_favorites()
+    {
+        // Given we have an authenticated user
+        $this->withExceptionHandling()
+            ->signInUser();
+
+        $reply = factory(Reply::class)->create();
+
+        // and that the user favorites a given reply
+        $this->post(route('favorites.store', $reply));
+    
+        $this->assertCount(1, $reply->favorites);
+
+        // if that user unfavorites the reply
+        $this->delete(route('favorites.destroy', $reply))
+            ->assertStatus(204);
+        
+        // then the favorite should be missing from the db
+        // fresh reloads(technically it fetches a new version of)
+        // the reply so that anything that was added/removed from the model is reflected
+        $this->assertCount(0, $reply->fresh()->favorites);
     }
 }

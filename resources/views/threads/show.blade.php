@@ -15,14 +15,11 @@
             <form action="{{ route('threads.destroy', [$thread->channel, $thread]) }}" method="POST">
               @method('delete'){{-- delete method spoofing --}}
               @csrf
-
               <button type="submit" class="tw-flex tw-items-center">
                 <a class="delete"></a>
               </button>
-              
-            </form>{{-- end delete button --}}
-          @endcan
-
+            </form>
+          @endcan {{-- end delete button --}}
         </div>{{-- end header --}}
     
         <div class="lu-card-body tw-leading-loose"> 
@@ -45,7 +42,7 @@
               to join this discussion.
             </div>
           </article>
-          @endguest
+          @endguest{{-- end guest login notification --}}
               
           @if(count($replies))
             <h3 class="tw-text-xl sm:tw-text-2xl">Replies:</h3>
@@ -59,38 +56,34 @@
                 @include('threads.partials.reply')
               </div>
             @endforeach
-
             {{ $replies->links() }}
           </div> {{-- end replies and pagination --}}
 
         </div> {{-- end replies section --}}
-    
       </div>{{-- end pannel --}}
       
-    </div>
+    </div>{{-- end column is-8 --}}
 
-    {{-- side widget --}}
     <div class="column">
+
       <div class="lu-card tw-text-center">
         <div class="lu-pannel-header">
-          
           <p class="lu-pannel-text">
             Thread published on {{ $thread->created_at->toFormattedDateString() }}
-          </p>
+          </p>{{-- end date --}}
 
           <p class="lu-pannel-text">
             By
             <a href={{ route('profiles.show', $thread->user) }} class="tw-text-green hover:tw-text-green-dark tw-font-semibold">
               {{ $thread->user->name}}
             </a>
-          </p>
+          </p>{{-- end user info --}}
 
-        
         <lu-counter :initial-count={{ $thread->replies_count }}></lu-counter> {{-- end Vue reply count component --}}
 
         </div>
       </div>{{-- end side widget --}}
-    </div>{{-- end column --}}
 
+    </div>{{-- end column --}}
   </div>
 @endsection

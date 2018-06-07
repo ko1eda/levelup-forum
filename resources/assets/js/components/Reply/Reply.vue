@@ -1,6 +1,11 @@
 
 <script>
+import Favorite from '../Favorite/Favorite.vue';
 export default {
+
+  components : {
+    'lu-favorite' : Favorite
+  },
 
   props: {
     attributes: {
