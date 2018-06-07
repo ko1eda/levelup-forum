@@ -14,6 +14,10 @@ class Reply extends Model
     protected $fillable = ['user_id', 'body'];
     protected $withCount=['favorites'];
 
+    // this adds any custom properties to 
+    // the json serializiation of the object
+    protected $appends = ['is_favorited'];
+
      /**
      * boot
      *

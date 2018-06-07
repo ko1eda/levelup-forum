@@ -75,7 +75,7 @@ class ParticipateInForumTest extends TestCase
             ->assertStatus(204);
     
         // Then the database should no longer have the reply
-        $this->assertDatabaseMissing('replies', $reply->toArray());
+        $this->assertDatabaseMissing('replies', $reply->makeHidden('is_favorited')->toArray());
             
         // Or its aassociated favorites 
         $this->assertDatabaseMissing('favorites', $favorite->toArray());

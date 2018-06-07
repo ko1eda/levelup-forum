@@ -131,7 +131,7 @@ class ManageThreadsTest extends TestCase
 
         // Then the favorite and reply are also deleted
         $this->assertDatabaseMissing('threads', $thread->makeHidden('channel')->toArray());
-        $this->assertDatabaseMissing('replies', $reply->toArray());
+        $this->assertDatabaseMissing('replies', $reply->makeHidden('is_favorited')->toArray());
         $this->assertDatabaseMissing('favorites', $favorite->toArray());
         
         // Then the associated thread record is deleted

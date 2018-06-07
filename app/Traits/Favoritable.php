@@ -14,7 +14,7 @@ trait Favoritable
      * Note it deletes all favorites individually
      * so that it will trigger the favorites delete
      * method -- this is so any Activity related
-     * to a favorite will also be deleted 
+     * to a favorite will also be deleted
      *
      * @return void
      */
@@ -56,6 +56,22 @@ trait Favoritable
     }
 
     /**
+     * Remove a favorite from the database if that favorite
+     * exists for the given user
+     *
+     * If not fail with a status code 404 not found (firstOrFail)
+     *
+     * @return void
+     */
+    public function removeFavorite()
+    {
+        return $this->favorites()
+            ->where('user_id', \Auth::user()->id)
+            ->firstOrFail()
+            ->delete();
+    }
+
+    /**
      * First Check if the user is authenticated
      * if so, check to see if the
      * user had already favorited the reply count(1) true
@@ -65,7 +81,7 @@ trait Favoritable
      * SINCE WE EAGER LOAD USER in the boot method
      * we can then access user_id as a property on the model
      *
-     * @return void
+     * @return boolean
      */
     public function isFavorited()
     {
@@ -73,7 +89,24 @@ trait Favoritable
             return false;
         }
 
-        return $this->favorites->where('user_id', \Auth::user()->id)->count();
+        return (boolean) $this->favorites->where('user_id', \Auth::user()->id)->count();
     }
 
+
+    /**
+     * Adds an is_favorited
+     * attribute to the serilization of any class
+     * that uses this trait (see -Reply.php for example)
+     *
+     * What this means is that any model that subscribes to this trait
+     * will have an is_favorited attribute on their toJSON or toArray serializations
+     * This attribute will reflect the returned boolean from the isFavorited method above 
+     * https://laravel.com/docs/5.6/eloquent-serialization
+     * 
+     * @return boolean
+     */
+    public function getIsFavoritedAttribute()
+    {
+        return $this->isFavorited();
+    }
 }
