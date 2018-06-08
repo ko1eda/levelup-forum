@@ -59,7 +59,7 @@
 
       <div class="lu-card tw-py-4 tw-mb-6">
         <ul class="tw-px-6">
-          @foreach($activities as $date => $activity)
+          @forelse($activities as $date => $activity)
             <span class="tw-text-sm">{{$date}}</span>
 
             @foreach($activity as $record)
@@ -67,8 +67,10 @@
                 @include("profiles.activities.{$record->type}", ['activity' => $record])
               </li>
             @endforeach
-
-          @endforeach
+          
+          @empty
+              <p class="tw-text-sm">There is no recent activity for this user :-(</p>
+          @endforelse
         </ul> 
       </div>{{-- end activity feed widget --}}
 
