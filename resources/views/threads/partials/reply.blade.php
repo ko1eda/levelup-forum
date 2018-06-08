@@ -58,9 +58,10 @@
           </div>
         @endif {{-- end edit/ Vue Edit Button --}}
         
+      @auth
+        <lu-favorite :reply-data="{{ $reply }}"></lu-favorite>{{-- end favorites widget --}}
+      @endauth
 
-      <lu-favorite :reply-data="{{ $reply }}"></lu-favorite>{{-- end favorites widget --}}
-  
       </div>{{-- end info level --}}
   
     </div>{{-- end reply body --}}

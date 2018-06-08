@@ -61,6 +61,19 @@ trait Favoritable
      *
      * If not fail with a status code 404 not found (firstOrFail)
      *
+     * IMPORTANT NOTE**** because laravel CAN only call model events
+     * ON MODELS, if FirstOrFail which returns an eloquent model was not used here and instead
+     * a delete request was preformed as an sql query
+     * The model event that removes all favorites in the boot method
+     * above would not be called and therefore when a favorite was
+     * deleted it would not actually delete the activity from the corresponding activity
+     * record.
+     * THis is because each MODEL has to be deleted individually have its
+     * model event called, and if there was no model to begin with (i.e we didn't get a concretion of a favorite using
+     * firstOrFail or another method like find or get or w/e that returns a collection of models) then the
+     * delete method on the boot event would have never been called.
+     * solution to this problem for a collection is commented below
+     *
      * @return void
      */
     public function removeFavorite()
@@ -69,6 +82,20 @@ trait Favoritable
             ->where('user_id', \Auth::user()->id)
             ->firstOrFail()
             ->delete();
+
+        // NOTE an alternative way to handle the problem mentioned in
+        // THE IMPORTANT NOTE
+        // THIS WORKS BETTER IF THE COLLECTION RETURNED IS MORE THAN ONE RESULT
+        // THE IMPORTANT TAKEAWAY IS TO CALL THE DELETE MODEL EVENT
+        // YOU MUST DELETE AN ACTUAL MODEL SO YOUR QUERY MUST RETURN A MODEL OR A COLLECTION
+        // OF MODELS WHICH YOU THEN DELETE EACH INDIVIDUALLY
+
+        // return $this->favorites()
+        //     ->where('user_id', \Auth::user()->id)
+        //     ->get()
+        //     ->each(function ($favorite) {
+        //         $favorite->delete();
+        //     });
     }
 
     /**
