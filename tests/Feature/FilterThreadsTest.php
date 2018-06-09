@@ -91,7 +91,7 @@ class FilterThreadsTest extends TestCase
                 'thread_id' => $thread
             ]);
         }
-         
+
         // If a user filters by popular querystring
         // then the user should see those threads,
         // sorted by reply count in descending order
@@ -102,5 +102,36 @@ class FilterThreadsTest extends TestCase
                 $leastPopularThread->title,
             ]);
     }
+    
+    /** @test */
+    public function a_user_can_filter_threads_by_unresponded()
+    {
+        // Given we have three threads
+        // One with no replies that is older
+        $threadNoReplies = factory(Thread::class)->create([
+            'created_at' => \Carbon\Carbon::now()->subDay()
+        ]);
 
+        // One with no replies that is more recent
+        $threadNoRepliesLatest = factory(Thread::class)->create();
+
+        // and one with replies
+        $threadWithReply = factory(Thread::class)->create();
+
+        factory(Reply::class)->create([
+            'thread_id' => $threadWithReply
+        ]);
+
+
+        // When the user selects the unresponded threads filter
+        // They should the the latest unresponded first
+        // The older unresponded second
+        // And they should not see the thread with replies
+        $this->get(route('threads.index', '?unresponded=1'))
+            ->assertSeeInOrder([
+                $threadNoRepliesLatest->title,
+                $threadNoReplies->title
+            ])
+            ->assertDontSee($threadWithReply->title);
+    }
 }

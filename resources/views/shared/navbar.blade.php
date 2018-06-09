@@ -21,6 +21,7 @@
           </a>
           <div class="navbar-dropdown is-boxed">
             <a class="navbar-item" href="{{ route('threads.index') }}">All Threads</a>
+            <a class="navbar-item" href="{{ route('threads.index', '?unresponded=1') }}">Unresponded Threads</a>
             <a class="navbar-item" href="/threads/?popular=1">Popular Threads</a>
             <a class="navbar-item" href="/threads/?trending=1">Trending Threads</a>
           </div>

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class ThreadFilter extends Filter
 {
 
-    protected $filters = ['by', 'popular', 'trending'];
+    protected $filters = ['by', 'popular', 'trending', 'unresponded'];
 
     /**
      * Return all threads for a given
@@ -38,6 +38,20 @@ class ThreadFilter extends Filter
         $this->builder->getQuery()->orders = [];
 
         return $this->builder->orderBy('replies_count', 'desc');
+    }
+    
+    /**
+     * Return only threads that have no replies
+     * ordered by the most recent thread
+     *
+     * @return Builder
+     */
+    protected function unresponded()
+    {
+        // clear out any pre-existing order by clause
+        $this->builder->getQuery()->orders = [];
+
+        return $this->builder->has('replies', 0)->latest();
     }
 
     /**
