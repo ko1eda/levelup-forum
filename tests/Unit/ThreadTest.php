@@ -42,7 +42,7 @@ class ThreadTest extends TestCase
     {
          // Given we have a thread
          // Then that thread must have an associated User
-         $this->assertInstanceOf(User::class, $this->thread->user);
+        $this->assertInstanceOf(User::class, $this->thread->user);
     }
 
     /** @test */
@@ -77,8 +77,44 @@ class ThreadTest extends TestCase
     /** @test */
     public function a_thread_belongs_to_a_channel()
     {
-       // Given we have a thread
-       // Then that thread should have an associated channel (main category)
-       $this->assertInstanceOf(Channel::class, $this->thread->channel);
+        // Given we have a thread
+        // Then that thread should have an associated channel (main category)
+        $this->assertInstanceOf(Channel::class, $this->thread->channel);
+    }
+
+
+    /** @test */
+    public function a_thread_can_be_subscribed_to()
+    {
+        // Given we have a thread
+        // And we call its addSubscription method for a given user
+        $user = factory(User::class)->create();
+        $this->thread->addSubscription($user);
+
+        // Then the databases subscriptions table should contain the corresponding entry
+        $this->assertDatabaseHas('subscriptions', [
+            'subscribable_id' => $this->thread->id,
+            'subscribable_type' => 'thread',
+            'user_id' => $user->id
+        ])
+        ->assertEquals(1, $this->thread->subscriptions()->count());
+    }
+
+
+    /** @test */
+    public function a_thread_can_be_unsubscribed_to()
+    {
+        // Given we have a thread with subscriptions
+        $user = factory(User::class)->create();
+        $this->thread->subscriptions()->create([
+            'user_id' => $user->id
+        ]);
+        // If we call the removeSubscription method and pass the user
+        $this->thread->removeSubscription($user);
+
+        // Then the subscriptions count should be zero
+        // Then the subscription should be removed from the database
+        $this->assertDatabaseMissing('subscriptions', ['subscribable_id' => $this->thread->id, 'user_id' => $user->id])
+            ->assertEquals(0, $this->thread->subscriptions()->count());
     }
 }

@@ -5,11 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\RecordActivity;
+use App\Traits\SubscribableTrait;
 
 class Thread extends Model
 {
 
-    use RecordActivity;
+    use RecordActivity, SubscribableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -66,6 +67,7 @@ class Thread extends Model
     {
         return $this->hasMany(Reply::class);
     }
+
     
     /**
      * A thread belongs to a user
@@ -99,14 +101,15 @@ class Thread extends Model
 
     /**
      * Add a reply to the given thread
+     *
      * @return void
      */
     public function addReply(array $reply)
     {
         $this->replies()->create($reply);
     }
-
-
+    
+    
     /**
      * Call the apply method of
      * the ThreadFilters class
