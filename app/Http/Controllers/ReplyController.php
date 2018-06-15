@@ -24,7 +24,7 @@ class ReplyController extends Controller
      * @param Request $req
      * @return void
      */
-    public function store(Channel $channel, Thread $thread, Request $req)
+    public function store(Thread $thread, Request $req)
     {
         // Remember that $thread
         // already has the correct id

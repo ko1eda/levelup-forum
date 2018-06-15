@@ -18,7 +18,7 @@ class ParticipateInForumTest extends TestCase
     {
         $thread = factory(Thread::class)->create();
 
-        $this->checkUnauthFunctionality('post', $thread->path('/replies'));
+        $this->checkUnauthFunctionality('post', route('replies.store', $thread));
     }
 
     /** @test */
@@ -34,7 +34,7 @@ class ParticipateInForumTest extends TestCase
         $reply = factory(Reply::class)->make([
             'thread_id' => $thread->id
         ]);
-        $this->post($thread->path('/replies'), $reply->toArray());
+        $this->post(route('replies.store', $thread), $reply->toArray());
         
         // Then the reply should be visible on the threads page
         $this->get($thread->path())
@@ -144,7 +144,7 @@ class ParticipateInForumTest extends TestCase
         // Then laravel should flash the corresponding
         // error to the session
         $this->withExceptionHandling()
-            ->post($thread->path('/replies'), $reply->toArray())
+            ->post(route('replies.store', $thread), $reply->toArray())
             ->assertSessionHasErrors('body');
     }
 }

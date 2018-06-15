@@ -1,4 +1,4 @@
-<form action="{{ $thread->path('/replies') }}" method="POST">
+<form action="{{ route('replies.store', $thread) }}" method="POST">
   {{ csrf_field() }}
   
   <div class="field">
