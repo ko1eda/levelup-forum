@@ -29,9 +29,6 @@
         <div class="lu-card-section tw-py-0 ">
           @auth
             @include('threads.partials.reply-form')
-            @if(count($replies))
-            <hr>{{-- line break if replies --}}
-            @endif
           @endauth
 
           @guest
@@ -44,9 +41,8 @@
           </article>
           @endguest{{-- end guest login notification --}}
               
-          @if(count($replies))
-            <h3 class="tw-text-xl sm:tw-text-2xl">Replies:</h3>
-          @endif{{-- replies heading--}}
+      
+          <lu-divider :initial-count={{ $thread->replies_count }}></lu-divider> {{-- divider between post and replies + replies heading--}}
 
           {{-- Note the id is so that we can navigate to a given reply --}}
           {{-- on the page using a hash link ex /#reply-4 --}}

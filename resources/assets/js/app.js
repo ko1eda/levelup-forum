@@ -3,6 +3,7 @@ import axios from 'axios';
 import FlashMessage from './components/Flash/FlashMessage.vue';
 import Reply from './components/Reply/Reply.vue';
 import ReplyCounter from './components/Reply/ReplyCounter.vue';
+import ReplyDivider from './components/Reply/ReplyDivider.vue';
 
 // Global axios instance with csrf token
 window.axios = axios;
@@ -33,6 +34,7 @@ const app = new Vue({
       'lu-flash-message' : FlashMessage,
       'lu-reply' : Reply,
       'lu-counter' : ReplyCounter,
+      'lu-divider' : ReplyDivider,
     }
 });
 
