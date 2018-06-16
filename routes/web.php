@@ -34,6 +34,11 @@ Route::delete('/replies/{reply}', 'ReplyController@destroy')->name('replies.dest
 Route::post('/replies/{reply}/favorites', 'FavoriteController@store')->name('favorites.store');
 Route::delete('/replies/{reply}/favorites', 'FavoriteController@destroy')->name('favorites.destroy');
 
+// subscriptions (this is a named route prefix grouping)
+Route::name('subscriptions.')->group(function () {
+    Route::post('/threads/{thread}/subscriptions', 'ThreadSubscriptionController@store')->name('threads.store');
+});
+
 // profiles
 Route::get('/profiles/{user}', 'ProfileController@show')->name('profiles.show');
 
