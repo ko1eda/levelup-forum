@@ -89,7 +89,7 @@ class ThreadTest extends TestCase
         // Given we have a thread
         // And we call its addSubscription method for a given user
         $user = factory(User::class)->create();
-        $this->thread->addSubscription($user);
+        $this->thread->addSubscription($user->id);
 
         // Then the databases subscriptions table should contain the corresponding entry
         $this->assertDatabaseHas('subscriptions', [
@@ -110,7 +110,7 @@ class ThreadTest extends TestCase
             'user_id' => $user->id
         ]);
         // If we call the removeSubscription method and pass the user
-        $this->thread->removeSubscription($user);
+        $this->thread->removeSubscription($user->id);
 
         // Then the subscriptions count should be zero
         // Then the subscription should be removed from the database
