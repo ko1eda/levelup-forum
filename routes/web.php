@@ -16,15 +16,18 @@ Route::get('/', function () {
 });
 
 
-// Threads Routes
+// subscriptions (this is above threads due to wildcard naming conflict with threads.destroy)
+Route::name('subscriptions.')->group(function () {
+    Route::post('/threads/{thread}/subscriptions', 'ThreadSubscriptionController@store')->name('threads.store');
+    Route::delete('/threads/{thread}/subscriptions', 'ThreadSubscriptionController@destroy')->name('threads.destroy');
+});
+
+// threads
 Route::get('/threads/create', 'ThreadController@create')->name('threads.create');
 Route::get('/threads/{channel?}', 'ThreadController@index')->name('threads.index');
 Route::post('/threads', 'ThreadController@store')->name('threads.store');
 
 Route::get('/threads/{channel}/{thread}', 'ThreadController@show')->name('threads.show');
-
-Route::delete('/threads/{thread}/subscriptions', 'ThreadSubscriptionController@destroy')->name('subscriptions.threads.destroy');
-
 Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy')->name('threads.destroy');  //change route
 
 // replies
@@ -36,11 +39,6 @@ Route::delete('/replies/{reply}', 'ReplyController@destroy')->name('replies.dest
 // favorites
 Route::post('/replies/{reply}/favorites', 'FavoriteController@store')->name('favorites.store');
 Route::delete('/replies/{reply}/favorites', 'FavoriteController@destroy')->name('favorites.destroy');
-
-// subscriptions (this is a named route prefix grouping)
-Route::name('subscriptions.')->group(function () {
-    Route::post('/threads/{thread}/subscriptions', 'ThreadSubscriptionController@store')->name('threads.store');
-});
 
 // profiles
 Route::get('/profiles/{user}', 'ProfileController@show')->name('profiles.show');
