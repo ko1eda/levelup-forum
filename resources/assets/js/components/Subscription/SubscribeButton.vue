@@ -49,8 +49,8 @@ export default {
     subscribe() {
       axios.post(this.endpoint)
         .then(res => {
-          console.log(res);
           this.isSubscribed = true;
+          flash('Subscribed to thread!')
         });
     },
 
@@ -58,21 +58,11 @@ export default {
 
       axios.delete(this.endpoint)
         .then(res => {
-          console.log(res);
           this.isSubscribed = false;
+           flash('Unsubscribed from thread!')
         });
     }
   },
 
 }
 </script>
-
-<style lang="scss" scoped>
-  .btn {
-    display: flex;
-    flex-direction: column;
-    flex-basis: 25%;
-    justify-content: center;
-  }
-</style>
-

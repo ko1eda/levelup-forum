@@ -16,7 +16,7 @@ class ThreadSubscriptionController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->only('store');
+        $this->middleware('auth');
     }
 
     /**
@@ -94,12 +94,10 @@ class ThreadSubscriptionController extends Controller
      */
     public function destroy(Thread $thread)
     {
-
-        $subExists = $thread->subscriptions()
-            ->exists('user_id', \Auth::user()->id);
-
-        if (!$subExists) {
-            return response([], 403);
+        // If the user has not subscribed to the thread
+        // return forbidden with message
+        if (!$thread->is_subscribed) {
+            return abort(403, 'Access denied');
         }
 
         $thread->removeSubscription();
