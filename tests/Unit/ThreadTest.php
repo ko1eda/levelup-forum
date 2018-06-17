@@ -117,4 +117,32 @@ class ThreadTest extends TestCase
         $this->assertDatabaseMissing('subscriptions', ['subscribable_id' => $this->thread->id, 'user_id' => $user->id])
             ->assertEquals(0, $this->thread->subscriptions()->count());
     }
+
+    
+    /** @test */
+    public function a_threads_is_subscribed_property_can_determine_if_the_auth_user_has_subscribed()
+    {
+        // Given we have a logged in user
+        $user = factory(User::class)->create();
+        $this->signInUser($user);
+
+        // And that user has subscribed to the thread
+        $this->thread->addSubscription();
+
+        // Then that threads is_subscribed attribute should return true
+        $this->assertTrue($this->thread->is_subscribed);
+
+        // And if that user logs off
+        \Auth::logout();
+
+        // Then that threads is_subscribed attribute should return false
+        $this->assertFalse($this->thread->is_subscribed);
+
+        // And if the user unsubscribes
+        $this->signInUser($user);
+        $this->thread->removeSubscription();
+        
+        // Then that threads is_subscribed attribute should return false
+        $this->assertFalse($this->thread->is_subscribed);
+    }
 }
