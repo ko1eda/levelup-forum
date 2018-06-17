@@ -40,4 +40,27 @@ class SubscriptionsTest extends TestCase
 
         // Then the user should recieve a notification relating to that new subscription
     }
+
+    /** @test */
+    public function an_authenticated_user_can_unsubscribe_to_a_thread()
+    {
+        // Given we have a signed in user
+        $this->signInUser();
+
+        // and a thread with a subscription
+        $thread = factory(Thread::class)->create();
+        $thread->addSubscription();
+        $this->assertEquals(1, $thread->subscriptions()->count());
+
+        // And that user hits our subscription endpoint /threads/{thread}/subscriptions
+        $this->delete(route('subscriptions.threads.destroy', $thread))
+            ->assertStatus(204);
+
+        // Then the database should contain a subscription for that user
+        $this->assertEquals(0, $thread->subscriptions->count());
+
+        // And when the thread recieves a new post
+
+        // Then the user should recieve a notification relating to that new subscription
+    }
 }

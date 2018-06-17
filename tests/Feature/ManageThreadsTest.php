@@ -100,7 +100,7 @@ class ManageThreadsTest extends TestCase
         // Note that makeHidden removes the channel information
         // from the array because it is not relevant to the array record
         // the channel information is bound to the array via route model binding
-        $this->assertDatabaseMissing('threads', $thread->makeHidden('channel')->toArray());
+        $this->assertDatabaseMissing('threads', $thread->makeHidden(['channel', 'is_subscribed'])->toArray());
     }
 
     /** @test */
@@ -130,7 +130,7 @@ class ManageThreadsTest extends TestCase
         $this->delete($route);
 
         // Then the favorite and reply are also deleted
-        $this->assertDatabaseMissing('threads', $thread->makeHidden('channel')->toArray());
+        $this->assertDatabaseMissing('threads', $thread->makeHidden(['channel', 'is_subscribed'])->toArray());
         $this->assertDatabaseMissing('replies', $reply->makeHidden('is_favorited')->toArray());
         $this->assertDatabaseMissing('favorites', $favorite->toArray());
         

@@ -17,7 +17,18 @@ class Thread extends Model
      * @var array
      */
     protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
+    
+    /**
+     * Add a count to the returned model.
+     * @var array
+     */
     protected $withCount = ['replies'];
+
+    /**
+     * Append mutators to the returned model.
+     * @var array
+     */
+    protected $appends = ['is_subscribed'];
 
     /**
      * boot

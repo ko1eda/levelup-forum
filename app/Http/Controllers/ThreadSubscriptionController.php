@@ -94,6 +94,16 @@ class ThreadSubscriptionController extends Controller
      */
     public function destroy(Thread $thread)
     {
-        //
+
+        $subExists = $thread->subscriptions()
+            ->exists('user_id', \Auth::user()->id);
+
+        if (!$subExists) {
+            return response([], 403);
+        }
+
+        $thread->removeSubscription();
+
+        return response([], 204);
     }
 }

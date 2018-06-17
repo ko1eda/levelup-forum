@@ -20,6 +20,20 @@
               </button>
             </form>
           @endcan {{-- end delete button --}}
+         
+
+          @auth {{-- if user is authenticated and it they do not own the thread  --}}
+            @if($thread->user_id !== \Auth::user()->id)
+
+              <lu-subscribe-button 
+                :subscribed="{{ $thread }}" 
+                :endpoint="{{ json_encode(route('subscriptions.threads.store', $thread)) }}">
+              </lu-subscribe-button>
+              
+            @endif
+          @endauth {{-- end Vue SubscribeButton component --}}
+
+
         </div>{{-- end header --}}
     
         <div class="lu-card-body tw-leading-loose"> 

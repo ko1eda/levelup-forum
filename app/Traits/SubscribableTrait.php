@@ -67,4 +67,19 @@ trait SubscribableTrait
             ->where('user_id', $user ? $user->id : \Auth::user()->id)
             ->delete();
     }
+
+
+    /**
+     * getIsSubscribedAttribute
+     *
+     * @return void
+     */
+    public function getIsSubscribedAttribute()
+    {
+        if (!\Auth::check()) {
+            return false;
+        }
+        
+        return (boolean) $this->subscriptions()->where('user_id', \Auth::user()->id)->count();
+    }
 }

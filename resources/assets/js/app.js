@@ -4,6 +4,7 @@ import FlashMessage from './components/Flash/FlashMessage.vue';
 import Reply from './components/Reply/Reply.vue';
 import ReplyCounter from './components/Reply/ReplyCounter.vue';
 import ReplyDivider from './components/Reply/ReplyDivider.vue';
+import SubscribeButton from './components/Subscription/SubscribeButton.vue';
 
 // Global axios instance with csrf token
 window.axios = axios;
@@ -35,6 +36,7 @@ const app = new Vue({
       'lu-reply' : Reply,
       'lu-counter' : ReplyCounter,
       'lu-divider' : ReplyDivider,
+      'lu-subscribe-button' : SubscribeButton
     }
 });
 

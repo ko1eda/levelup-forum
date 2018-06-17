@@ -17,12 +17,15 @@ Route::get('/', function () {
 
 
 // Threads Routes
-Route::get('/threads/create', 'ThreadController@create')->name('threads.create'); //possible /{channel}/create
+Route::get('/threads/create', 'ThreadController@create')->name('threads.create');
 Route::get('/threads/{channel?}', 'ThreadController@index')->name('threads.index');
 Route::post('/threads', 'ThreadController@store')->name('threads.store');
 
 Route::get('/threads/{channel}/{thread}', 'ThreadController@show')->name('threads.show');
-Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy')->name('threads.destroy');
+
+Route::delete('/threads/{thread}/subscriptions', 'ThreadSubscriptionController@destroy')->name('subscriptions.threads.destroy');
+
+Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy')->name('threads.destroy');  //change route
 
 // replies
 Route::post('/threads/{thread}/replies', 'ReplyController@store')->name('replies.store');
