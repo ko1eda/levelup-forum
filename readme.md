@@ -2,7 +2,9 @@
 
 An open source forum project to showcase my ungoing efforts to master fullstack development. This project is still in development.
 
-***10/17/18:*** I appologize for the unstyled login and registration forms pls bear with me :-(
+**10/17/18:** I appologize for the unstyled login and registration forms pls bear with me :-(
+
+**10/17/18:** Also make sure after you register a user, you navigate to http:://levelupforum.test/threads as the home route is not currently set up.
  
 ## Installation 
 > ***Prequisite***: to run the project files you must have PHP 7 installed on your development machine.
@@ -33,4 +35,4 @@ After creating and wiring up your database you must then run all the included mi
 ``` php artisan migrate ```
 
 ### Step 4:
-Start up a development server, visit www.levelupforum.test in your browser, register a new user and enjoy.
+Start up a development server, visit http:://levelupforum.test/threads in your browser, register a new user and enjoy.
