@@ -6,8 +6,9 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Thread;
+use App\Reply;
 
-class SubscriptionsTest extends TestCase
+class SubscribeToThreadsTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -36,9 +37,14 @@ class SubscriptionsTest extends TestCase
         // Then the database should contain a subscription for that user
         $this->assertEquals(1, $thread->subscriptions()->count());
 
-        // And when the thread recieves a new post
+        // And when the thread recieves a new reply
+        $thread->addReply([
+            'user_id' => \Auth::user()->id,
+            'body' => 'I am the replies body'
+        ]);
 
         // Then the user should recieve a notification relating to that new subscription
+        // $this->assertEquals(1, $thread->notfications()->count());
     }
 
     
