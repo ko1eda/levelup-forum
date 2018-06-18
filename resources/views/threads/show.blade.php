@@ -26,7 +26,7 @@
             @if($thread->user_id !== \Auth::user()->id)
 
               <lu-subscribe-button 
-                :subscribed="{{ $thread }}" 
+                :subscribed="{{ $thread->makeHidden('user') }}" 
                 :endpoint="{{ json_encode(route('subscriptions.threads.store', $thread)) }}">
               </lu-subscribe-button>
               
