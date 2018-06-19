@@ -35,19 +35,13 @@ class SubscribeToThreadsTest extends TestCase
             ->assertSee('Subscription added');
 
         // Then the database should contain a subscription for that user
-        $this->assertEquals(1, $thread->subscriptions()->count());
+        $this->assertCount(1, $thread->subscriptions);
 
-        // And when the thread recieves a new reply
-        $thread->addReply([
-            'user_id' => \Auth::user()->id,
-            'body' => 'I am the replies body'
-        ]);
-
-        // Then the user should recieve a notification relating to that new subscription
-        // $this->assertEquals(1, $thread->notfications()->count());
+        // and the user should have no notifications currently
+        $this->assertCount(0, \Auth::user()->notifications);
     }
 
-    
+
     /** @test */
     public function an_authenticated_user_can_subscribe_to_a_thread_only_once()
     {

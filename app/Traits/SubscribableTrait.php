@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Subscription;
 use App\User;
+use App\Interfaces\NotificationInterface;
 
 trait SubscribableTrait
 {
@@ -52,6 +53,25 @@ trait SubscribableTrait
         $this->subscriptions()->firstOrCreate([
             'user_id' => $userID ? $userID : \Auth::user()->id
         ]);
+    }
+
+
+    /**
+     * For each subscription on the given model,
+     * find all the associated subscribed users whose user ids are not in
+     * the blacklist and send them the passed in notification
+     *
+     * @param \App\Interface\NotificationInterface $notification
+     * @param array $blacklist list of user ids whom you do not want to notify
+     * @return void
+     */
+    public function notifySubscribers(NotificationInterface $notification, array $blacklist = [-1])
+    {
+        $this->subscriptions
+            ->whereNotIn('user_id', $blacklist)
+            ->each(function ($subscription) use ($notification) {
+                $subscription->user->notify($notification);
+            });
     }
    
    

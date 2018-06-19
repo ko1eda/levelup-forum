@@ -83,12 +83,6 @@ class ThreadController extends Controller
      */
     public function show(Channel $channel, Thread $thread)
     {
-        // if (\Auth::check()) {
-        //     $thread = $thread->load(['subscriptions' => function ($q) {
-        //         $q->where('user_id', \Auth::user()->id);
-        //     }]);
-        // }
-
         if ($thread->channel_id === $channel->id) {
             $replies = $thread
                 ->replies()
