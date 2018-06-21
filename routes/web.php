@@ -43,18 +43,13 @@ Route::delete('/replies/{reply}/favorites', 'FavoriteController@destroy')->name(
 // users
 Route::get('/profiles/{user}', 'ProfileController@show')->name('profiles.show');
 
-// if the specific notification is missing from the uri, delete all notifications
-// Route::delete('/users/notifications/{notification?}', 'UserNotificationController@destroy')
-//     ->middleware('auth')
-//     ->name('users.notifications.destroy');
-  
-
+// api endpoints
 Route::prefix('api')->group(function () {
-    
+
     // User Notifications
     Route::get('/profiles/{user}/notifications', 'UserNotificationController@index')
         ->name('users.notifications.index');
-    
+
     Route::patch('/profiles/{user}/notifications/{notification?}', 'UserNotificationController@update')
         ->name('users.notifications.update');
 });
