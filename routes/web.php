@@ -16,16 +16,22 @@ Route::get('/', function () {
 });
 
 
-// Threads Routes
-Route::get('/threads/create', 'ThreadController@create')->name('threads.create'); //possible /{channel}/create
+// subscriptions (this is above threads due to wildcard naming conflict with threads.destroy)
+Route::name('subscriptions.')->group(function () {
+    Route::post('/threads/{thread}/subscriptions', 'ThreadSubscriptionController@store')->name('threads.store');
+    Route::delete('/threads/{thread}/subscriptions', 'ThreadSubscriptionController@destroy')->name('threads.destroy');
+});
+
+// threads
+Route::get('/threads/create', 'ThreadController@create')->name('threads.create');
 Route::get('/threads/{channel?}', 'ThreadController@index')->name('threads.index');
 Route::post('/threads', 'ThreadController@store')->name('threads.store');
 
 Route::get('/threads/{channel}/{thread}', 'ThreadController@show')->name('threads.show');
-Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy')->name('threads.destroy');
+Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy')->name('threads.destroy');  //change route
 
 // replies
-Route::post('/threads/{channel}/{thread}/replies', 'ReplyController@store')->name('replies.store');
+Route::post('/threads/{thread}/replies', 'ReplyController@store')->name('replies.store');
 
 Route::patch('/replies/{reply}', 'ReplyController@update')->name('replies.update');
 Route::delete('/replies/{reply}', 'ReplyController@destroy')->name('replies.destroy');
@@ -34,7 +40,23 @@ Route::delete('/replies/{reply}', 'ReplyController@destroy')->name('replies.dest
 Route::post('/replies/{reply}/favorites', 'FavoriteController@store')->name('favorites.store');
 Route::delete('/replies/{reply}/favorites', 'FavoriteController@destroy')->name('favorites.destroy');
 
-// profiles
+// users
 Route::get('/profiles/{user}', 'ProfileController@show')->name('profiles.show');
+
+// if the specific notification is missing from the uri, delete all notifications
+// Route::delete('/users/notifications/{notification?}', 'UserNotificationController@destroy')
+//     ->middleware('auth')
+//     ->name('users.notifications.destroy');
+  
+
+Route::prefix('api')->group(function () {
+    
+    // User Notifications
+    Route::get('/profiles/{user}/notifications', 'UserNotificationController@index')
+        ->name('users.notifications.index');
+    
+    Route::patch('/profiles/{user}/notifications/{notification?}', 'UserNotificationController@update')
+        ->name('users.notifications.update');
+});
 
 Auth::routes();

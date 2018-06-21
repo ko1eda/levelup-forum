@@ -5,18 +5,31 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\RecordActivity;
+use App\Traits\SubscribableTrait;
+use App\Notifications\ThreadUpdated;
 
 class Thread extends Model
 {
 
-    use RecordActivity;
+    use RecordActivity, SubscribableTrait;
 
     /**
      * The attributes that are mass assignable.
      * @var array
      */
     protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
+    
+    /**
+     * Add a count to the returned model.
+     * @var array
+     */
     protected $withCount = ['replies'];
+
+    /**
+     * Append mutators to the returned model.
+     * @var array
+     */
+    protected $appends = ['is_subscribed'];
 
     /**
      * boot
@@ -66,6 +79,7 @@ class Thread extends Model
     {
         return $this->hasMany(Reply::class);
     }
+
     
     /**
      * A thread belongs to a user
@@ -99,18 +113,27 @@ class Thread extends Model
 
     /**
      * Add a reply to the given thread
-     * @return void
+     * and notify the subscribed users
+     * 
+     * @return App\Reply $reply
      */
     public function addReply(array $reply)
     {
-        $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);
+        
+        $this->notifySubscribers(
+            new ThreadUpdated($this, $reply),
+            [$reply->user_id]
+        );
+
+        return $reply;
     }
-
-
+    
+    
     /**
      * Call the apply method of
      * the ThreadFilters class
-     * passing in an Instance of
+     * passing in an Instance <of></of>
      * the querybuilder
      *
      * @param mixed $query

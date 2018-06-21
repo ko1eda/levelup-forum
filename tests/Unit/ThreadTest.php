@@ -42,7 +42,7 @@ class ThreadTest extends TestCase
     {
          // Given we have a thread
          // Then that thread must have an associated User
-         $this->assertInstanceOf(User::class, $this->thread->user);
+        $this->assertInstanceOf(User::class, $this->thread->user);
     }
 
     /** @test */
@@ -77,8 +77,72 @@ class ThreadTest extends TestCase
     /** @test */
     public function a_thread_belongs_to_a_channel()
     {
-       // Given we have a thread
-       // Then that thread should have an associated channel (main category)
-       $this->assertInstanceOf(Channel::class, $this->thread->channel);
+        // Given we have a thread
+        // Then that thread should have an associated channel (main category)
+        $this->assertInstanceOf(Channel::class, $this->thread->channel);
+    }
+
+
+    /** @test */
+    public function a_thread_can_be_subscribed_to()
+    {
+        // Given we have a thread
+        // And we call its addSubscription method for a given user
+        $user = factory(User::class)->create();
+        $this->thread->addSubscription($user->id);
+
+        // Then the databases subscriptions table should contain the corresponding entry
+        $this->assertDatabaseHas('subscriptions', [
+            'subscribable_id' => $this->thread->id,
+            'subscribable_type' => 'thread',
+            'user_id' => $user->id
+        ])
+        ->assertEquals(1, $this->thread->subscriptions()->count());
+    }
+
+
+    /** @test */
+    public function a_thread_can_be_unsubscribed_to()
+    {
+        // Given we have a thread with subscriptions
+        $user = factory(User::class)->create();
+        $this->thread->subscriptions()->create([
+            'user_id' => $user->id
+        ]);
+        // If we call the removeSubscription method and pass the user
+        $this->thread->removeSubscription($user->id);
+
+        // Then the subscriptions count should be zero
+        // Then the subscription should be removed from the database
+        $this->assertDatabaseMissing('subscriptions', ['subscribable_id' => $this->thread->id, 'user_id' => $user->id])
+            ->assertEquals(0, $this->thread->subscriptions()->count());
+    }
+
+    
+    /** @test */
+    public function a_threads_is_subscribed_property_can_determine_if_the_auth_user_has_subscribed()
+    {
+        // Given we have a logged in user
+        $user = factory(User::class)->create();
+        $this->signInUser($user);
+
+        // And that user has subscribed to the thread
+        $this->thread->addSubscription();
+
+        // Then that threads is_subscribed attribute should return true
+        $this->assertTrue($this->thread->is_subscribed);
+
+        // And if that user logs off
+        \Auth::logout();
+
+        // Then that threads is_subscribed attribute should return false
+        $this->assertFalse($this->thread->is_subscribed);
+
+        // And if the user unsubscribes
+        $this->signInUser($user);
+        $this->thread->removeSubscription();
+        
+        // Then that threads is_subscribed attribute should return false
+        $this->assertFalse($this->thread->is_subscribed);
     }
 }

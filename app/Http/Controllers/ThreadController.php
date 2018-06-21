@@ -28,10 +28,10 @@ class ThreadController extends Controller
         $threads = Thread::latest()->filter($filters);
 
         !isset($channel)
-            ?: $threads = $threads->where('channel_id', '=', $channel->id);
-        
+            ? : $threads = $threads->where('channel_id', '=', $channel->id);
+
         $threads = $threads->paginate(25);
-    
+
         return view('threads.index', compact('threads'));
     }
 
@@ -67,7 +67,7 @@ class ThreadController extends Controller
             'user_id' => \Auth::user()->id,
             'channel_id' => $req->get('channel_id')
         ]);
-        
+
         return redirect($thread->path())
             ->with('flash', 'Published A Thread');
     }
@@ -83,19 +83,18 @@ class ThreadController extends Controller
      */
     public function show(Channel $channel, Thread $thread)
     {
-
         if ($thread->channel_id === $channel->id) {
             $replies = $thread
                 ->replies()
                 ->latest()
                 ->paginate(25);
-            
+
             return view(
                 'threads.show',
                 compact('thread', 'replies')
             );
         }
-        
+
         return back()
             ->with('flash', 'Activity Forbidden');
     }
@@ -147,9 +146,9 @@ class ThreadController extends Controller
         // if not it will automatically
         // throw a 403 forbidden response
         $this->authorize('delete', $thread);
-        
+
         $thread->delete();
-  
+
         if (request()->wantsJson()) {
             return response([], 204);
         }
