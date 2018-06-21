@@ -52,10 +52,10 @@ Route::get('/profiles/{user}', 'ProfileController@show')->name('profiles.show');
 Route::prefix('api')->group(function () {
     
     // User Notifications
-    Route::get('/users/{user}/notifications', 'UserNotificationController@index')
+    Route::get('/profiles/{user}/notifications', 'UserNotificationController@index')
         ->name('users.notifications.index');
     
-    Route::patch('/users/{user}/notifications/{notification?}', 'UserNotificationController@update')
+    Route::patch('/profiles/{user}/notifications/{notification?}', 'UserNotificationController@update')
         ->name('users.notifications.update');
 });
 

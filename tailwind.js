@@ -102,6 +102,7 @@ let colors = {
   'bulma-darkest': '#242424',
 
   'bulma-black': '#121212',
+  'bulma-link' : '#3273DC',
 
   // activity feed
   'bulma-warning-light' : '#fffdf5',

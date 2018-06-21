@@ -54,15 +54,20 @@ class ThreadUpdated extends Notification implements NotificationInterface
 
     /**
      * Get the array representation of the notification.
-     *
+     * the link is the hash link to the specific reply that caused
+     * the notification.
+     * 
+     * Note: the false parameter in route() specifies absolute path
+     * by setting it to fault we get the relative path
      * @param  mixed  $notifiable
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            'message' => substr($this->reply->body, 0, 25) .'...',
-            'username' => $this->reply->user->name
+            'message' => substr($this->reply->body, 0, 20) .'...',
+            'username' => $this->reply->user->name,
+            'link' => route('threads.show', [$this->thread->channel, $this->thread], false).'#reply-'.$this->reply->id
         ];
     }
 }

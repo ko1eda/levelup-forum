@@ -47,6 +47,28 @@
         <a class="navbar-item" href="{{ route('login') }}">{{ __('Login') }}</a>
         <a class="navbar-item" href="{{ route('register') }}">{{ __('Register') }}</a>
         @else
+          {{-- <div class="navbar-item has-dropdown is-hoverable">
+
+            @if(count(Auth::user()->unreadNotifications))
+              <a class="navbar-link">
+                <i class="fas fa-bell tw-text-lg tw-text-green tw-cursor-pointer" title="Unsubscribe to this thread"></i>
+              </a> 
+
+            @else
+              <a class="navbar-link">
+                <i class="far fa-bell tw-text-lg tw-text-green tw-cursor-pointer" title="Unsubscribe to this thread"></i>
+              </a> 
+            @endif --}}
+
+          <lu-notification-widget 
+              :user-data="{{ \Auth::user()->makeHidden('email') }}"
+              :index-route={{ json_encode(route('users.notifications.index', \Auth::user(), false )) }}
+              :mark-route={{ json_encode(route('users.notifications.update', \Auth::user(), false)) }}>
+          </lu-notification-widget>
+
+            {{-- </div> --}}
+
+
           <div class="navbar-item has-dropdown is-hoverable ">
             <a class="navbar-link">
               {{ Auth::user()->name }}
