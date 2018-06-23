@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Thread;
 use App\Reply;
 use App\Channel;
+use App\SpamFilter;
 
 class ReplyController extends Controller
 {
@@ -24,14 +25,13 @@ class ReplyController extends Controller
      * @param Request $req
      * @return void
      */
-    public function store(Thread $thread, Request $req)
+    public function store(Thread $thread, Request $req, SpamFilter $spam)
     {
-        // Remember that $thread
-        // already has the correct id
-        // bound to it b/c route model binding
         $this->validate($req, [
             'body' => 'required'
         ]);
+
+        $spam->detect($req->get('body'));
 
         $thread->addReply([
             'body' => $req->get('body'),

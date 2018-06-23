@@ -13,9 +13,19 @@ class ParticipateInForumTest extends TestCase
 {
     use RefreshDatabase;
 
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->signInUser();
+    }
+
     /** @test */
     public function an_unauthenticated_user_cannot_reply_to_a_thread()
     {
+        \Auth::logout();
+
         $thread = factory(Thread::class)->create();
 
         $this->checkUnauthFunctionality('post', route('replies.store', $thread));
@@ -25,8 +35,6 @@ class ParticipateInForumTest extends TestCase
     public function an_authenticated_user_can_reply_to_a_thread()
     {
         // Given we have a authenticated user
-        $this->signInUser();
-
         // When that user navigates to an existing thread
         $thread = factory(Thread::class)->create();
     
@@ -44,6 +52,8 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     public function an_unauthenticated_user_cannot_delete_a_reply()
     {
+        \Auth::logout();
+
         $reply = factory(Reply::class)->create();
 
         $this->checkUnauthFunctionality('delete', route('replies.destroy', $reply));
@@ -53,17 +63,17 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     public function an_authorized_user_can_only_delete_their_own_replies_and_all_the_associated_data()
     {
+        
+        $this->withExceptionHandling();
+
         // Given we have a user
-        $this->withExceptionHandling()
-            ->signInUser();
-    
         // And and two replies
         // a reply by the current logged user
         $reply = factory(Reply::class)->create([
             'user_id' => \Auth::user()->id
         ]);
     
-        // which was favorited 
+        // which was favorited
         $favorite = $reply->addFavorite();
     
         // And a reply buy another another user
@@ -77,7 +87,7 @@ class ParticipateInForumTest extends TestCase
         // Then the database should no longer have the reply
         $this->assertDatabaseMissing('replies', $reply->makeHidden('is_favorited')->toArray());
             
-        // Or its aassociated favorites 
+        // Or its aassociated favorites
         $this->assertDatabaseMissing('favorites', $favorite->toArray());
             
            
@@ -90,6 +100,8 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     public function an_unauthenticated_user_cannot_update_a_reply()
     {
+        \Auth::logout();
+
         $reply = factory(Reply::class)->create();
 
         $this->checkUnauthFunctionality('patch', route('replies.update', $reply));
@@ -100,8 +112,7 @@ class ParticipateInForumTest extends TestCase
     public function an_authorized_user_can_only_update_their_own_reply()
     {
         // Given we have a user
-        $this->withExceptionHandling()
-            ->signInUser();
+        $this->withExceptionHandling();
 
         // and that user has a reply
         $reply = factory(Reply::class)->create([
@@ -133,8 +144,6 @@ class ParticipateInForumTest extends TestCase
     public function a_published_reply_must_have_a_body()
     {
         // Given we have a authenticated user
-        $this->signInUser();
-
         // When that user navigates to an existing thread
         // and makes a reply
         $thread = factory(Thread::class)->create();
@@ -146,5 +155,21 @@ class ParticipateInForumTest extends TestCase
         $this->withExceptionHandling()
             ->post(route('replies.store', $thread), $reply->toArray())
             ->assertSessionHasErrors('body');
+    }
+   
+   
+    /** @test */
+    public function a_reply_that_contains_spam_cannot_be_published()
+    {
+        // Given we have a user
+        // And that user posts a reply
+        $thread = factory(Thread::class)->create();
+        $reply = factory(Reply::class)->make(['body' => 'Yahoo Customer Support']);
+        
+        // If the user posts the reply and
+        // the spam detection determines there is spam
+        // Then it will throw an exception
+        $this->expectException(\Exception::class);
+        $this->post(route('replies.store', [$thread]), $reply->toArray());
     }
 }
