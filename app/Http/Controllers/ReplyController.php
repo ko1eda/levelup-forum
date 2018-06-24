@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Thread;
 use App\Reply;
 use App\Channel;
-use App\SpamFilter;
+use App\Inspections\SpamManager;
 
 class ReplyController extends Controller
 {
@@ -25,7 +25,7 @@ class ReplyController extends Controller
      * @param Request $req
      * @return void
      */
-    public function store(Thread $thread, Request $req, SpamFilter $spam)
+    public function store(Thread $thread, Request $req, SpamManager $spam)
     {
         $this->validate($req, [
             'body' => 'required'

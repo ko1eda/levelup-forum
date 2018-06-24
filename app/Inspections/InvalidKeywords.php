@@ -1,8 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Inspections;
 
-class SpamFilter
+use App\Inspections\Spam;
+use App\Inspections\Contracts\SpamDetectionInterface;
+
+class InvalidKeywords extends Spam
 {
 
     /**
@@ -18,58 +21,48 @@ class SpamFilter
 
     /**
      * Takes an optional indexed array of additional keywords
-     * to run against the spam detector
+     * and an optional threshold parameter for testing
      *
      * @param array $blacklist
      * @return void
      */
-    public function __construct(array $blacklist = null)
+    public function __construct(int $threshold = null, array $blacklist = null)
     {
-        !$blacklist ? : array_merge($this->blacklist, $blacklist);
+        // If there is a $blacklist merge it with the existing
+        !$blacklist ?: array_merge($this->blacklist, $blacklist);
+
+        !$threshold ?: $this->threshold = $threshold;
     }
 
 
     /**
-     * detect
-     *
-     * @param String $message
-     * @return mixed
-     */
-    public function detect(String $message)
-    {
-        if ($this->runAgainstBlackList($message)) {
-            throw new \Exception('Spam Detected Exception');
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Runs the message against the
-     * keyword $blacklist array
+     * If no exception is thrown by the test
+     * then return false
      *
      * @param String $message
      * @return boolean
      */
-    protected function runAgainstBlacklist(String $message)
+    public function scan(String $message)
     {
-        $numHits = 0;
-    
         foreach ($this->blacklist as $keyword) {
             $pattern = $this->buildRegEx($keyword);
 
-            $numHits .= preg_match_all($pattern, $message);
+            $this->numHits .= preg_match_all($pattern, $message);
+    
+            $this->checkSpamStatus();
         }
-
-        return $numHits >= 1 ? true : false;
+        
+        return false;
     }
 
-
+   
     /**
      * Split the keyword into its individial words
      * loop through the words and build a regexpression from them
      * then return the expression
+     *
+     * The expression checks for any character
+     * That could seperate the phrase
      *
      * @param String $message
      * @return String
@@ -83,7 +76,7 @@ class SpamFilter
 
         // If the keyword is only one word
         if ($len == 1) {
-            return $regExFull . $keywords[0] . $reg .'/i';
+            return $regExFull . $keywords[0] . $reg . '/i';
         }
 
         // If the keyword is a phrase
@@ -91,28 +84,14 @@ class SpamFilter
             trim($keywords[$i]);
         
             // the end of the array
-            if ($i  === $len - 1) {
+            if ($i === $len - 1) {
                 $regExFull .= $keywords[$i] . $reg . '/i';
                 break;
             }
 
-            $regExFull .= $keywords[$i] .$reg;
+            $regExFull .= $keywords[$i] . $reg;
         }
 
-        return  $regExFull;
-    }
-
-
-    /**
-     * populateBlackList
-     *
-     * @param mixed array
-     * @return void
-     */
-    protected function populateBlackList(array $blacklist = null)
-    {
-        // parse the blacklist array
-        $keywords = preg_split('/[^\w]+/m', $keyword);
-        // and store it in the protected variable
+        return $regExFull;
     }
 }
