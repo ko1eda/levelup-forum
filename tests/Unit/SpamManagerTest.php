@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Inspections\SpamManager;
+use App\Providers\SpamServiceProvider;
 
 class SpamManagerTest extends TestCase
 {
@@ -14,8 +15,8 @@ class SpamManagerTest extends TestCase
     public function it_checks_for_invalid_keywords()
     {
         // Given we have two keywords are entered into the spam filter
-        $filter = new SpamManager(null, $threshold = 1);
-
+        $filter = app()->make(SpamManager::class);
+    
         // One not on the spam filters blacklist
         $keyNotOnList = 'Dogs r cool';
 
@@ -35,7 +36,7 @@ class SpamManagerTest extends TestCase
     public function it_checks_for_repeated_keypress()
     {
         // Create a new spam filter
-        $filter = new SpamManager(null, $threshold = 2);
+        $filter = app()->make(SpamManager::class);
 
         // If a message with repeated characters is run through the filter
         $repeatedStr = 'dude what the hell aaaaaaaaaaaaaaa uuuuuuuuuuuuuuuuuuu';

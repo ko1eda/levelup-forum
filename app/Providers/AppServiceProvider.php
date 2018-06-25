@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use App\Inspections\InvalidKeywords;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -48,6 +49,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(InvalidKeywords::class, function ($app) {
+            return new InvalidKeywords(config('spam.blacklist'));
+        });
     }
 }

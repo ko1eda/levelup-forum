@@ -8,17 +8,17 @@ use App\Inspections\Contracts\SpamDetectionInterface;
 class RepeatedCharacters extends Spam
 {
 
-    /**
-     * Takes an optional indexed array of additional keywords
-     * and an optional threshold parameter for testing
-     *
-     * @param int $threshold
-     * @return void
-     */
-    public function __construct(int $threshold = null, array $blacklist = null)
-    {
-        !$threshold ?: $this->threshold = $threshold;
-    }
+    // /**
+    //  * Takes an optional indexed array of additional keywords
+    //  * and an optional threshold parameter for testing
+    //  *
+    //  * @param int $threshold
+    //  * @return void
+    //  */
+    // public function __construct(int $threshold = null, array $blacklist = null)
+    // {
+    //     !$threshold ?: $this->threshold = $threshold;
+    // }
 
 
     /**

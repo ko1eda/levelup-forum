@@ -2,6 +2,10 @@
 
 namespace App\Inspections;
 
+use App\Inspections\Spam;
+use App\Inspections\InvalidKeywords;
+use App\Inspections\RepeatedCharacters;
+
 class SpamManager
 {
 
@@ -12,7 +16,7 @@ class SpamManager
      */
     protected $threshold;
 
-    
+
     /**
      * $blacklist
      *
@@ -26,10 +30,7 @@ class SpamManager
      *
      * @var array
      */
-    protected $inspections = [
-        InvalidKeywords::class,
-        RepeatedCharacters::class
-    ];
+    protected $inspections = [];
 
 
     /**
@@ -40,27 +41,29 @@ class SpamManager
      * @param int $threshold
      * @return void
      */
-    public function __construct(array $blacklist = null, int $threshold = null)
-    {
-        !$blacklist ? : $this->blacklist = $blacklist;
-        !$threshold ? : $this->threshold = $threshold;
+    public function __construct(
+        InvalidKeywords $invalidKeyWords,
+        RepeatedCharacters $RepeatedCharacters
+    ) {
+        $this->inspections = func_get_args();
     }
 
 
     /**
-     * If no exception is thrown by the tests
-     * then return false
+     * Loop through the list of Spam Inspection classes
+     * Resolve them from the IoC containter
+     * Call their scan method on the passed in text
+     * Return null if no exception is thrown
      *
      * @param String $message
-     * @return mixed
+     * @return Exception|boolean
      */
     public function detect(String $message)
     {
         foreach ($this->inspections as $inspection) {
-            app()->makeWith($inspection, [$this->threshold, $this->blacklist])
-                ->scan($message);
+            $inspection->scan($message);
         }
-        
+
         return false;
     }
 }

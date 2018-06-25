@@ -19,7 +19,33 @@ abstract class Spam
      *
      * @var integer
      */
-    protected $threshold = 1;
+    protected $threshold;
+
+
+    /**
+     * $blacklist
+     *
+     * @var array
+     */
+    protected $blacklist = [];
+
+
+    /**
+    * __construct
+    *
+    * @return void
+    */
+    final public function __construct($blacklist = null, $threshold = null)
+    {
+        isset($this->threshold)
+            ? $this->threshold = $threshold
+            : $this->threshold = config('spam.threshold');
+
+        // If there is a $blacklist merge it with the existing
+        isset($blacklist)
+            ? $this->blacklist = $blacklist
+            : $this->blacklist = config('spam.blacklist');
+    }
 
 
     /**
@@ -29,7 +55,6 @@ abstract class Spam
      * @return void
      */
     abstract public function scan(String $message);
-
 
 
     /**

@@ -8,32 +8,6 @@ use App\Inspections\Contracts\SpamDetectionInterface;
 class InvalidKeywords extends Spam
 {
 
-    /**
-     * An array of keywords or terms
-     * to run through the spam detector.
-     *
-     * @var array
-     */
-    protected $blacklist = [
-        'Yahoo Customer Support'
-    ];
-
-
-    /**
-     * Takes an optional indexed array of additional keywords
-     * and an optional threshold parameter for testing
-     *
-     * @param array $blacklist
-     * @return void
-     */
-    public function __construct(int $threshold = null, array $blacklist = null)
-    {
-        // If there is a $blacklist merge it with the existing
-        !$blacklist ?: array_merge($this->blacklist, $blacklist);
-
-        !$threshold ?: $this->threshold = $threshold;
-    }
-
 
     /**
      * If no exception is thrown by the test
