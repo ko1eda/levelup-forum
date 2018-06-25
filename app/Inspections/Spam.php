@@ -40,6 +40,8 @@ abstract class Spam
         isset($this->threshold)
             ? $this->threshold = $threshold
             : $this->threshold = config('spam.threshold');
+        
+        // dd($this->threshold);
 
         // If there is a $blacklist merge it with the existing
         isset($blacklist)

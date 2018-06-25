@@ -6,7 +6,8 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Inspections\SpamManager;
-use App\Providers\SpamServiceProvider;
+use App\Inspections\InvalidKeywords;
+use App\Inspections\RepeatedCharacters;
 
 class SpamManagerTest extends TestCase
 {
@@ -36,13 +37,13 @@ class SpamManagerTest extends TestCase
     public function it_checks_for_repeated_keypress()
     {
         // Create a new spam filter
-        $filter = app()->make(SpamManager::class);
+        $filter = app()->makeWith(RepeatedCharacters::class, [null, $treshold = 2]);
 
         // If a message with repeated characters is run through the filter
         $repeatedStr = 'dude what the hell aaaaaaaaaaaaaaa uuuuuuuuuuuuuuuuuuu';
     
         // Then an exception will be thrown
         $this->expectException(\Exception::class);
-        $filter->detect($repeatedStr);
+        $filter->scan($repeatedStr);
     }
 }

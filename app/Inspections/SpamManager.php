@@ -8,23 +8,6 @@ use App\Inspections\RepeatedCharacters;
 
 class SpamManager
 {
-
-    /**
-     * $threshold
-     *
-     * @var integer
-     */
-    protected $threshold;
-
-
-    /**
-     * $blacklist
-     *
-     * @var array
-     */
-    protected $blacklist;
-
-
     /**
      * List of spam inspections to run
      *

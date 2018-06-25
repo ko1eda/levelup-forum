@@ -8,7 +8,6 @@ use App\Inspections\Contracts\SpamDetectionInterface;
 class InvalidKeywords extends Spam
 {
 
-
     /**
      * If no exception is thrown by the test
      * then return false
@@ -21,8 +20,8 @@ class InvalidKeywords extends Spam
         foreach ($this->blacklist as $keyword) {
             $pattern = $this->buildRegEx($keyword);
 
-            $this->numHits .= preg_match_all($pattern, $message);
-    
+            $this->numHits += preg_match_all($pattern, $message);
+
             $this->checkSpamStatus();
         }
         

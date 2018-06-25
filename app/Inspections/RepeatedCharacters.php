@@ -7,20 +7,6 @@ use App\Inspections\Contracts\SpamDetectionInterface;
 
 class RepeatedCharacters extends Spam
 {
-
-    // /**
-    //  * Takes an optional indexed array of additional keywords
-    //  * and an optional threshold parameter for testing
-    //  *
-    //  * @param int $threshold
-    //  * @return void
-    //  */
-    // public function __construct(int $threshold = null, array $blacklist = null)
-    // {
-    //     !$threshold ?: $this->threshold = $threshold;
-    // }
-
-
     /**
      * If no exception is thrown by the tests
      * then return false
@@ -32,7 +18,7 @@ class RepeatedCharacters extends Spam
     {
         $regExFull = '/(.)\1{9,}/mi';
 
-        $this->numHits .= preg_match_all($regExFull, $message);
+        $this->numHits += preg_match_all($regExFull, $message);
 
         $this->checkSpamStatus();
 

@@ -17,15 +17,6 @@ class SpamServiceProvider extends ServiceProvider
      */
     protected $defer = true;
 
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
 
     /**
      * Register services.
@@ -35,7 +26,20 @@ class SpamServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(SpamManager::class, function ($app) {
-            return new SpamManager(new InvalidKeywords, new RepeatedCharacters);
+            return new SpamManager(
+                new InvalidKeywords(config('spam.blacklist')),
+                new RepeatedCharacters
+            );
         });
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return [SpamManager::class];
     }
 }
