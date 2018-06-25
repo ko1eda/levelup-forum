@@ -25,8 +25,8 @@ class SpamManager
      * @return void
      */
     public function __construct(
-        InvalidKeywords $invalidKeyWords,
-        RepeatedCharacters $RepeatedCharacters
+        Spam $invalidKeyWords,
+        Spam $RepeatedCharacters
     ) {
         $this->inspections = func_get_args();
     }
