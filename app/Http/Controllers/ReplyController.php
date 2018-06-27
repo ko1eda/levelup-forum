@@ -7,6 +7,7 @@ use App\Thread;
 use App\Reply;
 use App\Channel;
 use App\Inspections\SpamManager;
+use App\Rules\SpamFree;
 
 class ReplyController extends Controller
 {
@@ -25,13 +26,11 @@ class ReplyController extends Controller
      * @param Request $req
      * @return void
      */
-    public function store(Thread $thread, Request $req, SpamManager $spam)
+    public function store(Thread $thread, Request $req)
     {
         $this->validate($req, [
-            'body' => 'required'
+            'body' => ['required', app(SpamFree::class)]
         ]);
-
-        $spam->detect($req->get('body'));
 
         $thread->addReply([
             'body' => $req->get('body'),

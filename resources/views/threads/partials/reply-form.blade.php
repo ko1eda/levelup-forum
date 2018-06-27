@@ -12,6 +12,19 @@
       <textarea class="textarea" name="body"></textarea>
     </div>
   </div>
+  
+  <div class="field">
+    <div class="control">
+
+      <p class="help is-danger">
+        @if(count($errors->all()))
+          {{ $errors->first() }}  
+        @endif
+      </p>
+      {{-- end spam dection error check --}}
+
+    </div>
+  </div>
 
   <div class="field">
     <div class="control">
