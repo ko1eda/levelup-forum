@@ -56,7 +56,7 @@ class ReplyController extends Controller
 
         // Validate the reply
         $this->validate($req, [
-            'body' => 'required'
+            'body' =>  ['required', app(SpamFree::class)]
         ]);
 
         // Update the reply
