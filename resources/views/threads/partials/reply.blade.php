@@ -38,7 +38,7 @@
         </div>{{-- end v-if --}}
 
         <div v-else>
-          <span v-text="body"></span>
+          <div class="tw-break-words" v-text="body"></div>
         </div>
 
       </div>{{-- end body text / Vue Reply edit form --> v-cloak to hide this form until the whole component is fully loaded --}}
