@@ -95,11 +95,10 @@ export default {
         .then(() =>  {
           this.deleted = true;
           window.events.$emit('deletedReply');
-          flash('Deleted a Reply!')
+          flash('Deleted a Reply!', 'danger')
         });
     }
 
   }
-
 }
 </script>

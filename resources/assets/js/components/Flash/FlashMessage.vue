@@ -1,6 +1,6 @@
 <template>
   <div class="pos" v-if="display">
-    <div class="lu-card notification is-success sm:tw-w-64 tw-w-48 tw-py-4 tw-px-4 ">
+    <div class="lu-card notification sm:tw-w-64 tw-w-48 tw-py-4 tw-px-4 " :class="'is-'+level">
 
       <span>{{ body }}</span>
 
@@ -19,7 +19,8 @@
     data() {
       return {
         display: false,
-        body: this.message
+        body: this.message,
+        level: 'primary'
       }
     },
 
@@ -52,7 +53,10 @@
       if(this.message)
         this.show(this.message);
     
-      window.events.$on('flashEvent', (message) => this.show(message));
+      window.events.$on('flashEvent', ({message, level = null}) => {
+        level && (this.level = level);
+        this.show(message);
+      });
     }
 
   }
