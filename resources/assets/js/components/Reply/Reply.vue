@@ -27,24 +27,39 @@ export default {
 
   methods: {
 
-    handleEditing() {
+    clearErrors() {
       this.error = '';
-      this.editing = true;
     },
 
-
-    // Returns the correct reply body
-    // If the reply has not been edited 
-    // it returns the passed in reply prop
-    // if it has been edited, it returns the new value
-    handleReplyCancel() {
+    // this is called from reply cancel
+    // if the body has already been patched it will
+    // be returend 
+    // otherwise the original body will be returned 
+    resetBodyState() {
       if (this.hasBeenEdited) {
         this.body = this.editedBody;
       }
       else {
         this.body = this.attributes.body;
       }
-      this.error = '';
+    },
+
+    // opens the editing pane
+    // clears any errors that may have
+    // been previously present
+    handleEditing() {
+      this.clearErrors();
+      this.editing = true;
+    },
+
+    // Cancel a reply edit
+    handleReplyCancel() {
+
+      this.resetBodyState();
+
+      this.clearErrors();
+      
+      // close the editing window
       this.editing = false;
     },
 
@@ -52,14 +67,18 @@ export default {
       // IF the user tries to submit the error message 
       // return to the previously stored reply
       if (this.body === this.error) {
+
         this.handleReplyCancel();
-        return;
+
+        return
       }
 
       // if the user tries to resubmit the reply they've already left
       if(this.body === this.attributes.body || this.editedBody) {
-        this.editing = false;
-        return ;
+
+        this.handleReplyCancel();
+
+        return
       }
 
       // if all checks pass send the patch request
