@@ -1,7 +1,7 @@
 <template>
  <div class="navbar-item has-dropdown is-hoverable" v-if="hasNotifications">
   <a class="navbar-item" >
-    <i class="fas fa-bell tw-text-lg tw-text-green tw-cursor-pointer" title="Unsubscribe to this thread"></i>
+    <i class="fas fa-bell tw-text-lg tw-text-green tw-cursor-pointer"></i>
   </a>
 
   <div class="navbar-dropdown">
