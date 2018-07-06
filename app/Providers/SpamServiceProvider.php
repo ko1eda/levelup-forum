@@ -25,6 +25,10 @@ class SpamServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // $this->app->bind(SpamFree::class, function ($app) {
+        //     return new SpamFree(app(SpamManager::class));
+        // });
+
         $this->app->bind(SpamManager::class, function ($app) {
             return new SpamManager(
                 new InvalidKeywords(config('spam.blacklist')),

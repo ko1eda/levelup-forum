@@ -168,8 +168,9 @@ class ParticipateInForumTest extends TestCase
         
         // If the user posts the reply and
         // the spam detection determines there is spam
-        // Then it will throw an exception
-        $this->expectException(\Exception::class);
-        $this->post(route('replies.store', [$thread]), $reply->toArray());
+        // then the user will recieve a redirect request (would be a 422 denied if was a json request)
+        $this->withExceptionHandling()
+            ->post(route('replies.store', [$thread]), $reply->toArray())
+            ->assertStatus(302);
     }
 }

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Thread;
 use App\Reply;
 use App\Channel;
-use App\Inspections\SpamManager;
 use App\Rules\SpamFree;
 
 class ReplyController extends Controller

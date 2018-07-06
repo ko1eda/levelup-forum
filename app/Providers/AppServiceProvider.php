@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Schema;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use App\Inspections\SpamManager;
-use App\Rules\SpamFree;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -50,9 +48,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Bind spam manager to the spamfree validatior rule
-        $this->app->bind(SpamFree::class, function ($app) {
-            return new SpamFree(app(SpamManager::class));
-        });
+      //
     }
 }
