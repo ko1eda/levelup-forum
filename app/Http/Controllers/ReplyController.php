@@ -27,6 +27,15 @@ class ReplyController extends Controller
      */
     public function store(Thread $thread, Request $req)
     {
+        // note because of how policies work you always
+        // need to pass in whatever class the policy belongs to
+        // even if it is a blank object
+        try {
+            $this->authorize('create', new Reply);
+        } catch (\Exception $e) {
+            return back()->withErrors('You are posting too frequently, please wait a bit');
+        }
+
         $this->validate($req, [
             'body' => ['required', app(SpamFree::class)]
         ]);

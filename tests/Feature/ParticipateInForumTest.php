@@ -169,8 +169,37 @@ class ParticipateInForumTest extends TestCase
         // If the user posts the reply and
         // the spam detection determines there is spam
         // then the user will recieve a redirect request (would be a 422 denied if was a json request)
+        // note that I used the json request here because the reply route returns a redirect upon success as well
+        // so i wanted to distinguish the difference. you could also expect the Validiation Exception 
         $this->withExceptionHandling()
-            ->post(route('replies.store', [$thread]), $reply->toArray())
-            ->assertStatus(302);
+            ->json('POST', route('replies.store', [$thread]), $reply->toArray())
+            ->assertStatus(422);
+    }
+
+
+    /** @test */
+    public function a_given_user_cannot_reply_to_a_thread_more_than_once_per_x_minutes()
+    {
+        // if the user tries to post multiple times in the same minute then the user will
+        // recieve an authoriziation exception
+        // $this->expectException(\Illuminate\Auth\Access\AuthorizationException::class);
+        $this->signInUser();
+
+        // Given we have a user and a thread
+        $thread = factory(Thread::class)->create();
+
+        // if that user leaves a single reply
+        $reply = factory(Reply::class)->make();
+        $this->post(route('replies.store', $thread), $reply->toArray());
+
+        // then they should see the reply when they are redirected to the threads page
+        $this->get(route('threads.show', [$thread->channel, $thread]))
+            ->assertSee($reply->body);
+
+        // however if that user leaves another reply within the same minute
+        $this->post(route('replies.store', $thread), $reply->toArray())
+            ->assertSessionHasErrors();
+
+        // then an error will be thrown or shown or something
     }
 }

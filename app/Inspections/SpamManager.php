@@ -2,7 +2,6 @@
 
 namespace App\Inspections;
 
-use App\Inspections\Spam;
 use App\Inspections\InvalidKeywords;
 use App\Inspections\RepeatedCharacters;
 
