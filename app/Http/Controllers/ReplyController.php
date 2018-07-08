@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Thread;
 use App\Reply;
-use App\Channel;
 use App\Rules\SpamFree;
+use App\Http\Requests\CreateReplyRequest;
 
 class ReplyController extends Controller
 {
@@ -25,29 +25,14 @@ class ReplyController extends Controller
      * @param Request $req
      * @return void
      */
-    public function store(Thread $thread, Request $req)
+    public function store(Thread $thread, CreateReplyRequest $form)
     {
-        // note because of how policies work you always
-        // need to pass in whatever class the policy belongs to
-        // even if it is a blank object
-        try {
-            $this->authorize('create', new Reply);
-        } catch (\Exception $e) {
-            return back()->withErrors('You are posting too frequently, please wait a bit');
-        }
-
-        $this->validate($req, [
-            'body' => ['required', app(SpamFree::class)]
-        ]);
-
         $thread->addReply([
-            'body' => $req->get('body'),
-            'user_id' => \Auth::user()->id
+            'body' => $form->validated()['body'],
+            'user_id' => \Auth::id()
         ]);
 
-        $req->session()->flash('flash', 'Posted a Reply!');
-
-        return back();
+        return back()->with('flash', 'Posted a reply!');
     }
 
     /**
