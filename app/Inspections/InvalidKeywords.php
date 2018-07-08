@@ -7,6 +7,28 @@ use App\Inspections\Contracts\SpamDetectionInterface;
 
 class InvalidKeywords extends Spam
 {
+    /**
+     * $blacklist
+     *
+     * @var array
+     */
+    protected $blacklist = [];
+
+
+    /**
+     * __construct
+     *
+     * @param mixed $blacklist | optional
+     * @param mixed $threshold | optional
+     * @return void
+     */
+    public function __construct($blacklist = null, $threshold = null)
+    {
+        parent::__construct($threshold);
+        
+        $this->blacklist = $blacklist ? $blacklist : config('spam.blacklist');
+    }
+
 
     /**
      * If no exception is thrown by the test
@@ -24,11 +46,11 @@ class InvalidKeywords extends Spam
 
             $this->checkSpamStatus();
         }
-        
+
         return false;
     }
 
-   
+
     /**
      * Split the keyword into its individial words
      * loop through the words and build a regexpression from them
