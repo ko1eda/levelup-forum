@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Traits\RecordActivity;
 use App\Traits\SubscribableTrait;
 use App\Notifications\ThreadUpdated;
+use App\Interfaces\SubscribableInterface;
 
-class Thread extends Model
+class Thread extends Model implements SubscribableInterface
 {
 
     use RecordActivity, SubscribableTrait;

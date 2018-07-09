@@ -68,4 +68,23 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reply::class);
     }
+
+    
+    /**
+     * Determine if the user has a reply in the database with a created_at timestamp
+     * within a range of minutes UP TO the specified threshold time.
+     *
+     * If they do, return true (meaning they shouldn't be able to reply again until the time is up)
+     *
+     * If they do not return false.
+     *
+     * @param int (optional) $timeInMinutes
+     * @return boolean
+     */
+    public function hasRepliedWithin(int $timeInMinutes = 1)
+    {
+        return $this->replies()
+            ->where('created_at', '>=', \Carbon\Carbon::now()->subMinutes($timeInMinutes))
+            ->exists();
+    }
 }

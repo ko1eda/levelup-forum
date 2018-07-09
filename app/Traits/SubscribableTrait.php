@@ -10,8 +10,8 @@ trait SubscribableTrait
 {
 
     /**
-     * Delete all favorites associated with
-     * Any model who uses Subscribable trait
+     * Delete all subscriptions associated with
+     * any model who uses Subscribable trait
      *
      * Note it deletes all subscriptions individually
      * so that it will trigger the subscriptions delete
@@ -28,9 +28,9 @@ trait SubscribableTrait
         });
     }
 
+    
     /**
      * A model that uses this trait can have many subscriptions.
-     *
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
@@ -42,17 +42,19 @@ trait SubscribableTrait
 
     /**
      * Store an entry corresponding to the
-     * given thread and authenticated user to
+     * given model and authenticated user to
      * the subscriptions table
      *
      * @param User $user
-     * @return void
+     * @return \App\Interfaces\SubscribableInterface $this
      */
     public function addSubscription(int $userID = null)
     {
         $this->subscriptions()->firstOrCreate([
             'user_id' => $userID ? $userID : \Auth::user()->id
         ]);
+
+        return $this;
     }
 
 
@@ -63,7 +65,7 @@ trait SubscribableTrait
      *
      * @param \App\Interface\NotificationInterface $notification
      * @param array $blacklist list of user ids whom you do not want to notify
-     * @return void
+     * @return \App\Interfaces\SubscribableInterface $this
      */
     public function notifySubscribers(NotificationInterface $notification, array $blacklist = [-1])
     {
@@ -72,6 +74,8 @@ trait SubscribableTrait
             ->each(function ($subscription) use ($notification) {
                 $subscription->user->notify($notification);
             });
+
+        return $this;
     }
    
    
@@ -79,15 +83,16 @@ trait SubscribableTrait
      * removeSubscription
      *
      * @param User $user
-     * @return void
+     * @return \App\Interfaces\SubscribableInterface $this
      */
     public function removeSubscription(int $userID = null)
     {
         $this->subscriptions()
             ->where('user_id', $userID ? $userID : \Auth::user()->id)
             ->delete();
+            
+        return $this;
     }
-
 
     /**
      * getIsSubscribedAttribute

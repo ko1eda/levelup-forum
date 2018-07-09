@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Thread;
 use App\User;
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ThreadUpdated;
 
 class NotificationsTest extends TestCase
 {
@@ -47,6 +49,27 @@ class NotificationsTest extends TestCase
 
         // Then the user SHOULD recieve a notification
         $this->assertEquals(1, \Auth::user()->notifications()->count());
+    }
+
+
+    /** @test */
+    public function a_thread_notifies_all_subscribers_when_a_reply_is_added()
+    {
+        // Mocks the notifcation being sent using the notifcation facade
+        Notification::fake();
+
+        // Given we have a user who is subsribed to a thread
+        // When another user replies to that thread
+        $thread = factory(Thread::class)
+            ->create()
+            ->addSubscription()
+            ->addReply([
+                'user_id' => factory(User::class)->create()->id,
+                'body' => 'I am the replies body'
+            ]);
+        
+        // Then a ThreadUpdated Notifcation will be fired
+        Notification::assertSentTo(\Auth::user(), ThreadUpdated::class);
     }
 
 

@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Thread;
 use App\Reply;
-use App\Channel;
+use App\Rules\SpamFree;
+use App\Http\Requests\CreateReplyRequest;
 
 class ReplyController extends Controller
 {
@@ -24,23 +25,14 @@ class ReplyController extends Controller
      * @param Request $req
      * @return void
      */
-    public function store(Thread $thread, Request $req)
+    public function store(Thread $thread, CreateReplyRequest $form)
     {
-        // Remember that $thread
-        // already has the correct id
-        // bound to it b/c route model binding
-        $this->validate($req, [
-            'body' => 'required'
-        ]);
-
         $thread->addReply([
-            'body' => $req->get('body'),
-            'user_id' => \Auth::user()->id
+            'body' => $form->validated()['body'],
+            'user_id' => \Auth::id()
         ]);
 
-        $req->session()->flash('flash', 'Posted a Reply!');
-
-        return back();
+        return back()->with('flash', 'Posted a reply!');
     }
 
     /**
@@ -57,7 +49,7 @@ class ReplyController extends Controller
 
         // Validate the reply
         $this->validate($req, [
-            'body' => 'required'
+            'body' =>  ['required', app(SpamFree::class)]
         ]);
 
         // Update the reply

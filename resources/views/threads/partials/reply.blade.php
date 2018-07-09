@@ -24,7 +24,7 @@
 
           <div class="field">
             <div class="control">
-              <textarea class="textarea" v-model="body"></textarea>
+              <textarea class="textarea" :class="this.error ? 'tw-text-red' : '' " v-model="body"></textarea>
             </div>
           </div>{{-- end textarea --}}
 
@@ -51,7 +51,7 @@
 
         @can('update', $reply)
           <div class="tw-mr-2">
-            <button type="submit" class="tw-flex tw-items-center tw-text-bulma-dark" @click="editing = true">
+            <button type="submit" class="tw-flex tw-items-center tw-text-bulma-dark" @click="handleEditing">
               <i class="fas fa-edit tw-text-xs hover:tw-text-blue"></i>
               <span class="tw-ml-1 tw-text-xs sm:tw-text-sm">edit</span>
             </button>

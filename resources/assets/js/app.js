@@ -24,8 +24,9 @@ window.events = new Vue;
 
 // Global flash function for emiting
 // flash messages 
-window.flash = function(message) {
-  window.events.$emit('flashEvent', message);
+// level represents the type of message i.e info, danger, warning, etc
+window.flash = function(message, level = null) {
+  window.events.$emit('flashEvent', {message, level});
 }
 
 // Our Vue instance

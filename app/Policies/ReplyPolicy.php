@@ -23,14 +23,17 @@ class ReplyPolicy
     }
 
     /**
-     * Determine whether the user can create replies.
+     * If the user has not replied within
+     * the set number of minutes, then they are authorized to reply
+     * again.
      *
      * @param  \App\User  $user
+     * @param  \App\Reply  $Reply
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user, Reply $reply)
     {
-        //
+        return !$user->hasRepliedWithin($minutes = 1);
     }
 
     /**

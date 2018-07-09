@@ -4,19 +4,18 @@
     <i class="fas fa-bell tw-text-lg tw-text-green tw-cursor-pointer"></i>
   </a>
 
-  <div class="navbar-dropdown">
+  <div class="navbar-dropdown limit-w">
     <div v-for="(notification) in unread" :key = "notification.id">
       <div class="hover-effect navbar-item tw-cursor-pointer hover:tw-bg-green">
 
         <div class="tw-flex tw-items-center">
-          <div class='circle tw-mr-2 tw-rounded-full tw-bg-red tw-w-2 tw-h-2' @click="handleMarkRead(notification.id)"></div>
-            <!-- <i class="c fas fa-comments tw-mr-2 tw-text-bulma-link tw-text-sm"></i> -->
-    
-          <a :href="notification.data.link" @click="handleMarkRead(notification.id)">
+          <div class='circle tw-mr-2 tw-rounded-full tw-bg-red tw-w-3 tw-h-3' @click="handleMarkRead(notification.id)"></div>
+         
+          <a :href="notification.data.link" @click="handleMarkRead(notification.id)" class="tw-px-4">
             <span class="tw-mr-1 tw-text-xs tw-font-bold ">
               {{notification.data.username}}:
             </span>
-
+            <br>
             <span class="tw-text-xs">
               {{ notification.data.message }}
             </span>
@@ -123,4 +122,11 @@ export default {
       border: 1px solid grey;
     }
   }
+
+  .limit-w {
+    max-width: 250px;
+    min-width: 250px;
+    // overflow: hidden;
+  }
+
 </style>
