@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\Favoritable;
 use App\Traits\RecordActivity;
+use App\Events\ReplyPosted;
 
 class Reply extends Model
 {
@@ -61,12 +62,13 @@ class Reply extends Model
             $builder->with('user');
         });
 
+        // Fetch any mentioned users when a reply is created
+        // Then fire a reply posted event
+        static::created(function ($reply) {
 
-        // Note this method checks for @mentions when a reply is being created.
-        // If you wanted to get the user names with the @ infront of them you would
-        // just use output[0], preg_match_all returns full matches in the first array and grouped in the second.
-        static::creating(function ($reply) {
             $reply->mentionedUsers = $reply->resolveMentionedUsers();
+
+            event(new ReplyPosted($reply->thread, $reply));
         });
     }
 

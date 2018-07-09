@@ -33,10 +33,6 @@ class ReplyController extends Controller
             'user_id' => \Auth::id()
         ]);
 
-        $reply->mentionedUsers->each(function ($user) use ($thread, $reply) {
-            $user->notify(new UserMentioned($thread, $reply));
-        });
-
         return back()->with('flash', 'Posted a reply!');
     }
 
