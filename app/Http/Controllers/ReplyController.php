@@ -7,6 +7,7 @@ use App\Thread;
 use App\Reply;
 use App\Rules\SpamFree;
 use App\Http\Requests\CreateReplyRequest;
+use App\Notifications\UserMentioned;
 
 class ReplyController extends Controller
 {
@@ -27,10 +28,14 @@ class ReplyController extends Controller
      */
     public function store(Thread $thread, CreateReplyRequest $form)
     {
-        $thread->addReply([
+        $reply = $thread->addReply([
             'body' => $form->validated()['body'],
             'user_id' => \Auth::id()
         ]);
+
+        $reply->mentionedUsers->each(function ($user) use ($thread, $reply) {
+            $user->notify(new UserMentioned($thread, $reply));
+        });
 
         return back()->with('flash', 'Posted a reply!');
     }

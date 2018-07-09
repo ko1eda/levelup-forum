@@ -73,6 +73,27 @@ class NotificationsTest extends TestCase
     }
 
 
+
+    public function a_reply_notifies_all_mentioned_users_when_it_is_posted()
+    {
+        // Mocks the notifcation being sent using the notifcation facade
+        Notification::fake();
+
+        // Given we have a user who is subsribed to a thread
+        // When another user replies to that thread
+        $thread = factory(Thread::class)
+            ->create()
+            ->addReply([
+                'user_id' => factory(User::class)->create()->id,
+                'body' => 'I am the replies body'
+            ]);
+        
+        // Then a ThreadUpdated Notifcation will be fired
+        Notification::assertSentTo(\Auth::user(), ThreadUpdated::class);
+    }
+
+
+
     /** @test */
     public function a_user_can_mark_a_single_notification_as_read()
     {

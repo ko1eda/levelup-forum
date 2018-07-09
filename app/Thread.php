@@ -21,7 +21,7 @@ class Thread extends Model implements SubscribableInterface
     protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
     
     /**
-     * Add a count to the returned model.
+ * Add a count to the returned model.
      * @var array
      */
     protected $withCount = ['replies'];
@@ -115,7 +115,7 @@ class Thread extends Model implements SubscribableInterface
     /**
      * Add a reply to the given thread
      * and notify the subscribed users
-     * 
+     *
      * @return App\Reply $reply
      */
     public function addReply(array $reply)

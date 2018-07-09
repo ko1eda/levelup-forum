@@ -5,25 +5,28 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
+use App\Interfaces\NotificationInterface;
 use App\Thread;
 use App\Reply;
-use App\Interfaces\NotificationInterface;
+use App\User;
 
-class ThreadUpdated extends Notification implements NotificationInterface
+class UserMentioned extends Notification implements NotificationInterface
 {
     use Queueable;
 
     /**
      * $thread
      *
-     * @var App\Thread $thread
+     * @var $thread
      */
     protected $thread;
+
 
     /**
      * $reply
      *
-     * @var @var App\Reply $reply
+     * @var $reply
      */
     protected $reply;
 
@@ -50,22 +53,31 @@ class ThreadUpdated extends Notification implements NotificationInterface
         return ['database'];
     }
 
+    // /**
+    //  * Get the mail representation of the notification.
+    //  *
+    //  * @param  mixed  $notifiable
+    //  * @return \Illuminate\Notifications\Messages\MailMessage
+    //  */
+    // public function toMail($notifiable)
+    // {
+    //     return (new MailMessage)
+    //                 ->line('The introduction to the notification.')
+    //                 ->action('Notification Action', url('/'))
+    //                 ->line('Thank you for using our application!');
+    // }
 
     /**
      * Get the array representation of the notification.
-     * the link is the hash link to the specific reply that caused
-     * the notification.
      *
-     * Note: the false parameter in route() specifies absolute path
-     * by setting it to fault we get the relative path
      * @param  mixed  $notifiable
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            'message' => substr($this->reply->body, 0, 20) .'...',
-            'username' => $this->reply->user->name,
+            'message' => 'mentioned you in '. $this->thread->title,
+            'username' => '@'.$this->reply->user->username,
             'link' => route('threads.show', [$this->thread->channel, $this->thread], false).'#reply-'.$this->reply->id
         ];
     }

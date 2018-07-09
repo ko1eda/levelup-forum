@@ -10,15 +10,41 @@ use App\Traits\RecordActivity;
 class Reply extends Model
 {
     use Favoritable, RecordActivity;
-    
-    protected $fillable = ['user_id', 'body'];
-    protected $withCount=['favorites'];
 
-    // this adds any custom properties to 
-    // the json serializiation of the object
+    /**
+     * $fillable
+     *
+     * @var array
+     */
+    protected $fillable = ['user_id', 'body'];
+
+
+    /**
+     * $withCount
+     *
+     * @var array
+     */
+    protected $withCount = ['favorites'];
+
+
+    /**
+     * $appends
+     *
+     * @var array
+     */
     protected $appends = ['is_favorited'];
 
-     /**
+
+
+    /**
+     * $mentionedUsers
+     *
+     * @var \Illuminate\Database\Eloquent\Collection
+     */
+    public $mentionedUsers;
+
+
+    /**
      * boot
      *
      * @return void
@@ -34,7 +60,35 @@ class Reply extends Model
         static::addGlobalScope('user', function (Builder $builder) {
             $builder->with('user');
         });
+
+
+        // Note this method checks for @mentions when a reply is being created.
+        // If you wanted to get the user names with the @ infront of them you would
+        // just use output[0], preg_match_all returns full matches in the first array and grouped in the second.
+        static::creating(function ($reply) {
+            $reply->mentionedUsers = $reply->resolveMentionedUsers();
+        });
     }
+
+
+
+    /**
+     * This method checks for @mentions when a reply is being created.
+     * Note: If you wanted to get the user names with the @ infront of them you would
+     * just use userArr[0], preg_match_all returns full matches
+     * in the first array and grouped in the second.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    protected function resolveMentionedUsers()
+    {
+        $usersArr = array(array());
+
+        preg_match_all('/@([A-Za-z0-9]+)/im', $this->body, $usersArr, PREG_PATTERN_ORDER);
+
+        return User::whereIn('username', $usersArr[1])->get();
+    }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

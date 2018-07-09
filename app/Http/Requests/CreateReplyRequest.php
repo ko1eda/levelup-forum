@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\SpamFree;
 use App\Reply;
+use App\Thread;
 
 class CreateReplyRequest extends FormRequest
 {
@@ -33,6 +34,25 @@ class CreateReplyRequest extends FormRequest
     {
         return back()->withErrors('You are posting too frequently, please wait a bit');
     }
+
+
+    // /**
+    //  * checkForMentionedUsers
+    //  *
+    //  * @return void
+    //  */
+    // protected function checkForMentionedUsers()
+    // {
+    //     // If a user is mentioned in the reply body
+    //     $replyBody = request('body');
+
+    //     $thread = Thread::find($this->route('thread'))->firstOrFail();
+    //     $user = \Auth::user();
+
+    //     // Pass in the necessary information about the reply and thread
+
+    //     // And send the notification to the user
+    // }
 
 
     /**
