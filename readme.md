@@ -1,12 +1,24 @@
 # Levelup Forum 
 
-An open source forum project to showcase my ungoing efforts to master fullstack development. This project is still in development.
+An open source forum project to showcase my ongoing efforts to master fullstack development. This project is still in development.
 
 **10/17/18:** I appologize for the unstyled login and registration forms pls bear with me :-(
 
-**10/17/18:** Also make sure after you register a user, you navigate to http:://levelupforum.test/threads as the home route is not currently set up.
- 
-## Installation 
+
+## Features
++ Thread subscriptions and user notification system.
++ Editable thread comments with favorites and @mentions.
++ Customizeable user profiles.
++ Configurable spam detection system with keyword detection, repeated key detection and comment throttling.
++ User registration system with mailing.
++ Thread filters for trending, popular, new, etc.
++ Caching with Redis.
++ Heavy use of S.O.L.I.D design principles, polymorphism and patterns including Strategy, Factory, Builder, Template.
++ Heavy use of the IoC container and other higher level Laravel concepts.
+
+
+## Installation
+
 > ***Prequisite***: to run the project files you must have PHP 7 installed on your development machine.
 
 ### Step 1 :
@@ -34,5 +46,16 @@ After creating and wiring up your database you must then run all the included mi
 
 ``` php artisan migrate ```
 
+  
 ### Step 4:
-Start up a development server, visit http:://levelupforum.test/threads in your browser, register a new user and enjoy.
+
+After migrating the database you can generate dummy content using
+
+``` php artisan db:seed ```
+
+This will create 50 random users, 50 random posts and 500 replies.
+
+
+### Step 5:
+
+Finally, Start up a development server, visit http:://levelupforum.test/threads in your browser, register a new user and enjoy.
