@@ -121,3 +121,17 @@ export default {
   }
 }
 </script>
+
+
+<style lang="scss" scoped>
+@import '../../../sass/vendor/_bulma-theme.scss';
+
+// The deep selector is a css selector used
+// to select dynamically loaded content like v-html 
+  #style-link {
+    /deep/ a {
+      color: $link;
+    }
+  }
+
+</style>

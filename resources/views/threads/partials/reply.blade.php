@@ -37,9 +37,9 @@
           
         </div>{{-- end v-if --}}
 
-        <div v-else>
-          <div class="tw-break-words" v-text="body"></div>
-        </div>
+        <div id="style-link" v-else>
+          <div class="tw-break-words" v-html="body"></div>
+        </div>{{-- end reply body --}}
 
       </div>{{-- end body text / Vue Reply edit form --> v-cloak to hide this form until the whole component is fully loaded --}}
     
@@ -52,7 +52,7 @@
         @can('update', $reply)
           <div class="tw-mr-2">
             <button type="submit" class="tw-flex tw-items-center tw-text-bulma-dark" @click="handleEditing">
-              <i class="fas fa-edit tw-text-xs hover:tw-text-blue"></i>
+              <i class="fas fa-edit tw-text-xs hover:tw-text-bulma-link"></i>
               <span class="tw-ml-1 tw-text-xs sm:tw-text-sm">edit</span>
             </button>
           </div>

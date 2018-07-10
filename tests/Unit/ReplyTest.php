@@ -46,4 +46,18 @@ class ReplyTest extends TestCase
         // And any given one should be an instance of App\User
         $this->assertInstanceOf(\App\User::class, $reply->mentionedUsers->first());
     }
+
+
+    /** @test */
+    public function it_wraps_mentioned_users_usernames_in_anchor_tags()
+    {
+        // given we have a reply that mentions a user
+        $reply = new \App\Reply(['body'=> 'hey @fred-savage what is up ?']);
+
+        // then the reply should have the ability to replace any mentioned users with their profile links
+        $anchoredBody = "hey <a href=" . route('profiles.show', 'fred-savage') . ">@fred-savage</a> what is up ?";
+
+
+        $this->assertEquals($anchoredBody, $reply->body);
+    }
 }

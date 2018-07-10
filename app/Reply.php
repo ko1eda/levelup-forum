@@ -62,7 +62,7 @@ class Reply extends Model
 
         // Fetch any mentioned users when a reply is created
         static::created(function ($reply) {
-            $reply->mentionedUsers = $reply->resolveMentionedUsers();
+            $reply->resolveMentions();
         });
     }
 
@@ -75,13 +75,30 @@ class Reply extends Model
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    protected function resolveMentionedUsers()
+    protected function resolveMentions()
     {
         $usersArr = array(array());
 
-        preg_match_all('/@([A-Za-z0-9]+)/im', $this->body, $usersArr, PREG_PATTERN_ORDER);
+        preg_match_all('/@([A-Za-z0-9-]+)/im', $this->body, $usersArr, PREG_PATTERN_ORDER);
 
-        return User::whereIn('username', $usersArr[1])->get();
+        $this->mentionedUsers = User::whereIn('username', $usersArr[1])->get();
+
+        return true;
+    }
+
+
+    /**
+     * Convert any body text with mentions to a profile link
+     *
+     * @return void
+     */
+    public function setBodyAttribute($body)
+    {
+        $replaced = preg_replace_callback('/@([A-Za-z0-9-]+)/im', function ($matches) {
+            return "<a href=" .route('profiles.show', $matches[1]) .">{$matches[0]}</a>";
+        }, $body);
+
+        $this->attributes['body'] = $replaced;
     }
 
 
