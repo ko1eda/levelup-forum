@@ -49,14 +49,10 @@ class ReplyController extends Controller
         $this->authorize('update', $reply);
 
         // Validate the reply
-        $this->validate($req, [
-            'body' =>  ['required', app(SpamFree::class)]
-        ]);
+        $validated = $req->validate(['body' =>  ['required', app(SpamFree::class)]]);
 
         // Update the reply
-        $reply->update([
-            'body' => $req->get('body')
-        ]);
+        $reply->update($validated);
 
         // hide user info from json response, return code 200
         return response($reply->makeHidden('user')->toJson(), 200);
