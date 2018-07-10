@@ -32,7 +32,7 @@ class Reply extends Model
      *
      * @var array
      */
-    protected $appends = ['is_favorited'];
+    protected $appends = ['is_favorited', 'anchored_body'];
 
 
     /**
@@ -92,13 +92,13 @@ class Reply extends Model
      *
      * @return void
      */
-    public function setBodyAttribute($body)
+    public function getAnchoredBodyAttribute($body)
     {
-        $replaced = preg_replace_callback('/@([A-Za-z0-9-]+)/im', function ($matches) {
+        return preg_replace_callback('/@([A-Za-z0-9-]+)/im', function ($matches) {
             return "<a href=" .route('profiles.show', $matches[1]) .">{$matches[0]}</a>";
-        }, $body);
+        }, $this->body);
 
-        $this->attributes['body'] = $replaced;
+        // $this->attributes['body'] = $replaced;
     }
 
 

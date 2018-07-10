@@ -58,6 +58,6 @@ class ReplyTest extends TestCase
         $anchoredBody = "hey <a href=" . route('profiles.show', 'fred-savage') . ">@fred-savage</a> what is up ?";
 
 
-        $this->assertEquals($anchoredBody, $reply->body);
+        $this->assertEquals($anchoredBody, $reply->anchored_body);
     }
 }

@@ -18,10 +18,12 @@ export default {
     return {
       editing: false,
       body: this.attributes.body,
+      anchoredBody: this.attributes.anchored_body,
       deleted: false,
       error: '',
       hasBeenEdited: false,
-      editedBody: ''
+      editedBody: '',
+      editedAnchoredBody: ''
     }
   },
 
@@ -38,9 +40,11 @@ export default {
     resetBodyState() {
       if (this.hasBeenEdited) {
         this.body = this.editedBody;
+        this.anchoredBody = this.editedAnchoredBody;
       }
       else {
         this.body = this.attributes.body;
+        this.anchoredBody = this.attributes.anchored_body;
       }
     },
 
@@ -74,7 +78,7 @@ export default {
       }
 
       // if the user tries to resubmit the reply they've already left
-      if(this.body === this.attributes.body || this.editedBody) {
+      if(this.body === this.attributes.body || this.body === this.editedBody) {
 
         this.handleReplyCancel();
 
@@ -82,11 +86,16 @@ export default {
       }
 
       // if all checks pass send the patch request
+      // we only update the body because the anchored body is derrived from the regular body
       axios.patch(`/replies/${this.attributes.id}`, {
         body: this.body
       })
         .then(({data}) => {
+          // set body to new plain body
           this.body = data.body;
+
+          // set anchoredBody to returned new anchored body
+          this.anchoredBody = data.anchored_body;
 
           this.hasBeenEdited = true;
 
@@ -94,7 +103,17 @@ export default {
 
           flash('Edited a Reply!');
 
-          this.editedBody = this.body;
+          // set the edited body to the plain body
+          // because when a user is editing they are only seeing the 
+          // plain no linked body
+          this.editedBody = data.body;
+          
+          // set the editedAnchoredBody so that when 
+          // the body is updated on edit, the anchored body
+          // which is what displays the tags, is also updated
+          // this is used in the resetBodyState function
+          this.editedAnchoredBody = data.anchored_body;
+
         })
         .catch(({response:{data:{errors:{body}}}}) => {
           this.body = body[0];
