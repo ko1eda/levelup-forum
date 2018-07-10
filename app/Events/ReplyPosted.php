@@ -15,11 +15,24 @@ class ReplyPosted
     use Dispatchable;
 
 
+    /**
+     * $thread
+     *
+     * @var undefined
+     */
     public $thread;
-    public $reply;
 
     /**
-     * Create a new event instance.
+     * $reply
+     *
+     * @var undefined
+     */
+    public $reply;
+
+
+    /**
+     * Note that you access it by sql query instead of eager loading
+     * the relationship so that each reply will not have the thread relationship attached to it
      *
      * @return void
      */

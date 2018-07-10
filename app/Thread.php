@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\RecordActivity;
 use App\Traits\SubscribableTrait;
-use App\Notifications\ThreadUpdated;
 use App\Interfaces\SubscribableInterface;
+use App\Events\ReplyPosted;
 
 class Thread extends Model implements SubscribableInterface
 {
@@ -114,18 +114,15 @@ class Thread extends Model implements SubscribableInterface
 
     /**
      * Add a reply to the given thread
-     * and notify the subscribed users
+     *
      *
      * @return App\Reply $reply
      */
     public function addReply(array $reply)
     {
         $reply = $this->replies()->create($reply);
-        
-        $this->notifySubscribers(
-            new ThreadUpdated($this, $reply),
-            [$reply->user_id]
-        );
+
+        event(new ReplyPosted($this, $reply));
 
         return $reply;
     }

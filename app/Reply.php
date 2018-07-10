@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\Favoritable;
 use App\Traits\RecordActivity;
-use App\Events\ReplyPosted;
 
 class Reply extends Model
 {
@@ -36,9 +35,8 @@ class Reply extends Model
     protected $appends = ['is_favorited'];
 
 
-
     /**
-     * $mentionedUsers
+     * Collection of mentioned users in the replies body
      *
      * @var \Illuminate\Database\Eloquent\Collection
      */
@@ -63,15 +61,10 @@ class Reply extends Model
         });
 
         // Fetch any mentioned users when a reply is created
-        // Then fire a reply posted event
         static::created(function ($reply) {
-
             $reply->mentionedUsers = $reply->resolveMentionedUsers();
-
-            event(new ReplyPosted($reply->thread, $reply));
         });
     }
-
 
 
     /**

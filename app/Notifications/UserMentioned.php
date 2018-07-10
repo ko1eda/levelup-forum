@@ -6,12 +6,11 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use App\Interfaces\NotificationInterface;
 use App\Thread;
 use App\Reply;
 use App\User;
 
-class UserMentioned extends Notification implements NotificationInterface
+class UserMentioned extends Notification
 {
     use Queueable;
 

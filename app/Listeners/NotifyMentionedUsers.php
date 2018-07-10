@@ -21,7 +21,9 @@ class NotifyMentionedUsers
     }
 
     /**
-     * Handle the event.
+     * Get all mentioned users for each reply
+     * and for each user mentioned, send
+     * a userMentioned notification.
      *
      * @param  ReplyPosted  $event
      * @return void

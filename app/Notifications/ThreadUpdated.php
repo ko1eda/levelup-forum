@@ -7,9 +7,8 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Thread;
 use App\Reply;
-use App\Interfaces\NotificationInterface;
 
-class ThreadUpdated extends Notification implements NotificationInterface
+class ThreadUpdated extends Notification
 {
     use Queueable;
 
