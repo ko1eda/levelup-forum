@@ -23,6 +23,7 @@ export default {
       members: [],
       temp: [],
       endOfArr: 0,
+      prevSearchedTerm: '',
     }
   },
 
@@ -37,9 +38,30 @@ export default {
       this.temp = value.split('@');
 
       this.endOfArr = this.temp.length - 1;
+
+      // if there is no @ split at all dont run any logic
+      if (this.endOfArr === 0) {
+        return ;
+      }
       
-      axios.get(this.apiPath + '?user=' + this.temp[this.endOfArr])
-        .then(({data}) => this.members = data);
+      let search = this.temp[this.endOfArr];
+
+      // if there is a fresh @split bring up the previously searched term
+      // as options
+      if(this.temp[this.endOfArr] === '' && this.endOfArr > 1) {
+        search = this.prevSearchedTerm;
+      }
+      
+      axios.get(this.apiPath + '?user=' + search)
+        .then(({data}) => {
+          this.members = data;
+
+          // if a matched was returned then the previous search was a good search
+          // so it should be saved to use again
+          if(data.length !== 0 ) {
+            this.prevSearchedTerm = this.temp[this.endOfArr];
+          }
+        });
     },
 
     // debounce the user input into the text area
