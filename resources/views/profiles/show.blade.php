@@ -32,7 +32,7 @@
                 <i class="fas fa-user tw-text-green"></i>
               </div>
               <div class="tw-inline tw-align-middle">
-                username
+               {{ '@'. $user->username  }}
               </div>
             </div>
           </li>
