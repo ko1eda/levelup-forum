@@ -79,7 +79,7 @@ class Reply extends Model
     {
         $usersArr = array(array());
 
-        preg_match_all('/@([A-Za-z0-9-]+)/im', $this->body, $usersArr, PREG_PATTERN_ORDER);
+        preg_match_all('/@([A-Za-z0-9-.]*[^\W\s])/im', $this->body, $usersArr, PREG_PATTERN_ORDER);
 
         $this->mentionedUsers = User::whereIn('username', $usersArr[1])->get();
 
@@ -94,7 +94,7 @@ class Reply extends Model
      */
     public function getAnchoredBodyAttribute($body)
     {
-        return preg_replace_callback('/@([A-Za-z0-9-]+)/im', function ($matches) {
+        return preg_replace_callback('/@([A-Za-z0-9-.]*[^\W\s])/im', function ($matches) {
             return "<a href=" .route('profiles.show', $matches[1]) .">{$matches[0]}</a>";
         }, $this->body);
 
