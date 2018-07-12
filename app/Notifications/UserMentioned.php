@@ -75,8 +75,10 @@ class UserMentioned extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' => 'mentioned you in '. $this->thread->title,
             'username' => '@'.$this->reply->user->username,
+            'action' => 'mentioned you in ',
+            'messageFull' => $this->thread->title,
+            'messageSub' => substr($this->thread->title, 0, 35) .'...',
             'link' => route('threads.show', [$this->thread->channel, $this->thread], false).'#reply-'.$this->reply->id
         ];
     }

@@ -63,8 +63,10 @@ class ThreadUpdated extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' => substr($this->reply->body, 0, 20) .'...',
-            'username' => $this->reply->user->name,
+            'username' => '@'.$this->reply->user->username,
+            'action' => 'posted in ',
+            'messageFull' => $this->thread->title,
+            'messageSub' => substr($this->thread->title, 0, 35) .'...',
             'link' => route('threads.show', [$this->thread->channel, $this->thread], false).'#reply-'.$this->reply->id
         ];
     }

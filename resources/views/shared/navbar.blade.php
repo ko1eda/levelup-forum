@@ -47,12 +47,13 @@
         <a class="navbar-item" href="{{ route('login') }}">{{ __('Login') }}</a>
         <a class="navbar-item" href="{{ route('register') }}">{{ __('Register') }}</a>
         @else
-
-          <lu-notification-widget 
-              :user-data="{{ \Auth::user()->makeHidden('email') }}"
-              :index-route={{ json_encode(route('users.notifications.index', \Auth::user(), false )) }}
-              :mark-route={{ json_encode(route('users.notifications.update', \Auth::user(), false)) }}>
-          </lu-notification-widget>
+          @if(count(Auth::user()->unreadNotifications))
+            <lu-notification-widget 
+                :user-data="{{ \Auth::user()->makeHidden('email') }}"
+                :index-route={{ json_encode(route('users.notifications.index', \Auth::user(), false )) }}
+                :mark-route={{ json_encode(route('users.notifications.update', \Auth::user(), false)) }}>
+            </lu-notification-widget>
+          @endif
           {{-- end notifications vue component --}}
 
           <div class="navbar-item has-dropdown is-hoverable ">
