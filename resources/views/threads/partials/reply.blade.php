@@ -7,7 +7,7 @@
 
         <a href="{{ route('profiles.show', $reply->user) }}" class="username">
           <h1 class="sm:tw-text-base tw-text-sm tw-font-light">
-            {{ $reply->user->name }}
+            <span class=''>{{ '@' . $reply->user->username }}</span>
           </h1>
         </a>{{-- end header left-side (username) --}}
         
