@@ -23,6 +23,9 @@ trait SubscribableTrait
     {
         static::deleting(function ($model) {
             $model->subscriptions->each(function ($subscription) {
+
+                $subscription->user->notifications()->delete();
+          
                 $subscription->delete();
             });
         });
