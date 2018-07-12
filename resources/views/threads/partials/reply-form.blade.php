@@ -1,4 +1,4 @@
-<lu-reply-form inline-template>
+<lu-reply-form :api-path={{ json_encode(route('api.users.index')) }} inline-template>
     <form action="{{ route('replies.store', $thread) }}" method="POST">
       {{ csrf_field() }}
       
@@ -10,8 +10,8 @@
         </label>
         
         <div class="control">
-          <at-ta :members="members">
-            <textarea class="textarea" name="body"></textarea>
+          <at-ta :members="members" >
+            <textarea class="textarea" name="body" @input="debounceInput"></textarea>
           </at-ta>
         </div>
       </div>

@@ -72,4 +72,38 @@ class MentionUsersTest extends TestCase
 
         Notification::assertSentToTimes($coolio, ThreadUpdated::class, 0);
     }
+
+
+    /** @test */
+    public function when_the_api_users_index_endpoint_is_pinged_it_will_return_5_relevant_users()
+    {
+        // given we have a query string with the letters name=joe
+        $endpoint = route('api.users.index') .'?user=joe';
+
+        // and 4 users joe, joel, joanne and dan
+        $joe = factory(User::class)->create([
+            'username' => 'joeeeeeeee'
+        ]);
+
+        $joel = factory(User::class)->create([
+            'username' => 'joeldude'
+        ]);
+
+        $joanne = factory(User::class)->create([
+            'username' => 'joanne-princess'
+        ]);
+
+        $dan = factory(User::class)->create([
+            'username' => 'danTHEman'
+        ]);
+
+        // When we hit that endpoint  but joanne will not
+        $returnedUserNames = $this->json('GET', $endpoint)->decodeResponseJson();
+
+        // then joe and joel will be returned
+        $this->assertEquals([ $joe->username, $joel->username], $returnedUserNames);
+
+        // then joanne and dan will not
+        $this->assertNotContains([$joanne->username, $dan->username], $returnedUserNames);
+    }
 }

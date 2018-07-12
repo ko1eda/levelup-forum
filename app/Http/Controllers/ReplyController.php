@@ -84,7 +84,6 @@ class ReplyController extends Controller
         if ($req->wantsJson()) {
             return response([], 204);
         }
-
         return back();
     }
 }
