@@ -46,16 +46,21 @@ Route::get('/profiles/{user}', 'ProfileController@show')->name('profiles.show');
 
 // api endpoints
 Route::prefix('api')->group(function () {
+    Route::namespace('Api')->group(function () {
+        //User lookup for search
+        Route::get('/profiles/users', 'UserController@index')->name('api.users.index');
 
-    // Username list
-    Route::get('/profiles/users', 'Api\UserController@index')->name('api.users.index');
+        // User Uploads
+        Route::post('/profiles/{user}/uploads/avatar', 'Profile\UserAvatarController@store')
+            ->name('api.profiles.avatar');
 
-    // User Notifications
-    Route::get('/profiles/{user}/notifications', 'UserNotificationController@index')
-        ->name('users.notifications.index');
+        // User Notifications
+        Route::get('/profiles/{user}/notifications', 'UserNotificationController@index')
+            ->name('users.notifications.index');
 
-    Route::patch('/profiles/{user}/notifications/{notification?}', 'UserNotificationController@update')
-        ->name('users.notifications.update');
+        Route::patch('/profiles/{user}/notifications/{notification?}', 'UserNotificationController@update')
+            ->name('users.notifications.update');
+    });
 });
 
 Auth::routes();
