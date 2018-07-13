@@ -1,14 +1,14 @@
 .lu-level {
-  @screen sm {
+  @screen md {
     @apply .tw-text-sm ;
   }
   @apply .tw-pb-2 .tw-px-4 .tw-flex .tw-items-center .tw-text-xs ;
 
   &-item {
-    @screen sm {
+    @screen md {
       @apply .tw-mr-4 ;
     }
-    @apply .tw-mr-4 ;
+    @apply .tw-mr-2 ;
   }
  
   &-last {

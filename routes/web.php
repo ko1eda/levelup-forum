@@ -19,6 +19,7 @@ Route::get('/', function () {
 // subscriptions (this is above threads due to wildcard naming conflict with threads.destroy)
 Route::name('subscriptions.')->group(function () {
     Route::post('/threads/{thread}/subscriptions', 'ThreadSubscriptionController@store')->name('threads.store');
+
     Route::delete('/threads/{thread}/subscriptions', 'ThreadSubscriptionController@destroy')->name('threads.destroy');
 });
 
@@ -45,6 +46,9 @@ Route::get('/profiles/{user}', 'ProfileController@show')->name('profiles.show');
 
 // api endpoints
 Route::prefix('api')->group(function () {
+
+    // Username list
+    Route::get('/profiles/users', 'Api\UserController@index')->name('api.users.index');
 
     // User Notifications
     Route::get('/profiles/{user}/notifications', 'UserNotificationController@index')

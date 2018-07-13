@@ -55,22 +55,18 @@ class ThreadController extends Controller
      */
     public function store(Request $req)
     {
-        // validate
-        $this->validate($req, [
+        $validated = $req->validate([
             'body' => ['required', app(SpamFree::class)],
             'title' => ['required', 'max:80', app(SpamFree::class)],
             'channel_id' => 'required|exists:channels,id'
         ]);
+        // push the user_id field into the validated array
+        $validated["user_id"] = \Auth::id();
+        
+        // create thread with validateded array
+        $thread = Thread::create($validated);
 
-        $thread = Thread::create([
-            'body' => $req->get('body'),
-            'title' => $req->get('title'),
-            'user_id' => \Auth::user()->id,
-            'channel_id' => $req->get('channel_id')
-        ]);
-
-        return redirect($thread->path())
-            ->with('flash', 'Published A Thread');
+        return redirect($thread->path())->with('flash', 'Published A Thread');
     }
 
     /**
@@ -90,14 +86,10 @@ class ThreadController extends Controller
                 ->latest()
                 ->paginate(25);
 
-            return view(
-                'threads.show',
-                compact('thread', 'replies')
-            );
+            return view('threads.show', compact('thread', 'replies'));
         }
 
-        return back()
-            ->with('flash', 'Activity Forbidden');
+        return back()->with('flash', 'Activity Forbidden');
     }
 
     /**

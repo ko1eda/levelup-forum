@@ -17,8 +17,9 @@
             </span>
             <br>
             <span class="tw-text-xs">
-              {{ notification.data.message }}
-            </span>
+              {{ notification.data.action }}
+              <span class="tw-italic">{{ notification.data.messageSub }}</span>
+            </span> 
           </a> 
           <!-- end link to notifiable item -->
         </div><!-- end notification body -->
@@ -124,8 +125,8 @@ export default {
   }
 
   .limit-w {
-    max-width: 250px;
-    min-width: 250px;
+    max-width: 400px;
+    min-width: 375px;
     // overflow: hidden;
   }
 

@@ -50,6 +50,7 @@ class NotificationsTest extends TestCase
         // Then the user SHOULD recieve a notification
         $this->assertEquals(1, \Auth::user()->notifications()->count());
     }
+    
 
 
     /** @test */
@@ -73,6 +74,7 @@ class NotificationsTest extends TestCase
     }
 
 
+    
     /** @test */
     public function a_user_can_mark_a_single_notification_as_read()
     {

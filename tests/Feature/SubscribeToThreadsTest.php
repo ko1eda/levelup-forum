@@ -92,4 +92,39 @@ class SubscribeToThreadsTest extends TestCase
             ->assertStatus(403)
             ->assertSeeText('Access denied');
     }
+
+
+    /** @test */
+    public function when_a_thread_is_deleted_so_are_its_subscriptions_and_notifications()
+    {
+        // And a logged in user who owns the thread
+        $this->signInUser();
+
+        // Given we have a thread
+        $thread = factory(Thread::class)->create([
+            'user_id' => \Auth::id()
+        ]);
+
+        // and the thread has 2 subscriptions
+        $thread->addSubscription(($user1 = (factory(\App\User::class)->create()))->id);
+        $thread->addSubscription((factory(\App\User::class)->create())->id);
+        
+        // and a reply
+        $thread->addReply((factory(\App\Reply::class))->make()->toArray());
+
+        // then the count of thread subscriptions will be two
+        $this->assertEquals(2, $thread->subscriptions()->count());
+
+        // and user1 should have one notification 
+        $this->assertEquals(1, $user1->notifications()->count());
+    
+        // if the user deletes the thread,
+        $this->json('DELETE', route('threads.destroy', [$thread->channel, $thread]));
+        
+        // then there should be no subscriptions left in the thread
+        $this->assertEquals(0, $thread->subscriptions()->count());
+
+        // and the user should also no longer have any notifications for that thread
+        $this->assertEquals(0, $user1->notifications()->count());
+    }
 }

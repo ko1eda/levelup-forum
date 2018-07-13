@@ -23,6 +23,9 @@ trait SubscribableTrait
     {
         static::deleting(function ($model) {
             $model->subscriptions->each(function ($subscription) {
+
+                $subscription->user->notifications()->delete();
+          
                 $subscription->delete();
             });
         });
@@ -58,25 +61,25 @@ trait SubscribableTrait
     }
 
 
-    /**
-     * For each subscription on the given model,
-     * find all the associated subscribed users whose user ids are not in
-     * the blacklist and send them the passed in notification
-     *
-     * @param \App\Interface\NotificationInterface $notification
-     * @param array $blacklist list of user ids whom you do not want to notify
-     * @return \App\Interfaces\SubscribableInterface $this
-     */
-    public function notifySubscribers(NotificationInterface $notification, array $blacklist = [-1])
-    {
-        $this->subscriptions
-            ->whereNotIn('user_id', $blacklist)
-            ->each(function ($subscription) use ($notification) {
-                $subscription->user->notify($notification);
-            });
+    // /**
+    //  * For each subscription on the given model,
+    //  * find all the associated subscribed users whose user ids are not in
+    //  * the blacklist and send them the passed in notification
+    //  *
+    //  * @param \App\Interface\NotificationInterface $notification
+    //  * @param array $blacklist list of user ids whom you do not want to notify
+    //  * @return \App\Interfaces\SubscribableInterface $this
+    //  */
+    // public function notifySubscribers(NotificationInterface $notification, array $blacklist = [-1])
+    // {
+    //     $this->subscriptions
+    //         ->whereNotIn('user_id', $blacklist)
+    //         ->each(function ($subscription) use ($notification) {
+    //             $subscription->user->notify($notification);
+    //         });
 
-        return $this;
-    }
+    //     return $this;
+    // }
    
    
     /**

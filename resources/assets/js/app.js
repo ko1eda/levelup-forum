@@ -2,6 +2,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import FlashMessage from './components/Flash/FlashMessage.vue';
 import Reply from './components/Reply/Reply.vue';
+import ReplyForm from './components/Reply/ReplyForm.vue';
 import ReplyCounter from './components/Reply/ReplyCounter.vue';
 import ReplyDivider from './components/Reply/ReplyDivider.vue';
 import SubscribeButton from './components/Subscription/SubscribeButton.vue';
@@ -37,6 +38,7 @@ const app = new Vue({
       'lu-flash-message' : FlashMessage,
       'lu-reply' : Reply,
       'lu-counter' : ReplyCounter,
+      'lu-reply-form': ReplyForm, 
       'lu-divider' : ReplyDivider,
       'lu-subscribe-button' : SubscribeButton,
       'lu-notification-widget': NotificationWidget

@@ -7,6 +7,7 @@ use App\Thread;
 use App\Reply;
 use App\Rules\SpamFree;
 use App\Http\Requests\CreateReplyRequest;
+use App\Notifications\UserMentioned;
 
 class ReplyController extends Controller
 {
@@ -27,7 +28,7 @@ class ReplyController extends Controller
      */
     public function store(Thread $thread, CreateReplyRequest $form)
     {
-        $thread->addReply([
+        $reply = $thread->addReply([
             'body' => $form->validated()['body'],
             'user_id' => \Auth::id()
         ]);
@@ -48,14 +49,10 @@ class ReplyController extends Controller
         $this->authorize('update', $reply);
 
         // Validate the reply
-        $this->validate($req, [
-            'body' =>  ['required', app(SpamFree::class)]
-        ]);
+        $validated = $req->validate(['body' =>  ['required', app(SpamFree::class)]]);
 
         // Update the reply
-        $reply->update([
-            'body' => $req->get('body')
-        ]);
+        $reply->update($validated);
 
         // hide user info from json response, return code 200
         return response($reply->makeHidden('user')->toJson(), 200);
@@ -87,7 +84,6 @@ class ReplyController extends Controller
         if ($req->wantsJson()) {
             return response([], 204);
         }
-
         return back();
     }
 }

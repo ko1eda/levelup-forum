@@ -32,7 +32,7 @@
                 <i class="fas fa-user tw-text-green"></i>
               </div>
               <div class="tw-inline tw-align-middle">
-                username
+               {{ '@'. $user->username  }}
               </div>
             </div>
           </li>
@@ -80,41 +80,9 @@
         Top Threads
       </h1>
 
-      <div class="lu-pannel tw-px-6 tw-py-4 ">
-        @foreach($threads as $thread)
-
-        <div class="tw-pb-2 tw-text-xl">
-          <a href={{ $thread->path() }}>
-            <h4 class="tw-font-light">{{ $thread->title }}</h4>
-          </a>
-        </div>
-        <div class="tw-pb-2 tw-text-sm lg:tw-text-base">
-          {{$thread->body}}
-        </div>
-        
-        <div class="lu-level tw-px-0">
-      
-          <div class="lu-level-item tw-text-grey-darker ">
-            <i class="fas fa-clock tw-mr-1 tw-text-grey-darker tw-align-middle"></i>
-            <span class="tw-align-middle">
-              {{ $thread->created_at->diffForHumans()}}
-            </span>
-          </div>
-
-          <div class="lu-level-item">
-            <i class="fas fa-reply tw-mr-1 tw-text-grey-darker tw-align-middle "></i>
-            <span class="tw-align-middle">
-                {{ $thread->replies_count }}
-            </span>
-          </div>
-        </div>{{-- end level --}}
-
-        <hr class="tw-my-2 ">
-        @endforeach
-      </div>
+      @include('shared._thread-list', ['threads' => $threads])
 
     </div>{{-- end threads column--}}
 
   </div>
-
 @endsection
