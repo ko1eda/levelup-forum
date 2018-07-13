@@ -106,4 +106,39 @@ class MentionUsersTest extends TestCase
         // then joanne and dan will not
         $this->assertNotContains([$joanne->username, $dan->username], $returnedUserNames);
     }
+
+
+    /** @test */
+    public function a_user_cannot_mention_themselves()
+    {
+        // Notification::fake();
+
+        // Given we have a logged in user
+        $this->signInUser();
+    
+        // And a thread
+        $thread = factory(Thread::class)->create();
+
+        $reply = factory(\App\Reply::class)->make([
+            'user_id' => \Auth::id(),
+            'body' => 'what is up @' .\Auth::user()->username
+        ]);
+
+        // And that user tries to mention themselves in a reply
+        $this->post(route('replies.store', $thread), $reply->toArray());
+
+        // Then that user will not recieve a notification
+        $this->assertEmpty(\Auth::user()->notifications->count());
+
+        // However if another user menthions our loggend in user
+        $replyByOtherUser = factory(\App\Reply::class)->make([
+            'body' => 'what is up @' .\Auth::user()->username
+        ]);
+        
+        $thread->addReply($replyByOtherUser->toArray());
+
+        
+        // then they will recieve a notificaiton
+        $this->assertEquals(1, \Auth::user()->fresh()->notifications->count());
+    }
 }

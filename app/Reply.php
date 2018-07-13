@@ -73,6 +73,9 @@ class Reply extends Model
      * just use userArr[0], preg_match_all returns full matches
      * in the first array and grouped in the second.
      *
+     * Note appended second where query to ensure that a user cannot
+     * mention themselves in a reply and get a notification.
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     protected function resolveMentions()
@@ -81,7 +84,9 @@ class Reply extends Model
 
         preg_match_all('/@([A-Za-z0-9-.]*[^\W\s])/im', $this->body, $usersArr, PREG_PATTERN_ORDER);
 
-        $this->mentionedUsers = User::whereIn('username', $usersArr[1])->get();
+        $this->mentionedUsers = User::whereIn('username', $usersArr[1])
+        ->where('id', '<>', $this->user->id)
+        ->get();
 
         return true;
     }
