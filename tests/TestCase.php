@@ -30,8 +30,17 @@ abstract class TestCase extends BaseTestCase
         String $requestType = 'get',
         String $endpoint = '',
         array $data = [],
-        String $redirectRoute = 'login'
+        String $redirectRoute = 'login',
+        bool $wantsJson = false,
+        int $statusCode = 200
     ) {
+        if ($wantsJson) {
+            $this->withExceptionHandling()
+                ->json($requestType, $endpoint, $data)
+                ->assertStatus($statusCode);
+            return $this;
+        }
+
         // Enable http exception handling
         $this->withExceptionHandling()
             ->$requestType($endpoint, $data)

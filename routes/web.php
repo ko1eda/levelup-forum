@@ -48,17 +48,17 @@ Route::get('/profiles/{user}', 'ProfileController@show')->name('profiles.show');
 Route::prefix('api')->group(function () {
     Route::namespace('Api')->group(function () {
         //User lookup for search
-        Route::get('/profiles/users', 'UserController@index')->name('api.users.index');
+        Route::get('/profiles/users', 'Users\UserController@index')->name('api.users.index');
 
         // User Uploads
-        Route::post('/profiles/{user}/uploads/avatar', 'Profile\UserAvatarController@store')
-            ->name('api.profiles.avatar');
+        Route::post('/profiles/{user}/uploads/avatar', 'Profiles\AvatarController@store')
+            ->name('api.profiles.avatar.store');
 
         // User Notifications
-        Route::get('/profiles/{user}/notifications', 'UserNotificationController@index')
+        Route::get('/profiles/{user}/notifications', 'Users\NotificationController@index')
             ->name('users.notifications.index');
 
-        Route::patch('/profiles/{user}/notifications/{notification?}', 'UserNotificationController@update')
+        Route::patch('/profiles/{user}/notifications/{notification?}', 'Users\NotificationController@update')
             ->name('users.notifications.update');
     });
 });
