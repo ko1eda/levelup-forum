@@ -29,10 +29,10 @@
           <li class="tw-">
             <div class="lu-level">
               <div class="tw-inline tw-mr-2 tw-align-middle">
-                <i class="fas fa-user tw-text-green"></i>
+                <i class="fas fa-at tw-text-green"></i>
               </div>
               <div class="tw-inline tw-align-middle">
-               {{ '@'. $user->username  }}
+               {{ $user->username  }}
               </div>
             </div>
           </li>
