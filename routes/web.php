@@ -44,6 +44,8 @@ Route::delete('/replies/{reply}/favorites', 'FavoriteController@destroy')->name(
 // users
 Route::get('/profiles/{user}', 'ProfileController@show')->name('profiles.show');
 
+Route::get('/profiles/{user}/settings', 'ProfileController@create')->name('profiles.settings');
+
 // api endpoints
 Route::prefix('api')->group(function () {
     Route::namespace('Api')->group(function () {

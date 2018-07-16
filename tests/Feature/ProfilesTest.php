@@ -64,4 +64,27 @@ class ProfilesTest extends TestCase
         // Then their profile relationship should return an instance of App\Profile
         $this->assertInstanceOf(\App\Profile::class, $registeredUser->profile);
     }
+
+
+    /** @test */
+    public function an_authorized_user_can_only_view_their_own_profile_settings_page()
+    {
+        // Given we have a registered user
+        $this->withExceptionHandling()
+            ->signInUser($this->user);
+
+        // And another user who's settings the logged in user should not be able to see
+        $userWhosePageShouldNotBeVisible = factory(User::class)->create();
+
+        // if the logged in user navigates to there settings page
+        $this->get(route('profiles.settings', $this->user))
+            ->assertStatus(200);
+
+
+        // But if the user tries to access the settings page for another user they
+        // will nb
+        $this->get(route('profiles.settings', $userWhosePageShouldNotBeVisible))
+            ->assertStatus(403);
+    }
+
 }

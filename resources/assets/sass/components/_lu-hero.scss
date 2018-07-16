@@ -1,6 +1,9 @@
 .lu-hero {
+  @screen sm {
+    @apply .tw-h-64 ;
+  }
 
-  @apply .tw-max-w-full .tw-h-64 .tw-bg-center .tw-bg-center ;
+  @apply .tw-max-w-full .tw-h-48 .tw-bg-center .tw-bg-center ;
 
   background-image: linear-gradient(
     to right,
