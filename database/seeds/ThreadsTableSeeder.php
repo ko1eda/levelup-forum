@@ -16,9 +16,9 @@ class ThreadsTableSeeder extends Seeder
         $threads = factory(Thread::class, 50)->create();
 
         $threads->each(function ($thread) {
-
             factory(Reply::class, 10)->create([
-                'thread_id' => $thread->id
+                'thread_id' => $thread->id,
+                'user_id' => rand(1, 50)
             ]);
         });
     }
