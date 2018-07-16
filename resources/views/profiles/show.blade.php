@@ -69,7 +69,7 @@
             @endforeach
           
           @empty
-              <p class="tw-text-sm">There is no recent activity for this user :-(</p>
+              <p class="tw-text-sm">There is no recent activity to display</p>
           @endforelse
         </ul> 
       </div>{{-- end activity feed widget --}}
