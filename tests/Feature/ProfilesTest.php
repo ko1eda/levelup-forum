@@ -77,13 +77,13 @@ class ProfilesTest extends TestCase
         $userWhosePageShouldNotBeVisible = factory(User::class)->create();
 
         // if the logged in user navigates to there settings page
-        $this->get(route('profiles.settings', $this->user))
+        $this->get(route('profiles.settings.edit', $this->user))
             ->assertStatus(200);
 
 
         // But if the user tries to access the settings page for another user they
         // will nb
-        $this->get(route('profiles.settings', $userWhosePageShouldNotBeVisible))
+        $this->get(route('profiles.settings.edit', $userWhosePageShouldNotBeVisible))
             ->assertStatus(403);
     }
 

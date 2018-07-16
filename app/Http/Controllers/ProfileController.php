@@ -9,6 +9,13 @@ use App\Profile;
 
 class ProfileController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')->except('show');
+    }
+
+
     /**
      * Display the users top threads
      * and activity feed
@@ -37,11 +44,10 @@ class ProfileController extends Controller
      * @param User $user
      * @return void
      */
-    public function create(User $user)
+    public function edit(User $user)
     {
-        // Make sure the profile the user is viewing is theirs
-        $this->authorize('create', $user->profile);
-
+        // Make sure the settings page the user is viewing is theirs
+        $this->authorize('edit', $user->profile);
 
         return view('profiles.settings.create', compact('user'));
     }

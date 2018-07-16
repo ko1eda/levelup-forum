@@ -73,7 +73,7 @@
 
               <div class="navbar-divider"></div>
 
-              <a class="navbar-item" href="{{ route('profiles.settings', Auth::user()) }}">
+              <a class="navbar-item" href="{{ route('profiles.settings.edit', Auth::user()) }}">
                  Settings
               </a>{{-- profile settings --}}
 

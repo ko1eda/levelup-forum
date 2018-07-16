@@ -30,8 +30,21 @@ class ProfilePolicy
      */
     public function create(User $user, Profile $profile)
     {
+        //
+    }
+
+    /**
+     * Determine whether the user can view the edit form
+     *
+     * @param  \App\User  $user
+     * @param  \App\Profile  $profile
+     * @return mixed
+     */
+    public function edit(User $user, Profile $profile)
+    {
         return $user->id === $profile->user_id;
     }
+
 
     /**
      * Determine whether the user can update the profile.

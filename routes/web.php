@@ -44,7 +44,7 @@ Route::delete('/replies/{reply}/favorites', 'FavoriteController@destroy')->name(
 // users
 Route::get('/profiles/{user}', 'ProfileController@show')->name('profiles.show');
 
-Route::get('/profiles/{user}/settings', 'ProfileController@create')->name('profiles.settings');
+Route::get('/profiles/{user}/settings', 'ProfileController@edit')->name('profiles.settings.edit');
 
 // api endpoints
 Route::prefix('api')->group(function () {
@@ -53,7 +53,7 @@ Route::prefix('api')->group(function () {
         Route::get('/profiles/users', 'Users\UserController@index')->name('api.users.index');
 
         // User Uploads
-        Route::post('/profiles/{user}/uploads/avatar', 'Profiles\AvatarController@store')
+        Route::post('/profiles/{user}/avatar', 'Profiles\AvatarController@store')
             ->name('api.profiles.avatar.store');
 
         // User Notifications
