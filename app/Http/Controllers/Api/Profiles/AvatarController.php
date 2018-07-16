@@ -32,11 +32,16 @@ class AvatarController extends Controller
         $validated = $req->validate([
             'avatar' => 'required|image'
         ]);
-        
+
         // process the image
 
-        // Store the image to the image table
-        // $image = Image::create($validated)
+        // Store the avatar in pulbic storage under the users id
+        // and store the returned path in a variable
+        $avatarPath = $validated['avatar']->store("avatars/{$user->id}", 'public');
+
+        // Save the image path to the users profile
+        $user->profile->avatar_path =  $avatarPath;
+        $user->profile->save();
 
         return response([], 200);
     }

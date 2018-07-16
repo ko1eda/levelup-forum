@@ -14,14 +14,14 @@ class ProfilesTest extends TestCase
 
     protected $user;
     protected $profileURI;
-    
+
     public function setUp()
     {
         // Set up test environment
         parent::setUp();
 
         $this->user = factory(User::class)->create();
-        
+
         $this->profileURI = route('profiles.show', $this->user);
     }
 
@@ -33,7 +33,6 @@ class ProfilesTest extends TestCase
        // Then That user should see their name
         $this->get($this->profileURI)
             ->assertSee($this->user->name);
-
     }
 
     /** @test */
@@ -56,14 +55,13 @@ class ProfilesTest extends TestCase
     }
 
 
+    /** @test */
+    public function when_a_user_is_created_a_default_profile_is_created()
+    {
+        // Given we have a potential user
+        $registeredUser = factory(User::class)->create();
 
-
-    // /** @test */
-    // public function an_authenticated_user_can_view_their_profile()
-    // {
-    //     // Given we have an auth user
-    //     // And that user navigates to /profiles/{username}
-    //     // That user should see their username, email and threads
-    // }
-
+        // Then their profile relationship should return an instance of App\Profile
+        $this->assertInstanceOf(\App\Profile::class, $registeredUser->profile);
+    }
 }

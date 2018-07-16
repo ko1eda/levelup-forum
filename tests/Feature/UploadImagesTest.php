@@ -47,10 +47,17 @@ class UploadImagesTest extends TestCase
         // if that user hits the avatar endpoint with an avatar
         // Note that you can fake files for tests using the UploadedFile class
         $this->json('post', route('api.profiles.avatar.store', \Auth::user()), [
-            'avatar' => UploadedFile::fake()->image('avatar.jpg')
+            'avatar' => $file = UploadedFile::fake()->image('avatar.jpg')
         ]);
 
-        
-        // Then that avatar should be persisted to the images table
+        // note: this constructs the files path in storage/app/public/avatars/{user_id}/{some_file_hash}.jpeg
+        $filePath = 'avatars/' .\Auth::id() . '/' . $file->hashName();
+
+        // Then that avatar should be stored under the given file path
+        Storage::disk('public')->assertExists($filePath);
+
+        // Then the stored path name on the users profile should be equal to the
+        // avatars path in local storage
+        $this->assertEquals($filePath, \Auth::user()->profile->avatar_path);
     }
 }
