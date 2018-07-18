@@ -30,7 +30,7 @@ class AvatarController extends Controller
     {
         // Validate the request
         $validated = $req->validate([
-            'avatar' => 'required|image'
+            'avatar' => 'required|image|max:1024'
         ]);
 
         // process the image
