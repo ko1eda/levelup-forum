@@ -79,7 +79,7 @@ class ProfilesTest extends TestCase
         $userWhosePageShouldNotBeVisible = factory(User::class)->create();
 
         // if the logged in user navigates to there settings page
-        $this->get(route('profiles.settings.edit', $this->user))
+        $this->get(route('profiles.settings.edit', \Auth::user()))
             ->assertStatus(200);
 
 
@@ -101,13 +101,13 @@ class ProfilesTest extends TestCase
         Storage::fake('public');
         
         // if that user hits the avatar endpoint with an avatar
-        $this->json('post', route('api.profiles.avatar.store', \Auth::user()), [
-            'avatar' => UploadedFile::fake()->image('avatar.jpg')
+        $this->json('post', route('api.uploads.images.store', ['avatars', \Auth::user()]), [
+            'file' => UploadedFile::fake()->image('avatar.jpg')
         ]);
 
         // And then hits that endpoint again
-        $this->json('post', route('api.profiles.avatar.store', \Auth::user()), [
-            'avatar' => $file2 = UploadedFile::fake()->image('avatar.jpg')
+        $this->json('post', route('api.uploads.images.store', ['avatars', \Auth::user()]), [
+            'file' => $file2 = UploadedFile::fake()->image('avatar.jpg')
         ]);
 
 

@@ -55,8 +55,11 @@ Route::prefix('api')->group(function () {
         Route::get('/profiles/users', 'Users\UserController@index')->name('api.users.index');
 
         // User Uploads
-        Route::post('/profiles/{user}/avatar', 'Profiles\AvatarController@store')
-            ->name('api.profiles.avatar.store');
+        // Route::post('/profiles/{user}/avatar', 'Profiles\AvatarController@store')
+        //     ->name('api.profiles.avatar.store');
+
+        Route::post('/uploads/images/{key}/{user}', 'Uploads\ImageController@store')
+            ->name('api.uploads.images.store');
 
         // User Notifications
         Route::get('/profiles/{user}/notifications', 'Users\NotificationController@index')

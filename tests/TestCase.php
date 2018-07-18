@@ -57,9 +57,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function signInUser(User $user = null)
     {
-        isset($user)
-            ? $user
-            : $user = create(User::class);
+        $user ?? $user = create(User::class);
 
         $this->be($user);
 

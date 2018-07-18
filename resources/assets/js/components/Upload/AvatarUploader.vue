@@ -18,7 +18,7 @@
 
       <div class="file">
         <label class="file-label">
-          <input class="file-input" type="file" name="avatar" @change="onFileChange" accept="image/*">
+          <input class="file-input" type="file" name="file" @change="onFileChange" accept="image/*">
           <span class="file-cta">
             <span class="file-icon">
               <i class="fas fa-upload"></i>
