@@ -39,11 +39,8 @@ class AvatarController extends Controller
         // and store the returned path in a variable
         $avatarPath = $validated['avatar']->store("avatars/{$user->id}", 'public');
 
-        // Save the image path to the users profile
-        $user->profile->avatar_path =  $avatarPath;
-        $user->profile->save();
-
-        return response([], 200);
+    
+        return response(['path' => $avatarPath], 200);
     }
 
 

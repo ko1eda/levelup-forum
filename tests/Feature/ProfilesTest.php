@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
 use App\Thread;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class ProfilesTest extends TestCase
 {
@@ -87,4 +89,42 @@ class ProfilesTest extends TestCase
             ->assertStatus(403);
     }
 
+
+    /** @test */
+    public function when_a_user_updates_a_file_on_their_profile_all_related_tempory_files_are_deleted()
+    {
+        // Given we have a user and exception handling is turned on
+        $this->signInUser();
+
+        // Set up a fake public disk driver to store our faked avatar
+        // this will be cleared out ever time the test is run
+        Storage::fake('public');
+        
+        // if that user hits the avatar endpoint with an avatar
+        $this->json('post', route('api.profiles.avatar.store', \Auth::user()), [
+            'avatar' => UploadedFile::fake()->image('avatar.jpg')
+        ]);
+
+        // And then hits that endpoint again
+        $this->json('post', route('api.profiles.avatar.store', \Auth::user()), [
+            'avatar' => $file2 = UploadedFile::fake()->image('avatar.jpg')
+        ]);
+
+
+        $filePath2 = 'avatars/' .\Auth::id() . '/' . $file2->hashName();
+
+        // then that user should have 2 files under thier avatars directory
+        $this->assertEquals(2, count(Storage::disk('public')->files('avatars/' . \Auth::id())));
+
+         // however when the user updates their profile (aka submits thier avatar choice)
+        $this->post(route('profiles.settings.update', \Auth::user()), [
+            'avatar_path' => $filePath2
+        ]);
+
+        // Then their avatars directory should only have one avatar in it
+        $this->assertEquals(1, count(Storage::disk('public')->files('avatars/' . \Auth::id())));
+
+        // And that avatar should correspond to the avatar that was submitted by the user
+        $this->assertEquals($filePath2, Storage::disk('public')->files('avatars/' . \Auth::id())[0]);
+    }
 }

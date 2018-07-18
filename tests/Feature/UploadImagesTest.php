@@ -56,6 +56,11 @@ class UploadImagesTest extends TestCase
         // Then that avatar should be stored under the given file path
         Storage::disk('public')->assertExists($filePath);
 
+        // And if the user updates the profile settings page (aka in this case submits the image)
+        $this->post(route('profiles.settings.update', \Auth::user()), [
+            'avatar_path' => $filePath
+        ]);
+
         // Then the stored path name on the users profile should be equal to the
         // avatars path in local storage
         $this->assertEquals($filePath, \Auth::user()->profile->avatar_path);

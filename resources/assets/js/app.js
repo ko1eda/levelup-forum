@@ -7,6 +7,7 @@ import ReplyCounter from './components/Reply/ReplyCounter.vue';
 import ReplyDivider from './components/Reply/ReplyDivider.vue';
 import SubscribeButton from './components/Subscription/SubscribeButton.vue';
 import NotificationWidget from './components/Notification/NotificationWidget.vue';
+import AvatarUploader from './components/Upload/AvatarUploader.vue';
 
 // Global axios instance with csrf token
 window.axios = axios;
@@ -41,7 +42,8 @@ const app = new Vue({
       'lu-reply-form': ReplyForm, 
       'lu-divider' : ReplyDivider,
       'lu-subscribe-button' : SubscribeButton,
-      'lu-notification-widget': NotificationWidget
+      'lu-notification-widget': NotificationWidget,
+      'lu-avatar-uploader': AvatarUploader
     }
 });
 
