@@ -59,7 +59,7 @@ export default {
 
   data () {
     return {
-      avatarPath: this.currentAvatar ? this.appendsPath + this.currentAvatar : 'https://imgplaceholder.com/192x192/cccccc/757575/fa-user',
+      avatarPath: this.currentAvatar,
       rawAvatarPath: '',
       hasSuccessfulUpload : false,
       errors: [],

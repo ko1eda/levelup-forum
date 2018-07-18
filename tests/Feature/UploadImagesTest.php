@@ -63,6 +63,6 @@ class UploadImagesTest extends TestCase
 
         // Then the stored path name on the users profile should be equal to the
         // avatars path in local storage
-        $this->assertEquals($filePath, \Auth::user()->profile->avatar_path);
+        $this->assertEquals(asset('storage/'.$filePath), \Auth::user()->profile->avatar_path);
     }
 }
