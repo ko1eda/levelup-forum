@@ -40,31 +40,20 @@ class UploadImagesTest extends TestCase
     {
         // Given we have a user
         $this->signInUser();
-        Storage::fake('public');
+        // Storage::fake('public');
 
         // And that user hits our images endpoint with the key lasagna
-        $this->json('post', route('api.uploads.images.store', ['lasagna', \Auth::user()]), [
+        $filePath = $this->json('post', route('api.uploads.images.store', ['lasagna', \Auth::user()]), [
             'file' => $file = UploadedFile::fake()->image('image.jpg')
-        ]);
-
-        // directory lasagna/user_id/hash.jpeg
-        $filePath = 'lasagna/' .\Auth::id() . '/' . $file->hashName();
+        ])
+        ->decodeResponseJson('path');
 
         // Then that file should be in local storage, under the directory
         Storage::disk('public')->assertExists($filePath);
+
+        // This will just remove the directory since we cannot use storage fake
+        Storage::disk('public')->deleteDirectory('lasagna');
     }
-
-
-
-    // /**
-    //  * an_image_can_be_resized_from_the_query_string
-    //  *
-    //  * @return void
-    //  */
-    // public function an_image_can_be_resized_from_the_query_string()
-    // {
-        
-    // }
 
 
     /** @test */
@@ -73,18 +62,12 @@ class UploadImagesTest extends TestCase
         // Given we have a user and exception handling is turned on
         $this->signInUser();
 
-        // Set up a fake public disk driver to store our faked avatar
-        // this will be cleared out ever time the test is run
-        Storage::fake('public');
-        
         // if that user hits the avatar endpoint with an avatar
         // Note that you can fake files for tests using the UploadedFile class
-        $this->json('post', route('api.uploads.images.store', ['avatars', \Auth::user()]), [
-            'file' => $file = UploadedFile::fake()->image('avatar.jpg')
-        ]);
-
-        // note: this constructs the files path in storage/app/public/avatars/{user_id}/{some_file_hash}.jpeg
-        $filePath = 'avatars/' .\Auth::id() . '/' . $file->hashName();
+        $filePath = $this->json('post', route('api.uploads.images.store', ['test-avatars', \Auth::user()]), [
+            'file' => $file = UploadedFile::fake()->image('image.jpg')
+        ])
+        ->decodeResponseJson('path');
 
         // Then that avatar should be stored under the given file path
         Storage::disk('public')->assertExists($filePath);
@@ -97,5 +80,8 @@ class UploadImagesTest extends TestCase
         // Then the stored path name on the users profile should be equal to the
         // avatars path in local storage
         $this->assertEquals(asset('storage/'. $filePath), \Auth::user()->profile->avatar_path);
+
+        // clean up after test
+        Storage::disk('public')->deleteDirectory('test-avatars/');
     }
 }

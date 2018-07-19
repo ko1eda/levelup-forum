@@ -96,25 +96,20 @@ class ProfilesTest extends TestCase
         // Given we have a user and exception handling is turned on
         $this->signInUser();
 
-        // Set up a fake public disk driver to store our faked avatar
-        // this will be cleared out ever time the test is run
-        Storage::fake('public');
-        
         // if that user hits the avatar endpoint with an avatar
-        $this->json('post', route('api.uploads.images.store', ['avatars', \Auth::user()]), [
+        $this->json('post', route('api.uploads.images.store', ['test-avatars', \Auth::user()]), [
             'file' => UploadedFile::fake()->image('avatar.jpg')
         ]);
 
         // And then hits that endpoint again
-        $this->json('post', route('api.uploads.images.store', ['avatars', \Auth::user()]), [
-            'file' => $file2 = UploadedFile::fake()->image('avatar.jpg')
-        ]);
+        $filePath2 = $this->json('post', route('api.uploads.images.store', ['test-avatars', \Auth::user()]), [
+            'file' => UploadedFile::fake()->image('avatar.jpg')
+        ])
+        ->decodeResponseJson('path');
 
-
-        $filePath2 = 'avatars/' .\Auth::id() . '/' . $file2->hashName();
 
         // then that user should have 2 files under thier avatars directory
-        $this->assertEquals(2, count(Storage::disk('public')->files('avatars/' . \Auth::id())));
+        $this->assertEquals(2, count(Storage::disk('public')->files('test-avatars/' . \Auth::id())));
 
          // however when the user updates their profile (aka submits thier avatar choice)
         $this->post(route('profiles.settings.update', \Auth::user()), [
@@ -122,9 +117,13 @@ class ProfilesTest extends TestCase
         ]);
 
         // Then their avatars directory should only have one avatar in it
-        $this->assertEquals(1, count(Storage::disk('public')->files('avatars/' . \Auth::id())));
+        $this->assertEquals(1, count(Storage::disk('public')->files('test-avatars/' . \Auth::id())));
 
         // And that avatar should correspond to the avatar that was submitted by the user
-        $this->assertEquals($filePath2, Storage::disk('public')->files('avatars/' . \Auth::id())[0]);
+        $this->assertEquals($filePath2, Storage::disk('public')->files('test-avatars/' . \Auth::id())[0]);
+
+        
+        // Clean up after test
+        Storage::disk('public')->deleteDirectory('test-avatars');
     }
 }

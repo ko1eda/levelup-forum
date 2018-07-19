@@ -54,10 +54,7 @@ Route::prefix('api')->group(function () {
         //User lookup for search
         Route::get('/profiles/users', 'Users\UserController@index')->name('api.users.index');
 
-        // User Uploads
-        // Route::post('/profiles/{user}/avatar', 'Profiles\AvatarController@store')
-        //     ->name('api.profiles.avatar.store');
-
+        // Uploads routes
         Route::post('/uploads/images/{key}/{user}', 'Uploads\ImageController@store')
             ->name('api.uploads.images.store');
 
