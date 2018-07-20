@@ -35,12 +35,12 @@ export default {
 
    methods: {
 
-     upload(e) {
+     upload(e, endpoint = this.endpoint) {
       this.uploading = true; 
 
       // upload the image to this.endpoint
       // then return a promise so that the class using the mixin can handle the response
-      return axios.post(this.endpoint, this.packageUploads(e))
+      return axios.post(endpoint, this.packageUploads(e))
         .then((res) => {
           this.uploading = false;
 
