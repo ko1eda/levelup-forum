@@ -7,7 +7,7 @@
 
         <div class="tw-flex tw-items-center">
 
-          <img src="{{ $reply->user->profile->avatar_path }}" alt="avatar" height="50" width="50" class="tw-mr-2">
+          <img src="{{ $reply->user->profile->avatar_path }}" alt="avatar" class="tw-mr-2">
 
           <a href="{{ route('profiles.show', $reply->user) }}" class="username ">
             <h1 class="sm:tw-text-base tw-text-sm tw-font-light tw-inline">

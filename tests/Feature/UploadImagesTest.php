@@ -42,46 +42,32 @@ class UploadImagesTest extends TestCase
         $this->signInUser();
         // Storage::fake('public');
 
-        // And that user hits our images endpoint with the key lasagna
-        $filePath = $this->json('post', route('api.uploads.images.store', ['lasagna', \Auth::user()]), [
-            'file' => $file = UploadedFile::fake()->image('image.jpg')
-        ])
-        ->decodeResponseJson('path');
-
-        // Then that file should be in local storage, under the directory
-        Storage::disk('public')->assertExists($filePath);
-
-        // This will just remove the directory since we cannot use storage fake
-        Storage::disk('public')->deleteDirectory('lasagna');
-    }
-
-
-    /** @test */
-    public function a_user_may_add_their_avatar_to_their_profile()
-    {
-        // Given we have a user and exception handling is turned on
-        $this->signInUser();
-
-        // if that user hits the avatar endpoint with an avatar
-        // Note that you can fake files for tests using the UploadedFile class
+        // And that user hits our images endpoint with
         $filePath = $this->json('post', route('api.uploads.images.store', ['test-avatars', \Auth::user()]), [
             'file' => $file = UploadedFile::fake()->image('image.jpg')
         ])
         ->decodeResponseJson('path');
 
-        // Then that avatar should be stored under the given file path
+        // Then that file should be in local storage, under the directory name they specified
         Storage::disk('public')->assertExists($filePath);
 
-        // And if the user updates the profile settings page (aka in this case submits the image)
-        $this->post(route('profiles.settings.update', \Auth::user()), [
-            'avatar_path' => $filePath
-        ]);
+        // This will just remove the directory since we cannot use storage fake
+        Storage::disk('public')->deleteDirectory('test-avatars');
+    }
 
-        // Then the stored path name on the users profile should be equal to the
-        // avatars path in local storage
-        $this->assertEquals(asset('storage/'. $filePath), \Auth::user()->profile->avatar_path);
 
-        // clean up after test
-        Storage::disk('public')->deleteDirectory('test-avatars/');
+    /** @test */
+    public function an_image_cannot_be_stored_under_a_directory_name_that_we_do_not_allow()
+    {
+        // Given we have a user
+        $this->signInUser();
+
+        // And that user hits our images endpoint with the key lasagna
+        // then that user should recieve a 404 response because it is not on our whitelist
+        // of appropriate directory names
+        $this->json('post', route('api.uploads.images.store', ['lasagna', \Auth::user()]), [
+            'file' => UploadedFile::fake()->image('image.jpg')
+        ])
+        ->assertStatus(404);
     }
 }

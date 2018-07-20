@@ -25,7 +25,8 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        $threads = $user->threads()
+        $threads = $user->load('profile')
+            ->threads()
             ->orderBy('replies_count', 'desc')
             ->limit(5)
             ->get();

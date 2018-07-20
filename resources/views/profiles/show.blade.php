@@ -16,7 +16,7 @@
         </div>{{-- end header --}}
 
         <div class="tw-px-4 tw-pt-4 tw-mx-auto">
-          <img src="https://imgplaceholder.com/420x320" alt="profile picture">
+          <img src={{$user->profile->profile_photo_path}} alt="profile picture">
         </div>{{-- end profile pic --}}
 
         <hr class="tw-mx-4 tw-mt-4 tw-mb-0">
@@ -32,7 +32,7 @@
                 <i class="fas fa-at tw-text-green"></i>
               </div>
               <div class="tw-inline tw-align-middle">
-               {{ $user->username  }}
+               {{ $user->username }}
               </div>
             </div>
           </li>

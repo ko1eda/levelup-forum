@@ -9,7 +9,7 @@
         Processing...
       </div>
       <div v-else>
-        <img :src="avatarPath" alt="profile picture" class="tw-h-48 tw-w-48">
+        <img :src="imagePath" alt="profile picture" class="tw-h-48 tw-w-48">
       </div>
 
     
@@ -34,6 +34,7 @@
 
       <!-- only display the hidden input with the avatar path if there is a successfully uploaded avatar path -->
       <input v-if="hasSuccessfulUpload" type="hidden" name="avatar_path" :value="rawAvatarPath" >
+      <input v-if="hasSuccessfulUpload" type="hidden" name="profile_photo_path" :value="rawProfilePhotoPath" >
 
     </div>
   
@@ -59,8 +60,9 @@ export default {
 
   data () {
     return {
-      avatarPath: this.currentAvatar,
+      imagePath: this.currentAvatar,
       rawAvatarPath: '',
+      rawProfilePhotoPath: '' ,
       hasSuccessfulUpload : false,
       errors: [],
     }
@@ -71,28 +73,42 @@ export default {
       // If there are no files uploaded return 
       if(e.target.files.length === 0) return ;
 
-      // Call the mixins upload method
-      this.upload(e)
-        .then(({data}) => {
-          this.hasSuccessfulUpload = true;
-          
-          this.rawAvatarPath = data.path;
+      //replace /avatars/ with /profile-photos/ in our path
+      let path =  this.endpoint.replace(/avatars/i, 'profile-photos');
 
+      this.upload(e, path)
+        .then(({data}) => {
           // Append the base path to the file to the 
           // stored path 
-          this.avatarPath = this.appendsPath + data.path;
+          this.imagePath = this.appendsPath + data.path;
 
+          this.rawProfilePhotoPath = data.path;
+     
           this.errors = []
         })
         .catch((error) => {
           // Get any errors for the given input key
           // ex get all errors for errors: {avatar: []}
-          this.errors = error.response.data.errors[this.sendAs]
+          this.errors = error.response.data.errors[this.sendAs];
+        })
+
+
+      // upload the avatar after the full picture
+      this.upload(e, this.endpoint + '?size=45')
+        .then(({data}) => {
+          this.hasSuccessfulUpload = true;
+          
+          this.rawAvatarPath = data.path;
+
+        })
+        .catch((error) => {
+          // Get any errors for the given input key
+          // ex get all errors for errors: {avatar: []}
+          // this.errors = error.response.data.errors[this.sendAs]
         })
 
     }
   }
-
 };
 </script>
 

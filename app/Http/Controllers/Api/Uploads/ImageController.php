@@ -20,6 +20,19 @@ class ImageController extends Controller
 
 
     /**
+     * $allowedDirectoryKeys
+     *
+     * @var array
+     */
+    protected $allowedDirectoryKeys = [
+        'profile-photos',
+        'avatars',
+        'banners',
+        'test-avatars'
+    ];
+
+
+    /**
      * __construct
      *
      * @param ImageManager $imageManager
@@ -43,6 +56,12 @@ class ImageController extends Controller
         $validated = $req->validate([
             'file' => 'required|image|max:1024'
         ]);
+        
+        // If the user tries to store a file in a directory
+        // that is not in our whitelist return 404 not found
+        if (!in_array($key, $this->allowedDirectoryKeys, true)) {
+            return response([], 404);
+        }
 
         // Relative path to the resource we are storing
         $filePath = $key .'/'. $user->id ;
@@ -54,7 +73,7 @@ class ImageController extends Controller
         }
 
         // dd(is_writable(public_path('storage/' . $filePath)));
-        $filePath = $this->processImage($validated['file'], $filePath, $req->query('size') ?? 400);
+        $filePath = $this->processImage($validated['file'], $filePath, $req->query('size') ?? 450);
 
         return response(['path' => $filePath], 200);
     }

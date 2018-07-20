@@ -25,9 +25,9 @@
   
       <div class="column tw-flex tw-items-center sm:tw-justify-start tw-justify-center">
         <div>
-          Upload an avatar to use in the forums?
+          Upload a profile photo?
           <br>
-          <span class="tw-text-xs"> Note: This will not change your avatar unless you click update </span>
+          <span class="tw-text-xs"> Note: This will also serve as your avatar </span>
         </div>
       </div>{{-- end description col --}}
   
@@ -35,7 +35,7 @@
 
       <lu-avatar-uploader 
         :endpoint= {{ json_encode( route('api.uploads.images.store', ['avatars',$user], false) ) }} 
-        :current-avatar={{  json_encode( $user->profile->avatar_path  ) }}
+        :current-avatar={{  json_encode( $user->profile->profile_photo_path  ) }}
         send-as="file">
       </lu-avatar-uploader>
 
