@@ -15,8 +15,9 @@
 @section('content')
 
 <form action={{ route('profiles.settings.update', $user) }} method="POST" enctype="multipart/form-data">
+  @method('PATCH')
   @csrf
-
+  
   <div class="tw-w-full tw-bg-white tw-rounded tw-p-4 sm:tw-p-6 offset-t">
     <div class="columns">
   

@@ -107,7 +107,7 @@ class ProfilesTest extends TestCase
         Storage::disk('public')->assertExists($filePath);
     
         // And if the user updates the profile settings page (aka in this case submits the image)
-        $this->post(route('profiles.settings.update', \Auth::user()), [
+        $this->patch(route('profiles.settings.update', \Auth::user()), [
             'avatar_path' => $filePath
         ]);
     
@@ -143,7 +143,7 @@ class ProfilesTest extends TestCase
         $this->assertEquals(2, count(Storage::disk('public')->files('test-avatars/' . \Auth::id())));
 
          // however when the user updates their profile (aka submits thier avatar choice)
-        $this->post(route('profiles.settings.update', \Auth::user()), [
+        $this->patch(route('profiles.settings.update', \Auth::user()), [
             'avatar_path' => $filePath2
         ]);
 
@@ -171,7 +171,7 @@ class ProfilesTest extends TestCase
             ->assertSee('Recent Activity');
 
         // However If that user checks Hide Activity Feed in their user profile
-        $this->post(route('profiles.settings.update', \Auth::user()), [
+        $this->patch(route('profiles.settings.update', \Auth::user()), [
             'hide_activities' => true
         ]);
 

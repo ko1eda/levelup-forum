@@ -46,7 +46,7 @@ Route::get('/profiles/{user}', 'ProfileController@show')->name('profiles.show');
 
 Route::get('/profiles/{user}/settings/edit', 'ProfileController@edit')->name('profiles.settings.edit');
 
-Route::post('/profiles/{user}/settings', 'ProfileController@update')->name('profiles.settings.update');
+Route::patch('/profiles/{user}/settings', 'ProfileController@update')->name('profiles.settings.update');
 
 // api endpoints
 Route::prefix('api')->group(function () {
