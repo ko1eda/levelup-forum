@@ -157,4 +157,26 @@ class ProfilesTest extends TestCase
         // Clean up after test
         Storage::disk('public')->deleteDirectory('test-avatars');
     }
+
+
+    /** @test */
+    public function a_users_activity_feed_will_be_hidden_if_they_check_hide_activity_feed_option_on_their_profiles()
+    {
+        // Given we have a user and that user is logged in
+        $this->signInUser();
+
+        // If the user navigates to their profile
+        // Then they should see their activity feed
+        $this->get(route('profiles.show', \Auth::user()))
+            ->assertSee('Recent Activity');
+
+        // However If that user checks Hide Activity Feed in their user profile
+        $this->post(route('profiles.settings.update', \Auth::user()), [
+            'hide_activities' => true
+        ]);
+
+        // Then that users profile should not display the activity feed
+        $this->get(route('profiles.show', \Auth::user()))
+            ->assertDontSee('Activity Feed');
+    }
 }

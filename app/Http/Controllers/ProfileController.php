@@ -65,25 +65,24 @@ class ProfileController extends Controller
     public function update(Request $req, User $user)
     {
         $this->authorize('update', $user->profile);
-
+        
         $validated = $req->validate([
             'avatar_path' => 'nullable',
             'profile_photo_path' => 'nullable',
             'banner_path' => 'nullable',
             'hide_activities' => 'boolean|nullable'
         ]);
+        
+        // If the hide activities checkbox is unchecked (null), set it's value to 0
+        // Normalize the input
+        $validated['hide_activities'] = $validated['hide_activities'] ?? 0;
 
-        // Remove any null values from the array of validated key/value pairs
-        // this is to ensure that you won't reset any of your settings back to null
-        // when you update the form
-        $validated = array_filter($validated, function ($val) {
-            return !is_null($val);
-        });
-
+        
         // Check if the paths to the files actually exist
         // and remove all temporary files for any updated fields
         $this->checkPathExistence($validated, 'public')
             ->removeTemporaryFiles($validated, 'public', $user);
+
 
         // update the users profile
         $user->profile->update($validated);

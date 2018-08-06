@@ -40,7 +40,7 @@
       </lu-avatar-uploader>
 
       </div>{{-- end image col --}}
-    </div>
+    </div>{{-- end profile image row --}}
   
     <hr class="tw-my-4">
   
@@ -50,20 +50,20 @@
       </div>{{-- end number col --}}
   
       <div class="column tw-flex tw-items-center sm:tw-justify-start tw-justify-center">
-        Display Activity Feed?
+        Hide Activity Feed?
       </div>{{-- end description col --}}
   
       <div class="column is-4">
         <div class="tw-flex tw-flex-col settings__img-box tw-justify-center tw-items-center">
   
           <label class="checkbox">
-            <input type="checkbox" name="hide_activities">
+          <input type="checkbox" name="hide_activities" value="1" {{ $user->profile->hide_activities ? 'checked' : '' }}>
           </label>
   
         </div>
   
-      </div>{{-- end image col --}}
-    </div>
+      </div>{{-- end hide activity feed column --}}
+    </div>{{-- end hide activity feed row --}}
   
     <hr class="tw-my-4">
   

@@ -52,29 +52,31 @@
     </div>{{-- end left column --}}
 
     <div class="column is-offset-1-desktop">
+      @if(!$user->profile->hide_activities)
+      
+        <h1 class="tw-mb-2 tw-text-center tw-text-2xl tw-font-light">
+          Recent Activity
+        </h1>{{-- end feed header --}}
 
-      <h1 class="tw-mb-2 tw-text-center tw-text-2xl tw-font-light">
-        Recent Activity
-      </h1>{{-- end feed header --}}
+        <div class="lu-card tw-py-4 tw-mb-6">
+          <ul class="tw-px-6">
+            @forelse($activities as $date => $activity)
+              <span class="tw-text-sm">{{$date}}</span>
 
-      <div class="lu-card tw-py-4 tw-mb-6">
-        <ul class="tw-px-6">
-          @forelse($activities as $date => $activity)
-            <span class="tw-text-sm">{{$date}}</span>
+              @foreach($activity as $record)
+                <li>
+                  @include("profiles.activities.{$record->type}", ['activity' => $record])
+                </li>
+              @endforeach
+            
+            @empty
+                <p class="tw-text-sm">There is no recent activity to display</p>
+            @endforelse
+          </ul> 
+        </div>{{-- end activity feed widget --}}
 
-            @foreach($activity as $record)
-              <li>
-                @include("profiles.activities.{$record->type}", ['activity' => $record])
-              </li>
-            @endforeach
-          
-          @empty
-              <p class="tw-text-sm">There is no recent activity to display</p>
-          @endforelse
-        </ul> 
-      </div>{{-- end activity feed widget --}}
-
-
+      @endif
+      {{-- display this widget only if it is not set to hidden on the users profile  --}}
       
       <h1 class="tw-mb-2 tw-text-center tw-text-2xl tw-font-light">
         Top Threads
