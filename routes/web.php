@@ -44,18 +44,27 @@ Route::delete('/replies/{reply}/favorites', 'FavoriteController@destroy')->name(
 // users
 Route::get('/profiles/{user}', 'ProfileController@show')->name('profiles.show');
 
+Route::get('/profiles/{user}/settings/edit', 'ProfileController@edit')->name('profiles.settings.edit');
+
+Route::post('/profiles/{user}/settings', 'ProfileController@update')->name('profiles.settings.update');
+
 // api endpoints
 Route::prefix('api')->group(function () {
+    Route::namespace('Api')->group(function () {
+        //User lookup for search
+        Route::get('/profiles/users', 'Users\UserController@index')->name('api.users.index');
 
-    // Username list
-    Route::get('/profiles/users', 'Api\UserController@index')->name('api.users.index');
+        // Uploads routes
+        Route::post('/uploads/images/{key}/{user}', 'Uploads\ImageController@store')
+            ->name('api.uploads.images.store');
 
-    // User Notifications
-    Route::get('/profiles/{user}/notifications', 'UserNotificationController@index')
-        ->name('users.notifications.index');
+        // User Notifications
+        Route::get('/profiles/{user}/notifications', 'Users\NotificationController@index')
+            ->name('users.notifications.index');
 
-    Route::patch('/profiles/{user}/notifications/{notification?}', 'UserNotificationController@update')
-        ->name('users.notifications.update');
+        Route::patch('/profiles/{user}/notifications/{notification?}', 'Users\NotificationController@update')
+            ->name('users.notifications.update');
+    });
 });
 
 Auth::routes();

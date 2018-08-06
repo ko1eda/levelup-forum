@@ -5,11 +5,18 @@
     <div class="tw-py-2 sm:tw-px-4 tw-px-2 tw-border-b tw-bg-bulma-lightest">
       <div class="tw-flex tw-justify-between tw-items-center">
 
-        <a href="{{ route('profiles.show', $reply->user) }}" class="username">
-          <h1 class="sm:tw-text-base tw-text-sm tw-font-light">
-            <span class=''>{{ '@' . $reply->user->username }}</span>
-          </h1>
-        </a>{{-- end header left-side (username) --}}
+        <div class="tw-flex tw-items-center">
+
+          <img src="{{ $reply->user->profile->avatar_path }}" alt="avatar" class="tw-mr-2">
+
+          <a href="{{ route('profiles.show', $reply->user) }}" class="username ">
+            <h1 class="sm:tw-text-base tw-text-sm tw-font-light tw-inline">
+              <span class=''>{{ $reply->user->username }}</span>
+            </h1>
+          </a>
+
+        </div>
+        {{-- end header left-side (username) --}}
         
         @can('delete', $reply)
           <button class="delete is-small hover:tw-bg-red-light" @click="handleReplyDelete"></button>

@@ -8,6 +8,8 @@ use App\Thread;
 use App\Reply;
 use App\Policies\ThreadPolicy;
 use App\Policies\ReplyPolicy;
+use App\Profile;
+use App\Policies\ProfilePolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -18,7 +20,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Thread::class => ThreadPolicy::class,
-        Reply::class =>  ReplyPolicy::class
+        Reply::class =>  ReplyPolicy::class,
+        Profile::class =>  ProfilePolicy::class
     ];
 
     /**

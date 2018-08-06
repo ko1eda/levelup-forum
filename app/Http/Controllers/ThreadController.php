@@ -83,6 +83,7 @@ class ThreadController extends Controller
         if ($thread->channel_id === $channel->id) {
             $replies = $thread
                 ->replies()
+                ->with('user.profile')
                 ->latest()
                 ->paginate(25);
 

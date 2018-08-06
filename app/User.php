@@ -28,6 +28,28 @@ class User extends Authenticatable
     ];
 
 
+    public static function boot()
+    {
+        parent::boot();
+
+        // When a user is created so is their profile
+        // see eloquent model events for more
+        // https://laravel.com/docs/5.6/eloquent#events
+        static::created(function ($user) {
+            $profile = new Profile;
+
+            $profile->user_id = $user->id;
+
+            $profile->save();
+        });
+
+        // When a user is deleted so is their profile
+        // static::deleting(function ($user) {
+        //     Profile::find($user->id)->firstOrFail()->delete();
+        // });
+    }
+
+
     /**
      * For Route model binding
      *
@@ -52,6 +74,18 @@ class User extends Authenticatable
         return $this->hasMany(Activity::class);
     }
 
+
+    /**
+     * Every User has a profile
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -61,6 +95,7 @@ class User extends Authenticatable
             ->withoutGlobalScope('user');
     }
 
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -69,7 +104,7 @@ class User extends Authenticatable
         return $this->hasMany(Reply::class);
     }
 
-    
+
     /**
      * Determine if the user has a reply in the database with a created_at timestamp
      * within a range of minutes UP TO the specified threshold time.

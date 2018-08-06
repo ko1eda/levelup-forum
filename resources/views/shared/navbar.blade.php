@@ -72,7 +72,11 @@
               </a>
 
               <div class="navbar-divider"></div>
-              
+
+              <a class="navbar-item" href="{{ route('profiles.settings.edit', Auth::user()) }}">
+                 Settings
+              </a>{{-- profile settings --}}
+
               <a class="navbar-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                   document.getElementById('logout-form').submit();">
                 {{ __('Logout') }}
