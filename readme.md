@@ -1,14 +1,14 @@
-# Levelup Forum 
+# Levelup Forum
+
 
 An open source forum project to showcase my ongoing efforts to master fullstack development. This project is still in development.
-
-**10/17/18:** I appologize for the unstyled login and registration forms pls bear with me :-(
 
 
 ## Features
 + Thread subscriptions and user notification system.
 + Editable thread comments with favorites and @mentions.
 + Customizeable user profiles.
++ User avatar and photo uploads.
 + Configurable spam detection system with keyword detection, repeated key detection and comment throttling.
 + User registration system with mailing.
 + Thread filters for trending, popular, new, etc.
