@@ -1,4 +1,4 @@
-<div class="lu-pannel tw-px-6 tw-py-4 ">
+<div class="lu-pannel tw-px-4 md:tw-px-6 tw-py-4 ">
   @forelse($threads as $thread)
     <div class="tw-pb-2 tw-text-xl">
       <a href={{ $thread->path() }}>
