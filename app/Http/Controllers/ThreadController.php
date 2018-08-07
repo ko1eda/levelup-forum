@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Channel;
 use App\Filters\ThreadFilter;
 use App\Rules\SpamFree;
+use Illuminate\Support\Facades\Redis;
 
 class ThreadController extends Controller
 {
@@ -28,12 +29,27 @@ class ThreadController extends Controller
     {
         $threads = Thread::latest()->filter($filters);
 
-        !isset($channel)
-            ? : $threads = $threads->where('channel_id', '=', $channel->id);
+        // If the channel is set then only load the threads in that channel
+        !isset($channel) ?: $threads = $threads->where('channel_id', '=', $channel->id);
 
         $threads = $threads->paginate(25);
 
-        return view('threads.index', compact('threads'));
+        // Trending threads
+        // Note that because of the way redis has to output its array with scores
+        // which is in the forman jsonThreadData = > score, aka the data is the key and the score is the value
+        // we have to remap that by decoding the key,
+        // and adding the value (the view count) to the decoded thread object
+        $trendingThreads = Collect(Redis::zrevrange('trending_threads', 0, 4, 'WITHSCORES'))
+            ->map(function ($item, $key) {
+                $decodedThread = json_decode($key);
+
+                $decodedThread->view_count = $item;
+
+                return $decodedThread;
+            });
+
+
+        return view('threads.index', compact(['threads', 'trendingThreads']));
     }
 
     /**
@@ -85,12 +101,21 @@ class ThreadController extends Controller
                 ->replies()
                 ->with('user.profile')
                 ->latest()
-                ->paginate(25);
+                ->paginate(10);
+
+            // Store the relevent information into a redis cache
+            // and increment the threads view count by 1
+            Redis::zincrby('trending_threads', 1, json_encode([
+                'title' => $thread->title,
+                'uri' => route('threads.show', [$channel, $thread], false),
+                'username' => $thread->user->username,
+                'replies_count' => $thread->replies_count,
+            ]));
 
             return view('threads.show', compact('thread', 'replies'));
         }
 
-        return back()->with('flash', 'Activity Forbidden');
+        return back()->with('flash', 'Activity Forbidden~Danger');
     }
 
     /**
