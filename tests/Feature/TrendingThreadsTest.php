@@ -7,18 +7,22 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Thread;
 use Illuminate\Support\Facades\Redis;
+use App\Widgets\Trending;
 
 class TrendingThreadsTest extends TestCase
 {
 
     use RefreshDatabase;
 
+    protected $trending;
 
     public function setUp()
     {
         parent::setUp();
 
-        Redis::del('trending_threads');
+        $this->trending = new Trending(new Redis);
+
+        $this->trending->flush();
     }
 
 
@@ -26,7 +30,7 @@ class TrendingThreadsTest extends TestCase
     public function it_displays_a_list_of_most_viewed_threads()
     {
         // first assert that the redis cache is empty
-        $this->assertEmpty(Redis::zrevrange('trending_threads', 0, -1));
+        $this->assertEmpty($this->trending->withScores()->get());
 
         // Given we have two threads
         $threadWith5Visits = factory(Thread::class)->create();
@@ -42,12 +46,13 @@ class TrendingThreadsTest extends TestCase
         $this->get(route('threads.show', [$threadWithOneVisit->channel, $threadWithOneVisit]));
 
         // Then we should have a count of two threads in the trending_threads cache
-        $this->assertCount(2, Redis::zrevrange('trending_threads', 0, -1));
+        $this->assertCount(2, $this->trending->withScores()->get());
     
-        // note this is just the array of json objects that is returned from redis when you use zrevrange or zrange
-        $trending = Redis::zrevrange('trending_threads', 0, -1);
-
+    
         // then the title of our highest viewed thread should match the title of the first item in the redis cache when it is decoded
-        $this->assertEquals($threadWith5Visits->title, json_decode($trending[0])->title);
+        $this->assertEquals($threadWith5Visits->title, ($this->trending->withScores()->get()[0]->title));
+
+
+        $this->trending->flush();
     }
 }

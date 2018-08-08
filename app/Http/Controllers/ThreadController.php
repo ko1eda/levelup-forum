@@ -8,14 +8,25 @@ use App\Channel;
 use App\Filters\ThreadFilter;
 use App\Rules\SpamFree;
 use Illuminate\Support\Facades\Redis;
+use App\Widgets\Trending;
 
 class ThreadController extends Controller
 {
+    /**
+     * Trending threads
+     *
+     * @var App\Widgets\Trending;
+     */
+    protected $trending;
 
-    public function __construct()
+
+    public function __construct(Trending $trending)
     {
         $this->middleware('auth')
             ->except(['show', 'index']);
+
+
+        $this->trending = $trending;
     }
 
     /**
@@ -35,19 +46,7 @@ class ThreadController extends Controller
         $threads = $threads->paginate(25);
 
         // Trending threads
-        // Note that because of the way redis has to output its array with scores
-        // which is in the forman jsonThreadData = > score, aka the data is the key and the score is the value
-        // we have to remap that by decoding the key,
-        // and adding the value (the view count) to the decoded thread object
-        $trendingThreads = Collect(Redis::zrevrange('trending_threads', 0, 4, 'WITHSCORES'))
-            ->map(function ($item, $key) {
-                $decodedThread = json_decode($key);
-
-                $decodedThread->view_count = $item;
-
-                return $decodedThread;
-            });
-
+        $trendingThreads = $this->trending->withScores()->get([0, 4]);
 
         return view('threads.index', compact(['threads', 'trendingThreads']));
     }
@@ -103,14 +102,8 @@ class ThreadController extends Controller
                 ->latest()
                 ->paginate(10);
 
-            // Store the relevent information into a redis cache
-            // and increment the threads view count by 1
-            Redis::zincrby('trending_threads', 1, json_encode([
-                'title' => $thread->title,
-                'uri' => route('threads.show', [$channel, $thread], false),
-                'username' => $thread->user->username,
-                'replies_count' => $thread->replies_count,
-            ]));
+            // Store the visited thread for 24 hours
+            $this->trending->store($thread)->withExpireHours($hours = 24);
 
             return view('threads.show', compact('thread', 'replies'));
         }
