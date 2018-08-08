@@ -1,7 +1,8 @@
 @extends('layouts.app') 
 @section('content')
 
-@if(count($trendingThreads))
+{{-- There should not be trending threads if there are no threads --}}
+@if(count($trendingThreads) && count($threads))
   <div class="columns tw-flex tw-flex-col tw-flex-col-reverse md:tw-flex md:tw-flex-row ">
     <div class="column is-7 is-8-desktop "> 
       {{-- if there are trending threads --}}
@@ -28,8 +29,8 @@
     </div>
     {{-- end threads column --}}
 
-
-  @if(count($trendingThreads))
+  {{-- There should not be trending threads if there are no threads --}}
+  @if(count($trendingThreads) && count($threads))
     <div class="column">
       <div class="lu-card tw-px-4">
 
@@ -49,28 +50,27 @@
 
 
             <div class="lu-level tw-px-0 tw-py-0 tw-text-xs tw-p-2 ">
-              <div class="lu-level-item tw-text-grey-darker lg:tw-w-32 tw-w-24 tw-mr-0" title="Thread Owner">
+
+              <div class="lu-level-item tw-text-grey-darker tw-w-32 lg:tw-w-32 md:tw-justify-center tw-mr-0" title="Thread Owner">
                 <i class="fas fa-user tw-mr-1 tw-align-middle "></i>
                 <a href={{ route('profiles.show', $thread->username) }}>
                   <span class="tw-text-green hover:tw-text-green-dark tw-font-semibold tw-align-middle">
                     {{ $thread->username }}
                   </span>
                 </a>
-              </div>
-              {{-- end user name --}}
+              </div>{{-- end user name --}}
         
               <div class="lu-level-item tw-mr-0">
                 <i class="fas fa-reply tw-mr-1 tw-text-grey-darker tw-align-middle "></i>
                 <span class="tw-align-middle">
                   {{ $thread->replies_count }} replies
                 </span>
-              </div>
-              {{-- end replies count --}}
-               
+              </div>{{-- end replies count --}}
             </div>{{-- end level --}}
+
           </div>{{-- end text column with level --}}
 
-          {{-- <i class="fab fa-hotjar tw-mr-2"></i>  --}}
+
           <span class="tw-text-center lg:tw-mr-2">
             <span class="">
               {{ $thread->view_count }}
@@ -78,21 +78,19 @@
 
             <br>
             views
-          </span>{{-- end view count --}}
+          </span>{{-- end view count column --}}
           
-         </div>
-         {{-- end thread list --}}
+        </div>{{-- end thread list --}}
 
         @endforeach
-      
-      </div>
-      {{-- end lu-card --}}
+
+      </div>{{-- end lu-card --}}
 
     </div>{{-- end trending column --}}
   @endif
 
 
-  </div>
+  </div>{{-- end row --}}
   
  
 @endsection

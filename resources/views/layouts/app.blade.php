@@ -26,7 +26,7 @@
 
     @endif
 
-    <main class="section">
+    <main class="section tw-px-2 md:tw-px-6">
       <div class="container">
         @yield('content')
       </div>
