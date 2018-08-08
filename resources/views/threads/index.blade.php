@@ -48,9 +48,9 @@
             </span>
 
 
-            <div class="lu-level tw-px-0 tw-py-0 tw-text-xs ">
-              <div class="lu-level-item tw-text-grey-darker" title="Thread Owner">
-                <i class="fas fa-user tw-mr-1 tw-align-middle"></i>
+            <div class="lu-level tw-px-0 tw-py-0 tw-text-xs tw-p-2 ">
+              <div class="lu-level-item tw-text-grey-darker lg:tw-w-32 tw-w-24 tw-mr-0" title="Thread Owner">
+                <i class="fas fa-user tw-mr-1 tw-align-middle "></i>
                 <a href={{ route('profiles.show', $thread->username) }}>
                   <span class="tw-text-green hover:tw-text-green-dark tw-font-semibold tw-align-middle">
                     {{ $thread->username }}
