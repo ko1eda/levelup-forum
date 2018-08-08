@@ -8,7 +8,7 @@
       {{-- if there are trending threads --}}
 @else
   <div class="columns is-centered">
-    <div class="column is-10 "> 
+    <div class="column is-8 "> 
       {{-- if there are not trending threads --}}
 @endif
       {{-- if the thread filter returns no results --}}
