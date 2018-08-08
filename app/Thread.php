@@ -8,6 +8,7 @@ use App\Traits\RecordActivity;
 use App\Traits\SubscribableTrait;
 use App\Interfaces\SubscribableInterface;
 use App\Events\ReplyPosted;
+use Illuminate\Support\Facades\Redis;
 
 class Thread extends Model implements SubscribableInterface
 {
@@ -125,6 +126,31 @@ class Thread extends Model implements SubscribableInterface
         event(new ReplyPosted($this, $reply));
 
         return $reply;
+    }
+
+
+    /**
+     * record a threads view
+     *
+     * @return void
+     */
+    public function recordView()
+    {
+        Redis::incrby('thread:' . $this->id . ':views', 1);
+    }
+
+
+    /**
+     * get a threads views
+     *
+     * @return int
+     */
+    public function views()
+    {
+        $views = Redis::get('thread:' . $this->id . ':views');
+
+        // if views is null return 0
+        return $views ?? 0;
     }
     
     

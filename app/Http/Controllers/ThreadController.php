@@ -102,6 +102,9 @@ class ThreadController extends Controller
                 ->latest()
                 ->paginate(10);
 
+            // increment the threads viewcount
+            $thread->recordView();
+
             // Store the visited thread for 24 hours
             $this->trending->store($thread)->withExpireHours($hours = 24);
 

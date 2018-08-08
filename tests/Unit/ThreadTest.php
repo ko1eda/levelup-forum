@@ -145,4 +145,21 @@ class ThreadTest extends TestCase
         // Then that threads is_subscribed attribute should return false
         $this->assertFalse($this->thread->is_subscribed);
     }
+
+    /** @test */
+    public function a_thread_can_record_if_it_is_read()
+    {
+        // Given we have a thread
+         
+        // if that thread has no views
+        // then its views method will return 0 
+        $this->assertEquals(0, $this->thread->views());
+
+        // However if that thread is then viewd
+        $this->thread->recordView();
+
+        // Then that threads views should be incremented by one
+        $this->assertEquals(1, $this->thread->views());
+    }
+
 }
