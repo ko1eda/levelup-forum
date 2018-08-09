@@ -81,6 +81,7 @@ class ThreadFilter extends Filter
     
     /**
      * Shows threads updated within the last 24 hours
+     * with a reply count greater than 0
      *
      * @return void
      */
@@ -88,6 +89,8 @@ class ThreadFilter extends Filter
     {
         $this->builder->getQuery()->orders = [];
 
-        return $this->builder->where('updated_at', '>', \Carbon\Carbon::now()->subDay());
+        return $this->builder
+            ->where('updated_at', '>', \Carbon\Carbon::now()->subDay())
+            ->having('replies_count', '>', 0);
     }
 }
