@@ -91,6 +91,7 @@ class ThreadFilter extends Filter
 
         return $this->builder
             ->where('updated_at', '>', \Carbon\Carbon::now()->subDay())
-            ->having('replies_count', '>', 0);
+            ->having('replies_count', '>', 0)
+            ->orderBy('updated_at', 'DESC');
     }
 }
