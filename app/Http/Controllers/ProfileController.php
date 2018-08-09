@@ -33,7 +33,7 @@ class ProfileController extends Controller
 
         return view('profiles.show', [
             'user' => $user,
-            'activities' => Activity::feed($user),
+            'activities' => Activity::feed($user, $days = 3, $limit = 3),
             'threads' => $threads
         ]);
     }

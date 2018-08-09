@@ -103,27 +103,40 @@ class ActivityTest extends TestCase
     {
         // Given we have a user
         $this->signInUser();
-        
-        // And that user has created an older threa
+
+        // and that user has three threads from three seperate dates
+
+        // the oldest thread is from 4 days ago
+        $oldestThread = factory(Thread::class)->create([
+            'user_id' => \Auth::user()->id,
+            'created_at' => \Carbon\Carbon::now()->subDays(4)
+        ]);
+        // note we have to change the activity created_at date so the test works
+        Activity::where('subject_id', $oldestThread->id)->update([
+            'created_at' => \Carbon\Carbon::now()->subDays(4)
+        ]);
+
+
+        // the older thread was created a day ago
         $olderThread = factory(Thread::class)->create([
             'user_id' => \Auth::user()->id,
             'created_at' => \Carbon\Carbon::now()->subDay()
         ]);
-
-        // Because an activity will be created
-        // at the exact time we run the test, regardless
-        // of when we set a threads created date
-        Activity::first()->update([
+        // change activity date to older date
+        Activity::where('subject_id', $olderThread->id)->update([
             'created_at' => \Carbon\Carbon::now()->subDay()
         ]);
 
-        // And that user has created a newer thread
+
+        // And the newest thread was created today
         $newerThread = factory(Thread::class)->create([
             'user_id' => \Auth::user()->id
         ]);
 
+
         // If we fetch the activity feed for that user
-        $feed = Activity::feed(\Auth::user(), 15);
+        // for the last 3 days, with a limit of 3 items per day
+        $feed = Activity::feed(\Auth::user(), $days = 3, $limit = 3);
 
         // Then the older thread should be in the returned collection
         // with the given format
@@ -135,6 +148,12 @@ class ActivityTest extends TestCase
         // collection with the given format
         $this->assertTrue($feed->keys()->contains(
             \Carbon\Carbon::now()->format('l jS F Y')
+        ));
+
+        // however the oldest one (4 days old) should not be
+        // because we set the day limit to 3 days
+        $this->assertFalse($feed->keys()->contains(
+            \Carbon\Carbon::now()->subDays(4)->format('l jS F Y')
         ));
     }
 }
