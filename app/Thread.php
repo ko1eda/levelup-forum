@@ -69,6 +69,9 @@ class Thread extends Model implements SubscribableInterface
             $thread->replies->each(function ($reply) {
                 $reply->delete();
             });
+
+            // Clear the threads views from the redis cache
+            $thread->views()->clear();
         });
     }
 
