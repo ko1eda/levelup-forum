@@ -60,10 +60,10 @@
                 </a>
               </div>{{-- end user name --}}
         
-              <div class="lu-level-item tw-mr-0">
-                <i class="fas fa-reply tw-mr-1 tw-text-grey-darker tw-align-middle "></i>
+              <div class="lu-level-item tw-mr-0 " title="Time Posted">
+                <i class="fas fa-clock tw-mr-1 tw-text-grey-darker tw-align-middle "></i>
                 <span class="tw-align-middle">
-                  {{ $thread->replies_count }} replies
+                  {{ $thread->created_at }}
                 </span>
               </div>{{-- end replies count --}}
             </div>{{-- end level --}}
@@ -77,7 +77,7 @@
             </span>
 
             <br>
-            views
+            Points
           </span>{{-- end view count column --}}
           
         </div>{{-- end thread list --}}

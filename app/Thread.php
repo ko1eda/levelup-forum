@@ -10,11 +10,12 @@ use App\Interfaces\SubscribableInterface;
 use App\Events\ReplyPosted;
 use Illuminate\Support\Facades\Redis;
 use App\Traits\Views\RecordViews;
+use App\Widgets\Trending;
 
 class Thread extends Model implements SubscribableInterface
 {
 
-    use RecordActivity, SubscribableTrait, RecordViews;
+    use RecordActivity,RecordViews, SubscribableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -53,25 +54,18 @@ class Thread extends Model implements SubscribableInterface
             $builder->with('user');
         });
 
-        // These are called model events
-
-        // When a thread is delete also delete its
-        // replies
-        // Note:
-        // you have to use an each on the replies collection because
-        // if you just delete the threads->replies()->delete()
-        // then it will not trigger the deleted event
-        // on the reply model which intern means
-        // that replies favorites will not be deleted
-        // by the favoritable trait and its activites
-        // will not be deleted
+        
         static::deleting(function ($thread) {
+            // Delete all replies associated with the
             $thread->replies->each(function ($reply) {
                 $reply->delete();
             });
 
             // Clear the threads views from the redis cache
             $thread->views()->clear();
+
+            // and remove the thread from the trending cache
+            (new Trending(new Redis))->remove($thread);
         });
     }
 

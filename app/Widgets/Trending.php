@@ -11,7 +11,7 @@ class Trending
     /**
      * $cache
      *
-     * @var undefined
+     * @var Illuminate\Support\Facades\Redis;
      */
     protected $cache;
 
@@ -43,14 +43,15 @@ class Trending
     }
 
 
+    /**
+     * Store the thread if it does not exist, if it does increment it
+     *
+     * @param Thread $thread
+     * @return void
+     */
     public function store(Thread $thread)
     {
-        $this->cache::zincrby($this->cacheKey, 1, json_encode([
-            'title' => $thread->title,
-            'uri' => route('threads.show', [$thread->channel, $thread], false),
-            'username' => $thread->user->username,
-            'replies_count' => $thread->replies_count,
-        ]));
+        $this->cache::zincrby($this->cacheKey, 1, $this->encode($thread));
 
         return $this;
     }
@@ -58,7 +59,39 @@ class Trending
 
 
     /**
-     * Returns the specified range from the trending threads
+     * return a string of data to be stored in the trending cache
+     *
+     * @param Thread $thread
+     * @return String encoded data
+     */
+    protected function encode(Thread $thread) : String
+    {
+        return json_encode([
+            'title' => $thread->title,
+            'uri' => route('threads.show', [$thread->channel, $thread], false),
+            'username' => $thread->user->username,
+            'created_at' => $thread->created_at->diffForHumans(),
+        ]);
+    }
+
+
+    /**
+     * remove an item from the cache
+     *
+     * @param Thread $thread
+     * @return bool
+     */
+    public function remove(Thread $thread)
+    {
+        $returned = $this->cache::zrem($this->cacheKey, $this->encode($thread));
+
+        return $returned >= 1 ? true : false;
+    }
+
+
+    /**
+     * Returns an array of decoded trending items
+     * for the specified zrange
      *
      * @param mixed array
      * @return void
@@ -117,10 +150,6 @@ class Trending
      */
     protected function listWithScores(int $min, int $max)
     {
-        // $minRange = $range[0] ?? 0;
-
-        // $maxRange = $range[1] ?? -1;
-
         $json = $this->getJsonArrayDesc($min, $max);
 
         // Note that because of the way predis outputs the withscores
@@ -154,6 +183,7 @@ class Trending
     }
 
 
+
     /**
      * withExpire
      *
@@ -166,6 +196,7 @@ class Trending
             $this->cache::expire($this->cacheKey, floor($timeInMinutes * 60));
         }
     }
+
 
 
     /**
@@ -182,8 +213,6 @@ class Trending
         }
     }
 
-
-  
 
 
     /**

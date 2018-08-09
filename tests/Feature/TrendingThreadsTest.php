@@ -36,11 +36,11 @@ class TrendingThreadsTest extends TestCase
         $threadWith5Visits = factory(Thread::class)->create();
 
         // one visited 5 times
-        for ($i=0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $this->get(route('threads.show', [$threadWith5Visits->channel, $threadWith5Visits]));
         }
         
-        // // and one thread visited 1 times
+        // and one thread visited 1 times
         $threadWithOneVisit = factory(Thread::class)->create();
 
         $this->get(route('threads.show', [$threadWithOneVisit->channel, $threadWithOneVisit]));
@@ -54,5 +54,25 @@ class TrendingThreadsTest extends TestCase
 
 
         $this->trending->flush();
+    }
+
+
+    /** @test */
+    public function if_a_thread_is_deleted_its_entry_is_removed()
+    {
+        // Given there is a thread
+        $thread = factory(Thread::class)->create();
+
+        // And that thread is visited
+        $this->get(route('threads.show', [$thread->channel, $thread]));
+
+        // The cache should contain one item
+        $this->assertCount(1, $this->trending->get());
+
+        // However if the thread is deleted,
+        $thread->delete();
+
+        //the item should also be deleted
+        $this->assertCount(0, $this->trending->get());
     }
 }
