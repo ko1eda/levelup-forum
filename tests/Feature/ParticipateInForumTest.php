@@ -197,9 +197,13 @@ class ParticipateInForumTest extends TestCase
             ->assertSee($reply->body);
 
         // however if that user leaves another reply within the same minute
-        $this->post(route('replies.store', $thread), $reply->toArray())
+        // then an error will be thrown
+        $this->post(route('replies.store', $thread), $reply2 = factory(Reply::class)->make()->toArray())
             ->assertSessionHasErrors();
 
-        // then an error will be thrown or shown or something
+        // APPEND: AND THE REPLY SHOULD NOT BE VISIBLE ON THE PAGE BECAUSE IT WAS NEVER STORED
+        // Test wasn't checking if the reply was persisted (which it was, the errors were shown but the reply was still stored)
+        $this->get(route('threads.show', [$thread->channel, $thread]))
+            ->assertDontSee($reply2['body']);
     }
 }

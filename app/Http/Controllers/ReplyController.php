@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Thread;
 use App\Reply;
 use App\Rules\SpamFree;
-use App\Http\Requests\CreateReplyRequest;
 use App\Notifications\UserMentioned;
 
 class ReplyController extends Controller
@@ -16,20 +15,35 @@ class ReplyController extends Controller
     {
         // user must be authenticated
         $this->middleware('auth');
+
+        // Only allow only 8 reply requests per 1 minute
+        $this->middleware('throttle:8,1')->except('destroy');
     }
 
     /**
-     * store
+     * Check reply policy to determine if the user has
+     * already posted a reply within our alloted amount of time.
      *
-     * @param Channel $channel
-     * @param Thread $thread
+     * If they have flash an error to the session,
+     *
+     * If not validate the reply and return a success message.
+     *
      * @param Request $req
+     * @param Thread $thread
      * @return void
      */
-    public function store(Thread $thread, CreateReplyRequest $form)
+    public function store(Request $req, Thread $thread)
     {
+        try {
+            $this->authorize('create', new Reply);
+        } catch (\Exception $e) {
+            return back()->withErrors('You are posting too frequently, please wait a bit');
+        }
+
+        // Validate the body against our spamfree class
+        // then pull the value for key 'body' from the returned array
         $reply = $thread->addReply([
-            'body' => $form->validated()['body'],
+            'body' => $req->validate(['body' =>  ['required', app(SpamFree::class)]])['body'],
             'user_id' => \Auth::id()
         ]);
 
