@@ -7,14 +7,26 @@ use Illuminate\Http\Request;
 use App\Channel;
 use App\Filters\ThreadFilter;
 use App\Rules\SpamFree;
+use Illuminate\Support\Facades\Redis;
+use App\Widgets\Trending;
 
 class ThreadController extends Controller
 {
+    /**
+     * Trending threads
+     *
+     * @var App\Widgets\Trending;
+     */
+    protected $trending;
 
-    public function __construct()
+
+    public function __construct(Trending $trending)
     {
         $this->middleware('auth')
             ->except(['show', 'index']);
+
+
+        $this->trending = $trending;
     }
 
     /**
@@ -28,12 +40,15 @@ class ThreadController extends Controller
     {
         $threads = Thread::latest()->filter($filters);
 
-        !isset($channel)
-            ? : $threads = $threads->where('channel_id', '=', $channel->id);
+        // If the channel is set then only load the threads in that channel
+        !isset($channel) ?: $threads = $threads->where('channel_id', '=', $channel->id);
 
         $threads = $threads->paginate(25);
 
-        return view('threads.index', compact('threads'));
+        // Trending threads
+        $trendingThreads = $this->trending->withScores()->get([0, 4]);
+
+        return view('threads.index', compact(['threads', 'trendingThreads']));
     }
 
     /**
@@ -85,12 +100,18 @@ class ThreadController extends Controller
                 ->replies()
                 ->with('user.profile')
                 ->latest()
-                ->paginate(25);
+                ->paginate(10);
+
+            // increment the threads viewcount
+            $thread->views()->record();
+
+            // Store the visited thread for 24 hours
+            $this->trending->store($thread)->withExpireHours($hours = 24);
 
             return view('threads.show', compact('thread', 'replies'));
         }
 
-        return back()->with('flash', 'Activity Forbidden');
+        return back()->with('flash', 'Activity Forbidden~Danger');
     }
 
     /**

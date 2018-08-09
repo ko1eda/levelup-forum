@@ -36,40 +36,24 @@ class FilterThreadsTest extends TestCase
             ->assertDontSee($threadNotByJohnDoe->title);
     }
 
+
     /** @test */
-    public function a_user_can_filter_threads_by_trending()
+    public function a_user_can_filter_threads_by_recently_active()
     {
-         // Given we have Three threads created on the same day
-         // One with 105 replies
-        $trendingThread = factory(Thread::class)->create();
- 
-         // One with 100 replies
-        $trendingThreadLessReplies = factory(Thread::class)->create();
-         
-         // And one with sub100 replies
-        $notTrendingThread = factory(Thread::class)->create();
+        // Given we have a thread that was created one day ago with no replies
+        $thread = factory(Thread::class)->create([
+            'created_at' => \Carbon\Carbon::now()->subDay()
+        ]);
 
-        for ($i = 0; $i < 55; $i++) {
-            factory(Reply::class)->create([
-                'thread_id' => $trendingThread->id
-            ]);
-        }
 
-        for ($i = 0; $i < 50; $i++) {
-            factory(Reply::class)->create([
-                'thread_id' => $trendingThreadLessReplies->id
-            ]);
-        }
-         
-         // If a user filters by the trending=1 querystring
-         // Then the user will see the threads with 105 and 100 replies respectively
-         // Then the user will not see the thread with sub100 replies
-        $this->get('/threads/?trending=1')
-            ->assertSeeInOrder([
-                $trendingThread->title,
-                $trendingThreadLessReplies->title
-            ])
-            ->assertDontSee($notTrendingThread->title);
+        // however if that thread then gets a reply today
+        factory(Reply::class)->create([
+            'thread_id' => $thread
+        ]);
+
+        // That thread should then be active
+        $this->get(route('threads.index', '?active=1'))
+            ->assertSee($thread->body);
     }
 
 
@@ -77,32 +61,31 @@ class FilterThreadsTest extends TestCase
     /** @test */
     public function a_user_can_filter_threads_by_populartiy()
     {
-        // Given we have three threads
-        $threads = [
-            $mostPopularThread = factory(Thread::class)->create(),
-            $semiPopularThread = factory(Thread::class)->create(),
-            $leastPopularThread = factory(Thread::class)->create()
-        ];
+        // Given we have a thread
+        $thread = factory(Thread::class)->create();
  
-        // And those threads have 3,2, and 1 replies respectively
-        $numReplies = 3;
-        foreach ($threads as $thread) {
-            factory(Reply::class, $numReplies--)->create([
-                'thread_id' => $thread
-            ]);
-        }
+        // And that thread has 24 replies
+        factory(Reply::class, 24)->create([
+            'thread_id' => $thread->id
+        ]);
+    
 
         // If a user filters by popular querystring
-        // then the user should see those threads,
-        // sorted by reply count in descending order
+        // then the user wont see the thread
         $this->get('/threads/?popular=1')
-            ->assertSeeinOrder([
-                $mostPopularThread->title,
-                $semiPopularThread->title,
-                $leastPopularThread->title,
-            ]);
+            ->assertDontSee($thread->title);
+
+        // However if the thread gets one more reply (25)
+        factory(Reply::class)->create([
+            'thread_id' => $thread->id
+        ]);
+        
+        // Then it will be listed under popular
+        $this->get('/threads/?popular=1')
+            ->assertSee($thread->title);
     }
-    
+
+
     /** @test */
     public function a_user_can_filter_threads_by_unresponded()
     {

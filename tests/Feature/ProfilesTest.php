@@ -25,6 +25,9 @@ class ProfilesTest extends TestCase
         $this->user = factory(User::class)->create();
 
         $this->profileURI = route('profiles.show', $this->user);
+
+        // Clear any test directories created by these tests
+        Storage::disk('public')->deleteDirectory('test-avatars/');
     }
 
     /** @test */
@@ -115,8 +118,6 @@ class ProfilesTest extends TestCase
         // avatars path in local storage
         $this->assertEquals(asset('storage/' . $filePath), \Auth::user()->profile->avatar_path);
     
-        // clean up after test
-        Storage::disk('public')->deleteDirectory('test-avatars/');
     }
 
 
@@ -152,10 +153,6 @@ class ProfilesTest extends TestCase
 
         // And that avatar should correspond to the avatar that was submitted by the user
         $this->assertEquals($filePath2, Storage::disk('public')->files('test-avatars/' . \Auth::id())[0]);
-
-        
-        // Clean up after test
-        Storage::disk('public')->deleteDirectory('test-avatars');
     }
 
 

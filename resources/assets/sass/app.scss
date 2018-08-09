@@ -29,6 +29,18 @@ html {
   display: none ; 
 }
 
+// Issue with tablet sizing being 768px+
+// in this specific case for the trending threads pannel
+// So this specifcally sets the sizing to bulma size-8
+// for everything passed ipad
+.trending-lg-sizing {
+  @media (min-width: 769px) {
+    // width: 58.33% !important;
+    width: 66.66% !important;
+  }
+}
+
+
 
 @import "components/_lu-pannel";
 @import "components/_lu-card";
