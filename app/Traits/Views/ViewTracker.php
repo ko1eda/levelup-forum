@@ -12,6 +12,8 @@ class ViewTracker
 
     protected $cacheKey;
 
+    protected $testing = false;
+
 
     /**
      * __construct
@@ -22,10 +24,11 @@ class ViewTracker
      */
     public function __construct(Redis $redis, $item)
     {
-        // If testing make testing keys
         $this->store = $redis;
 
         $this->item = $item;
+
+        $this->testing = $this->checkTesting();
 
         $this->setCacheKey();
     }
@@ -39,6 +42,11 @@ class ViewTracker
     public function record()
     {
         $this->store::incrby($this->cacheKey, 1);
+
+        // If testing expire any testing cache in 3 minutes
+        if ($this->testing) {
+            $this->store::expire($this->cacheKey, 180);
+        }
     }
 
 
@@ -47,7 +55,7 @@ class ViewTracker
      *
      * @return int
      */
-    public function count() :int
+    public function count() : int
     {
         return $this->store::get($this->cacheKey) ?? 0;
     }
@@ -65,16 +73,33 @@ class ViewTracker
 
 
     /**
+     * check to see if the environment is testing
+     *
+     * @return void
+     */
+    protected function checkTesting()
+    {
+        if (app()->environment('testing')) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
      * Sets the cache key for testing and non-testing env
      *
      * @return void
      */
     protected function setCacheKey()
     {
-        if (app()->environment('testing')) {
+        if ($this->testing) {
             $this->cacheKey = 'test-' . get_class($this->item) . ':' . $this->item->id . ':views';
-        } else {
-            $this->cacheKey = get_class($this->item) . ':' . $this->item->id . ':views';
+            
+            return;
         }
+        
+        $this->cacheKey = get_class($this->item) . ':' . $this->item->id . ':views';
     }
 }
