@@ -9,11 +9,12 @@ use App\Traits\SubscribableTrait;
 use App\Interfaces\SubscribableInterface;
 use App\Events\ReplyPosted;
 use Illuminate\Support\Facades\Redis;
+use App\Traits\Views\RecordViews;
 
 class Thread extends Model implements SubscribableInterface
 {
 
-    use RecordActivity, SubscribableTrait;
+    use RecordActivity, SubscribableTrait, RecordViews;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +23,7 @@ class Thread extends Model implements SubscribableInterface
     protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
     
     /**
- * Add a count to the returned model.
+     * Add a count to the returned model.
      * @var array
      */
     protected $withCount = ['replies'];
@@ -129,31 +130,6 @@ class Thread extends Model implements SubscribableInterface
     }
 
 
-    /**
-     * record a threads view
-     *
-     * @return void
-     */
-    public function recordView()
-    {
-        Redis::incrby('thread:' . $this->id . ':views', 1);
-    }
-
-
-    /**
-     * get a threads views
-     *
-     * @return int
-     */
-    public function views()
-    {
-        $views = Redis::get('thread:' . $this->id . ':views');
-
-        // if views is null return 0
-        return $views ?? 0;
-    }
-    
-    
     /**
      * Call the apply method of
      * the ThreadFilters class

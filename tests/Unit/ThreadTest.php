@@ -149,17 +149,18 @@ class ThreadTest extends TestCase
     /** @test */
     public function a_thread_can_record_if_it_is_read()
     {
+        $this->thread->views()->clear();
         // Given we have a thread
-         
         // if that thread has no views
-        // then its views method will return 0 
-        $this->assertEquals(0, $this->thread->views());
+        // then its views method will return 0
+        $this->assertEquals(0, $this->thread->views()->count());
 
         // However if that thread is then viewd
-        $this->thread->recordView();
+        $this->thread->views()->record();
 
         // Then that threads views should be incremented by one
-        $this->assertEquals(1, $this->thread->views());
-    }
+        $this->assertEquals(1, $this->thread->views()->count());
 
+        $this->thread->views()->clear();
+    }
 }

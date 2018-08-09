@@ -38,7 +38,7 @@
       <div class="lu-level-item tw-text-grey-darker ">
         <i class="fas fa-eye tw-mr-1 tw-text-grey-darker tw-align-middle"></i>
         <span class="tw-align-middle">
-          {{ $thread->views() }} views
+          {{ $thread->views()->count() }} views
         </span>
       </div>
       {{-- end timestamp --}}
