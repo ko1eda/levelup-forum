@@ -71,7 +71,7 @@ class ViewTracker
      */
     protected function setCacheKey()
     {
-        if (app()->environment('test')) {
+        if (app()->environment('testing')) {
             $this->cacheKey = 'test-' . get_class($this->item) . ':' . $this->item->id . ':views';
         } else {
             $this->cacheKey = get_class($this->item) . ':' . $this->item->id . ':views';
