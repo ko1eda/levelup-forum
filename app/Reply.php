@@ -36,6 +36,14 @@ class Reply extends Model
 
 
     /**
+     * $touches
+     *
+     * @var array
+     */
+    protected $touches = ['thread'];
+
+
+    /**
      * Collection of mentioned users in the replies body
      *
      * @var \Illuminate\Database\Eloquent\Collection
