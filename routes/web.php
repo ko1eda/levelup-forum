@@ -12,7 +12,8 @@
  */
 
 Route::get('/', function () {
-    return redirect()->route('threads.index');
+    // return redirect()->route('threads.index');
+    // return new App\Mail\Registration\ConfirmationSent();
 })->name('home');
 
 

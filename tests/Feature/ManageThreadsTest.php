@@ -165,12 +165,6 @@ class ManageThreadsTest extends TestCase
         $this->publishThread()
             ->assertRedirect(route('threads.index'))
             ->assertSessionHas('flash');
-
-        // That will trigger an event to send an email to the users email account
-
-        // Then when the user enters the confirmation code
-
-        // The user will be able to
     }
 
 

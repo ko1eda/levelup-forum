@@ -33,31 +33,6 @@
             </p>
           @endif
         </div>
-
-        <div class="field">
-          <label class="label">Username</label>
-          <div class="control has-icons-left">
-            <input 
-            class="input" 
-            type="text" 
-            placeholder="cookie.monster" 
-            required
-            name="username"
-            >
-            <span class="icon is-small is-left">
-                <i class="fas fa-at"></i>
-            </span>
-          </div>
-
-          @if ($errors->has('username'))
-            <p class="help is-danger">
-              {{ $errors->first('username') }}
-            </p>
-          @endif
-        </div>
-
-     
-
       @endisset
 
       <div class="field">
@@ -82,6 +57,30 @@
         @endif
       </div>
 
+
+    @isset($isSignup)
+      <div class="field">
+        <label class="label">Username</label>
+        <div class="control has-icons-left">
+          <input 
+          class="input" 
+          type="text" 
+          placeholder="cookie.monster" 
+          required
+          name="username"
+          >
+          <span class="icon is-small is-left">
+              <i class="fas fa-at"></i>
+          </span>
+        </div>
+
+        @if ($errors->has('username'))
+          <p class="help is-danger">
+            {{ $errors->first('username') }}
+          </p>
+        @endif
+      </div>
+     @endisset
 
       <div class="field">
         <label class="label">Password</label>
