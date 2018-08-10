@@ -41,7 +41,7 @@
        </div>{{-- end card header --}}
 
        @foreach($trendingThreads as $thread)
-        <div class="tw-py-4 tw-px-2 lg:tw-p-4 tw-text-sm tw-flex tw-justify-between tw-items-center">
+        <div class="tw-py-4 lg:tw-p-4 tw-text-sm tw-flex tw-justify-between tw-items-center">
           <div class="tw-flex tw-flex-col tw-w-full">    
 
             <span class="tw-pr-4 md:tw-pr-0 lg:tw-pr-4 tw-mb-2">
@@ -49,7 +49,7 @@
             </span>
 
 
-            <div class="lu-level tw-px-0 tw-py-0 tw-text-xs tw-p-2 ">
+            <div class="lu-level tw-px-0 tw-py-0 tw-text-xs ">
 
               <div class="lu-level-item tw-text-grey-darker tw-w-32 lg:tw-w-32 md:tw-justify-center tw-mr-0" title="Thread Owner">
                 <i class="fas fa-user tw-mr-1 tw-align-middle "></i>
@@ -60,11 +60,13 @@
                 </a>
               </div>{{-- end user name --}}
         
-              <div class="lu-level-item tw-mr-0 " title="Time Posted">
-                <i class="fas fa-clock tw-mr-1 tw-text-grey-darker tw-align-middle "></i>
-                <span class="tw-align-middle">
-                  {{ $thread->created_at }}
-                </span>
+              <div class="lu-level-item tw-mr-0 " title="Thread channel">
+                <i class="fas fa-folder-open tw-mr-1 tw-text-grey-darker tw-align-middle "></i>
+                <a href="{{$thread->channelUri}}">
+                  <span class="tw-align-middle">
+                    / {{ $thread->channel }}
+                  </span>
+                </a>
               </div>{{-- end replies count --}}
             </div>{{-- end level --}}
 

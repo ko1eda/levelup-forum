@@ -70,7 +70,8 @@ class Trending
             'title' => $thread->title,
             'uri' => route('threads.show', [$thread->channel, $thread], false),
             'username' => $thread->user->username,
-            'created_at' => $thread->created_at->diffForHumans(),
+            'channel' => $thread->channel->name,
+            'channelUri' => route('threads.index', [$thread->channel], false)
         ]);
     }
 
