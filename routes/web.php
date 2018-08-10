@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     return redirect()->route('threads.index');
-});
+})->name('home');
 
 
 // subscriptions (this is above threads due to wildcard naming conflict with threads.destroy)

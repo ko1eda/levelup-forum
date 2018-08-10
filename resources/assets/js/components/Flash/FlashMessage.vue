@@ -1,6 +1,6 @@
 <template>
   <div class="pos" v-if="display">
-    <div class="lu-card notification sm:tw-w-64 tw-w-48 tw-py-4 tw-px-4 " :class="'is-'+level">
+    <div class="lu-card notification width tw-py-4 tw-px-4 " :class="'is-'+level">
 
       <span>{{ body }}</span>
 
@@ -109,5 +109,11 @@ export default {
   position: fixed;
   bottom: 0.25rem;
   right: 0;
+}
+
+.width {
+  min-width: 16rem;
+
+  max-width: 24rem;
 }
 </style>

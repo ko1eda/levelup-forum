@@ -154,6 +154,27 @@ class ManageThreadsTest extends TestCase
     }
 
 
+    /** @test */
+    public function a_user_must_confirm_their_email_address_before_they_can_post_a_thread()
+    {
+        // Given we have an auth user
+
+        // And that user tries to post a new thread (note this helper function is defined below)
+
+        // Then that user will be redirected via middleware to the homepage
+        $this->publishThread()
+            ->assertRedirect(route('threads.index'))
+            ->assertSessionHas('flash');
+
+        // That will trigger an event to send an email to the users email account
+
+        // Then when the user enters the confirmation code
+
+        // The user will be able to
+    }
+
+
+
     /**
      *
      * Validation tests
@@ -193,7 +214,7 @@ class ManageThreadsTest extends TestCase
     // This method is not a test it is being used
     // by the various validation tests 
     // above to publish threads
-    protected function publishThread($override)
+    protected function publishThread($override = [])
     {
 
         // Given that we have an authenticated user
@@ -207,6 +228,6 @@ class ManageThreadsTest extends TestCase
         // Note : we turn exception handling off here so we don't just get
         //   a ValidationException thrown
         return $this->withExceptionHandling()
-            ->post(route('threads.index'), $thread->toArray());
+            ->post(route('threads.store'), $thread->toArray());
     }
 }
