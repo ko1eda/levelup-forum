@@ -60,6 +60,9 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
+     * Note that we use an md5 hash of the email concatonated with
+     * a string random to help ensure that each token is unique
+     *
      * @param  array  $data
      * @return \App\User
      */
@@ -70,7 +73,7 @@ class RegisterController extends Controller
         $u->username = $data['username'];
         $u->email = $data['email'];
         $u->password = Hash::make($data['password']);
-        $u->confirmation_token = str_random(35);
+        $u->confirmation_token = str_limit(md5($data['email'] . str_random()), 35, '');
 
         $u->save();
 
@@ -88,19 +91,21 @@ class RegisterController extends Controller
      */
     public function confirm(Request $req)
     {
-        try {
-            $u = User::where('confirmation_token', $req->query('tokenID'))->firstOrFail();
-        } catch (\Exception $e) {
+        $user = User::where('confirmation_token', $req->query('tokenID'))->first();
+
+        // if we don't find a user aka ($user = null), redirect
+        if (!$user) {
             return redirect()->route('threads.index')->with('flash', 'The confirmation token was invalid~danger');
         }
-       
+   
         // switch the users confirmed status to true
-        $u->confirmed = 1;
+        $user->confirmed = 1;
 
         // reset the users confirmation token
-        $u->confirmation_token = null;
+        $user->confirmation_token = null;
 
-        $u->save();
+        // update the user
+        $user->save();
 
         return redirect()->route('threads.index')->with('flash', 'Ok you are good to go');
     }
