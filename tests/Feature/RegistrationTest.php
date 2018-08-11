@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Registration\ConfirmationSent;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\UserRegistered;
 
 class RegistrationTest extends TestCase
 {
@@ -28,6 +30,27 @@ class RegistrationTest extends TestCase
 
         // Then an email is sent
         Mail::assertSent(ConfirmationSent::class);
+    }
+
+
+    /** @test */
+    public function when_a_user_registers_they_recieve_a_notification_reminding_them_to_confirm_their_email()
+    {
+        Notification::fake();
+
+        // when the user registers their account
+        $this->post(route('register'), [
+            'name' => 'user',
+            'username' => 'rick',
+            'email' => 'user@user.com',
+            'password' => 'secret',
+            'password_confirmation' => 'secret'
+        ]);
+
+        $user = User::where('username', 'rick')->first();
+
+        // then the user should recieve a notification
+        Notification::assertSentTo($user, UserRegistered::class);
     }
 
 
