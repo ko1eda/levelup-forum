@@ -10,24 +10,38 @@ An open source forum project to showcase my ongoing efforts to master fullstack 
 + Customizeable user profiles.
 + User avatar and photo uploads.
 + Configurable spam detection system with keyword detection, repeated key detection and comment throttling.
-+ User registration system with mailing.
-+ Thread filters for trending, popular, new, etc.
-+ Caching with Redis.
++ User registration system with email confirmation.
++ Thread filters for active, popular, new, etc.
++ Trending threads with Redis as well as various other caching. 
 + Heavy use of S.O.L.I.D design principles, polymorphism and patterns including Strategy, Factory, Builder, Template.
 + Heavy use of the IoC container and other higher level Laravel concepts.
 
 
 ## Installation
 
-> ***Prequisite***: to run the project files you must have PHP 7 installed on your development machine.
+> ***Prequisite***: to run the project files you must have PHP 7 And Redis installed on your development machine.
+
+> ***Note***: If you are a docker user instead of installing Redis or PHP on your dev machine you can use the laradock submodule linked in this directory. Make sure you edit the directories .env.example file to fit your needs and then rename it to .env before you run docker.
+
+```
+cd laradock 
+
+mv ./.env.example ./.env
+
+docker-compose up -d nginx mysql redis workspace 
+```
+
+More info can be found at http://laradock.io/documentation/
 
 ### Step 1 :
 Clone the project to your development machine, cd into the project directory and install all composer dependencies.  You will also need to generate an application key. 
 
 ```
 git clone git@github.com:ko1eda/levelup-forum.git
-cd levelup-form && composer install 
-php artisan generate:key 
+
+cd levelup-form && composer install
+
+php artisan generate:key
 ```
 
 ### Step 2:
