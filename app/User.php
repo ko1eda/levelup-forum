@@ -24,7 +24,20 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'confirmation_token'
+    ];
+
+    /**
+     * This will cast any attribute to the type
+     * specified, that means when you access this
+     * property in laravel even though it is stored
+     * in the db as 0 or 1 it will be automatically cast
+     * to boolean
+     *
+     * @var array
+     */
+    protected $casts = [
+        'confirmed' => 'boolean'
     ];
 
 

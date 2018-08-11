@@ -13,7 +13,8 @@
 
 Route::get('/', function () {
     return redirect()->route('threads.index');
-});
+    // return new App\Mail\Registration\ConfirmationSent();
+})->name('home');
 
 
 // subscriptions (this is above threads due to wildcard naming conflict with threads.destroy)
@@ -67,4 +68,19 @@ Route::prefix('api')->group(function () {
     });
 });
 
-Auth::routes();
+// Auth::routes();
+// Authentication Routes...
+$this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
+$this->post('login', 'Auth\LoginController@login');
+$this->post('logout', 'Auth\LoginController@logout')->name('logout');
+
+// Registration Routes...
+$this->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+$this->post('register', 'Auth\RegisterController@register');
+$this->get('/register/confirmation', 'Auth\RegisterController@confirm')->name('register.confirm');
+
+// Password Reset Routes...
+$this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+$this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+$this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+$this->post('password/reset', 'Auth\ResetPasswordController@reset');

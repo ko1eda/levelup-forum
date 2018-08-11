@@ -15,10 +15,21 @@ use Faker\Generator as Faker;
 
 $factory->define(App\User::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
+        'name' => preg_replace('/\'/', '', $faker->name), // this is to make sure tests don't fail on names like O'dell or st
         'username' => $faker->unique()->userName,
         'email' => $faker->unique()->safeEmail,
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
         'remember_token' => str_random(10),
+        'confirmed' => true
+    ];
+});
+
+
+// This is a factory state we can use this with our factories in the format
+// factory(class)->state('unconfirmed')->create() and it will merge in whatever
+// properties we put in this array to the normal factory state
+$factory->state(App\User::class, 'unconfirmed', function () {
+    return [
+        'confirmed' => false
     ];
 });

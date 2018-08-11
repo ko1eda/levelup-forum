@@ -154,6 +154,22 @@ class ManageThreadsTest extends TestCase
     }
 
 
+    /** @test */
+    public function a_user_must_confirm_their_email_address_before_they_can_post_a_thread()
+    {
+        // Given we have an auth user
+        $user = factory(User::class)->states('unconfirmed')->create();
+        $this->signInUser($user);
+
+        // And that users tries to post a thread without confirming an email
+        // Then that user will be redirected via middleware to the homepage
+        $this->post(route('threads.store'), factory(Thread::class)->make()->toArray())
+            ->assertRedirect(route('threads.index'))
+            ->assertSessionHas('flash');
+    }
+
+
+
     /**
      *
      * Validation tests
@@ -193,7 +209,7 @@ class ManageThreadsTest extends TestCase
     // This method is not a test it is being used
     // by the various validation tests 
     // above to publish threads
-    protected function publishThread($override)
+    protected function publishThread($override = [])
     {
 
         // Given that we have an authenticated user
@@ -207,6 +223,6 @@ class ManageThreadsTest extends TestCase
         // Note : we turn exception handling off here so we don't just get
         //   a ValidationException thrown
         return $this->withExceptionHandling()
-            ->post(route('threads.index'), $thread->toArray());
+            ->post(route('threads.store'), $thread->toArray());
     }
 }

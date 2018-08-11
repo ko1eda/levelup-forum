@@ -16,8 +16,11 @@ class ReplyController extends Controller
         // user must be authenticated
         $this->middleware('auth');
 
-        // Only allow only 8 reply requests per 1 minute
-        $this->middleware('throttle:8,1')->except('destroy');
+        // Only allow only 5 reply requests per 1 minute
+        if (!app()->environment('testing')) {
+            $this->middleware('throttle:'. config('spam.throttle.replies.frequency'))
+                ->only(config('spam.throttle.replies.routes'));
+        }
     }
 
     /**

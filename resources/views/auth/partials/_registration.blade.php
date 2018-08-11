@@ -1,5 +1,5 @@
 <div class="lu-card tw-px-2 sm:tw-px-6">
-    <div class="lu-card-header tw-p-4 ">
+    <div class="lu-card-header tw-p-4">
       <h1 class="tw-text-center tw-text-2xl sm:tw-text-3xl">
         @isset($isSignup)
           Let's get you signed up
@@ -8,7 +8,7 @@
         @endisset
       </h1>
     </div>
-    <form class="tw-p-4" action="/{{ isset($isSignup) ? 'register' : 'login' }}" method="POST">
+    <form class="tw-p-4 tw-pb-0" action="/{{ isset($isSignup) ? 'register' : 'login' }}" method="POST">
       @csrf
 
       @isset($isSignup)
@@ -33,31 +33,6 @@
             </p>
           @endif
         </div>
-
-        <div class="field">
-          <label class="label">Username</label>
-          <div class="control has-icons-left">
-            <input 
-            class="input" 
-            type="text" 
-            placeholder="cookie.monster" 
-            required
-            name="username"
-            >
-            <span class="icon is-small is-left">
-                <i class="fas fa-at"></i>
-            </span>
-          </div>
-
-          @if ($errors->has('username'))
-            <p class="help is-danger">
-              {{ $errors->first('username') }}
-            </p>
-          @endif
-        </div>
-
-     
-
       @endisset
 
       <div class="field">
@@ -82,6 +57,30 @@
         @endif
       </div>
 
+
+    @isset($isSignup)
+      <div class="field">
+        <label class="label">Username</label>
+        <div class="control has-icons-left">
+          <input 
+          class="input" 
+          type="text" 
+          placeholder="cookie.monster" 
+          required
+          name="username"
+          >
+          <span class="icon is-small is-left">
+              <i class="fas fa-at"></i>
+          </span>
+        </div>
+
+        @if ($errors->has('username'))
+          <p class="help is-danger">
+            {{ $errors->first('username') }}
+          </p>
+        @endif
+      </div>
+     @endisset
 
       <div class="field">
         <label class="label">Password</label>
@@ -141,17 +140,18 @@
         </div>
       @endisset
 
-      <div class="field is-grouped is-grouped-centered tw-mt-6">
+      <div class="field is-grouped is-grouped-centered tw-my-8">
         <div class="control">
           <button class="button is-primary is-outlined">Submit</button>
         </div>
 
         @if(!isset($isSignup))
           <div class="control">
-            <a class="button is-info is-outlined" href="{{ route('password.request') }}">Forgot password ?</a>
+            <a class="button is-dark is-outlined" href="{{ route('password.request') }}">Forgot password?</a>
           </div>
         @endif
 
       </div>
     </form>
 </div>
+

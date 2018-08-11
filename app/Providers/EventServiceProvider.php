@@ -17,6 +17,12 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\NotifyMentionedUsers',
             'App\Listeners\NotifyThreadSubscribers'
         ],
+        
+        // When a user is registered
+        'Illuminate\Auth\Events\Registered'  => [
+            \App\Listeners\Registration\SendConfirmationEmail::class,
+            \App\Listeners\Registration\NotifyNewlyRegisteredUser::class
+        ],
     ];
 
     /**

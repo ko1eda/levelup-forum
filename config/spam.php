@@ -18,5 +18,21 @@ return [
        'Yahoo Customer Support',
     ],
 
-    'threshold' => 1
+    'threshold' => 1,
+
+    // Throttle the number of times a user or ip can hit certain routes
+    // for a given controller
+    'throttle' => [
+
+        'threads' => [
+            'routes' => ['show', 'store'],
+            'frequency' => '20,1'
+        ],
+
+        'replies' => [
+            'routes' => ['store', 'update'],
+            'frequency' => '5,1'
+        ],
+
+    ]
 ];

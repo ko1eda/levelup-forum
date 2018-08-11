@@ -26,8 +26,23 @@ class ThreadController extends Controller
             ->except(['show', 'index']);
 
 
+        // make sure the user confirms their email
+        // before they post a thread
+        $this->middleware('email.confirmation')
+            ->only(['store','create']);
+
+
+        // throttle the show and store route
+        // so that users cannot easily manipulate the
+        // trending threads count or spam threads
+        if (!app()->environment('testing')) {
+            $this->middleware('throttle:'. config('spam.throttle.threads.frequency'))
+                ->only(config('spam.throttle.threads.routes'));
+        }
+      
         $this->trending = $trending;
     }
+
 
     /**
      * Display a listing of the resource.
@@ -45,11 +60,11 @@ class ThreadController extends Controller
 
         $threads = $threads->paginate(25);
 
-        // Trending threads
         $trendingThreads = $this->trending->withScores()->get([0, 4]);
 
         return view('threads.index', compact(['threads', 'trendingThreads']));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -61,6 +76,7 @@ class ThreadController extends Controller
         return view('threads.create');
     }
 
+
     /**
      * Store a newly created resource in storage.
      * show
@@ -70,19 +86,24 @@ class ThreadController extends Controller
      */
     public function store(Request $req)
     {
+
         $validated = $req->validate([
             'body' => ['required', app(SpamFree::class)],
             'title' => ['required', 'max:80', app(SpamFree::class)],
             'channel_id' => 'required|exists:channels,id'
         ]);
+
         // push the user_id field into the validated array
         $validated["user_id"] = \Auth::id();
         
+
         // create thread with validateded array
         $thread = Thread::create($validated);
 
+
         return redirect($thread->path())->with('flash', 'Published A Thread');
     }
+
 
     /**
      * Display the specified resource.
@@ -114,6 +135,7 @@ class ThreadController extends Controller
         return back()->with('flash', 'Activity Forbidden~Danger');
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -125,6 +147,7 @@ class ThreadController extends Controller
         //
     }
 
+    
     /**
      * Update the specified resource in storage.
      *
@@ -136,6 +159,7 @@ class ThreadController extends Controller
     {
         //
     }
+
 
     /**
      * Remove the specified resource from storage.
