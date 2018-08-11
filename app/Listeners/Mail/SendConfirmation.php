@@ -28,6 +28,6 @@ class SendConfirmation
      */
     public function handle(Registered $event)
     {
-        Mail::to($event->user->email)->send(new ConfirmationSent);
+        Mail::to($event->user->email)->send(new ConfirmationSent($event->user));
     }
 }

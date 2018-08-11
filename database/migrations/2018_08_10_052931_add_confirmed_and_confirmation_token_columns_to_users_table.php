@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddConfirmedColumnToUsersTable extends Migration
+class AddConfirmedAndConfirmationTokenColumnsToUsersTable extends Migration
 {
     /**
      * Add user email confirmatin to users table
@@ -15,6 +15,7 @@ class AddConfirmedColumnToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->boolean('confirmed')->default(false);
+            $table->string('confirmation_token', 35)->nullable()->unique();
         });
     }
 
@@ -30,6 +31,7 @@ class AddConfirmedColumnToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('confirmed');
+            $table->dropColumn('confirmation_token');
         });
     }
 }

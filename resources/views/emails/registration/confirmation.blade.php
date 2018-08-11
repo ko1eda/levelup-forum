@@ -3,8 +3,8 @@
 
 Just click the button below and you're good to go.
 
-@component('mail::button', ['url' => '', 'color' => 'green'])
-Confirm 
+@component('mail::button', ['url' => route('register.confirm', "tokenID={$user->confirmation_token}"), 'color' => 'green'])
+Confirm Email
 @endcomponent
 
 Thanks,<br>

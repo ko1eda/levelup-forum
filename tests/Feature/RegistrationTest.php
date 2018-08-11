@@ -29,4 +29,38 @@ class RegistrationTest extends TestCase
         // Then an email is sent
         Mail::assertSent(ConfirmationSent::class);
     }
+
+
+    /** @test */
+    public function a_user_can_confirm_their_email_address()
+    {
+        // Given we have an unregistred user
+
+        // and that user registers for an account
+        $this->post(route('register'), [
+            'name' => 'user',
+            'username' => 'rick',
+            'email' => 'user@user.com',
+            'password' => 'secret',
+            'password_confirmation' => 'secret'
+        ]);
+
+        $user = User::where('username', 'rick')->first();
+
+        // Then the users confirmed property should still be false
+        $this->assertFalse($user->confirmed);
+
+        // However their account should now have a non-null confirmation_token set
+        $this->assertNotNull($user->confirmation_token);
+
+        // Then when the user vistis the endpoint register/confirmation?tokenID=
+        $this->get(route('register.confirm', "tokenID={$user->confirmation_token}"))
+            ->assertRedirect(route('threads.index'));
+
+        // Then the users confirmation status should be set to confirmed
+        $this->assertTrue($user->fresh()->confirmed);
+
+        // Then the users confirmation token should be set  back to null
+        $this->assertNull($user->fresh()->confirmation_token);
+    }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -37,7 +38,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('guest')->except('confirm');
     }
 
     /**
@@ -64,11 +65,39 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $u = new User;
+        $u->name = $data['name'];
+        $u->username = $data['username'];
+        $u->email = $data['email'];
+        $u->password = Hash::make($data['password']);
+        $u->confirmation_token = str_random(35);
+
+        $u->save();
+
+        return $u;
+    }
+
+
+    /**
+     * Get the ?tokenID from the query string
+     * and see if that token exists in the database
+     * if so confirm that user is fully registered
+     *
+     * @param Request $req
+     * @return void
+     */
+    public function confirm(Request $req)
+    {
+        $u = User::where('confirmation_token', $req->query('tokenID'))->firstOrFail();
+
+        // switch the users confirmed status to true
+        $u->confirmed = 1;
+
+        // reset the users confirmation token
+        $u->confirmation_token = null;
+
+        $u->save();
+
+        return redirect()->route('threads.index')->with('flash', 'Ok you are good to go');
     }
 }
