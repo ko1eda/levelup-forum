@@ -88,8 +88,12 @@ class RegisterController extends Controller
      */
     public function confirm(Request $req)
     {
-        $u = User::where('confirmation_token', $req->query('tokenID'))->firstOrFail();
-
+        try {
+            $u = User::where('confirmation_token', $req->query('tokenID'))->firstOrFail();
+        } catch (\Exception $e) {
+            return redirect()->route('threads.index')->with('flash', 'The confirmation token was invalid~danger');
+        }
+       
         // switch the users confirmed status to true
         $u->confirmed = 1;
 

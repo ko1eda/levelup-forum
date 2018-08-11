@@ -19,7 +19,7 @@ class RedirectIfEmailUnconfirmed
         if (! $request->user()->confirmed) {
             return redirect()
                 ->route('threads.index')
-                ->with('flash', 'First confirm your email address~info');
+                ->with('flash', 'First confirm your email address~danger');
         }
 
         return $next($request);

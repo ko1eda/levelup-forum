@@ -29,9 +29,17 @@ class ThreadController extends Controller
         // make sure the user confirms their email
         // before they post a thread
         $this->middleware('email.confirmation')
-            ->only('store');
+            ->only(['store','create']);
 
 
+        // throttle the show and store route
+        // so that users cannot easily manipulate the
+        // trending threads count or spam threads
+        if (!app()->environment('testing')) {
+            $this->middleware('throttle:'. config('spam.throttle.threads.frequency'))
+                ->only(config('spam.throttle.threads.routes'));
+        }
+      
         $this->trending = $trending;
     }
 

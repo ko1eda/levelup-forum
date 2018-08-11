@@ -28,8 +28,8 @@ class RegistrationTest extends TestCase
         // when that user navigates to /register and registers an account
         event(new \Illuminate\Auth\Events\Registered($user = factory(User::class)->create()));
 
-        // Then an email is sent
-        Mail::assertSent(ConfirmationSent::class);
+        // Then an email is sent (note queued here b/c in prod this will be queued)
+        Mail::assertQueued(ConfirmationSent::class);
     }
 
 
@@ -57,8 +57,9 @@ class RegistrationTest extends TestCase
     /** @test */
     public function a_user_can_confirm_their_email_address()
     {
+        Mail::fake();
+        
         // Given we have an unregistred user
-
         // and that user registers for an account
         $this->post(route('register'), [
             'name' => 'user',
@@ -85,5 +86,16 @@ class RegistrationTest extends TestCase
 
         // Then the users confirmation token should be set  back to null
         $this->assertNull($user->fresh()->confirmation_token);
+    }
+
+
+    /** @test */
+    public function a_user_may_not_use_an_invalid_token_to_confirm_their_email()
+    {
+        // If a user tries to hit our confirmation endpoint with an invalid tokenID
+        // Then that user should hit a 404 not found
+        $this->get(route('register.confirm', "tokenID=invalid"))
+            ->assertRedirect(route('threads.index'))
+            ->assertSessionHas('flash');
     }
 }
