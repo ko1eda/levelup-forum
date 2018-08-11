@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Listeners\Mail;
+namespace App\Listeners\Registration;
 
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Registration\ConfirmationSent;
 
-class SendConfirmation
+class SendConfirmationEmail
 {
     /**
      * Create the event listener.
