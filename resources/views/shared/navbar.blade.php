@@ -19,12 +19,14 @@
           <div class="navbar-item has-dropdown is-hoverable ">
             {{-- this just moves the notification widget up higher in the mobile drop down menu --}}
             {{-- it is completely hidden on anything with a screen size above 1025px --}}
-            <lu-notification-widget v-if="isActive" class="hidden-non-touch tw-border-b tw-border-bulma-lighter"
-            :user-data="{{ \Auth::user()->makeHidden('email') }}"
-            :index-route={{ json_encode(route('users.notifications.index', \Auth::user(), false )) }}
-            :mark-route={{ json_encode(route('users.notifications.update', \Auth::user(), false)) }}
-            :navbar-Active="isActive">
-          </lu-notification-widget>
+            @auth
+              <lu-notification-widget v-if="isActive" class="hidden-non-touch tw-border-b tw-border-bulma-lighter"
+                :user-data="{{ \Auth::user()->makeHidden('email') }}"
+                :index-route={{ json_encode(route('users.notifications.index', \Auth::user(), false )) }}
+                :mark-route={{ json_encode(route('users.notifications.update', \Auth::user(), false)) }}
+                :navbar-Active="isActive">
+              </lu-notification-widget>
+            @endauth
 
             <a class="navbar-link">
               Browse
