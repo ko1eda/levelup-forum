@@ -86,7 +86,6 @@ class ThreadController extends Controller
      */
     public function store(Request $req)
     {
-
         $validated = $req->validate([
             'body' => ['required', app(SpamFree::class)],
             'title' => ['required', 'max:80', app(SpamFree::class)],
@@ -95,13 +94,16 @@ class ThreadController extends Controller
 
         // push the user_id field into the validated array
         $validated["user_id"] = \Auth::id();
-        
 
+        // set the slug
+        $validated['slug'] = 0;
+        
         // create thread with validateded array
         $thread = Thread::create($validated);
 
-
-        return redirect($thread->path())->with('flash', 'Published A Thread');
+        return redirect()
+            ->route('threads.show', [$thread->channel, $thread])
+            ->with('flash', 'Published A Thread');
     }
 
 

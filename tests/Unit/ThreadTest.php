@@ -9,6 +9,7 @@ use App\Thread;
 use App\Reply;
 use App\User;
 use App\Channel;
+use Vinkla\Hashids\Facades\Hashids;
 
 class ThreadTest extends TestCase
 {
@@ -27,12 +28,30 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
+    public function a_thread_has_a_unique_slug()
+    {
+        // given we have three threads created sequentially
+        $threadTwo = factory(Thread::class)->create();
+
+        $threadThree = factory(Thread::class)->create();
+
+        // no two threads should be equal because each one combines their incremeneted ThreadID
+        // plus the time in milliseconds from UNIX 0 to their creation 
+        $this->assertNotEquals(
+            Hashids::connection('threads')->decode($threadTwo->slug)[0] + 1,
+            Hashids::connection('threads')->decode($threadThree->slug)[0]
+        );
+
+        // this proves that they are unique
+    }
+
+    /** @test */
     public function a_thread_can_fetch_its_path()
     {
-        // Given we have a thread, 
+        // Given we have a thread,
         // Then that threads path function should return
         $this->assertEquals(
-            "/threads/{$this->thread->channel->slug}/{$this->thread->id}",
+            "/threads/{$this->thread->channel->slug}/{$this->thread->slug}",
             $this->thread->path()
         );
     }
