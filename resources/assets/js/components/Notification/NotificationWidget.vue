@@ -1,10 +1,19 @@
 <template>
  <div class="navbar-item has-dropdown is-hoverable" v-if="hasNotifications">
-  <a class="navbar-item" >
+
+  <a class="navbar-item hidden-non-touch" >
+    <span class="tw-text-green tw-font-bold">Notifications</span>
+  </a>
+  <!-- if the navbar burger is toggled display Notifcations text -->
+
+  <a class="navbar-item" v-show="!this.navbarActive">
     <i class="fas fa-bell tw-text-lg tw-text-green tw-cursor-pointer"></i>
   </a>
+  <!-- display the bell icon only if the navbar burger is not toggled -->
+ 
 
-  <div class="navbar-dropdown limit-w">
+
+  <div :class="['navbar-dropdown is-right', {'limit-w' : !this.navbarActive}]">
     <div v-for="(notification) in unread" :key = "notification.id">
       <div class="hover-effect navbar-item tw-cursor-pointer hover:tw-bg-green">
 
@@ -28,7 +37,7 @@
       <hr class="navbar-divider">
     </div><!-- end v-for loop -->
 
-     <div class="tw-text-center tw-text-xs tw-px-4 ">
+     <div class="tw-text-center tw-text-xs tw-px-4 " v-if="!this.navbarActive">
       <!-- <a href="#" class="tw-text-bulma-link">Expand Notifications</a> -->
       <a href="#" class="tw-text-bulma-link" @click="handleMarkRead()">Clear All</a>
     </div><!-- end notifcation controls -->
@@ -54,6 +63,11 @@ export default {
 
     markRoute: {
       type: String,
+      required: true
+    },
+
+    navbarActive: {
+      type: Boolean, 
       required: true
     }
 
@@ -125,9 +139,16 @@ export default {
   }
 
   .limit-w {
-    max-width: 400px;
-    min-width: 375px;
-    // overflow: hidden;
+    max-width: 500px;
+    min-width: 400px;
+    overflow: hidden;
+  }
+
+// hide the green notifications header on large screens
+  @media (min-width: 1025px) {
+    .hidden-non-touch {
+      display:none;
+    }
   }
 
 </style>
