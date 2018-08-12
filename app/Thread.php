@@ -57,6 +57,16 @@ class Thread extends Model implements SubscribableInterface
         });
 
 
+        static::created(function ($thread) {
+            // $sinceEpoch = $thread->created_at->diffInSeconds(\Carbon\Carbon::createFromTimestamp(0));
+
+            // $hash = $sinceEpoch + $thread->id;
+
+            $thread->slug = Hashids::connection('threads')->encode($thread->id);
+
+            $thread->save();
+        });
+        
         static::deleting(function ($thread) {
             // Delete all replies associated with the
             $thread->replies->each(function ($reply) {
@@ -130,52 +140,52 @@ class Thread extends Model implements SubscribableInterface
     }
 
 
-    /**
-     * sets the passed in thread id to a hashid slug
-     *
-     * @param mixed $slug
-     * @param HashidsManager $hashids
-     * @return void
-     */
-    public function setSlugAttribute($value)
-    {
-        // gets the last id stored in the table
-        $lastID = $this->getSlugIncrement();
+    // /**
+    //  * sets the passed in thread id to a hashid slug
+    //  *
+    //  * @param mixed $slug
+    //  * @param HashidsManager $hashids
+    //  * @return void
+    //  */
+    // public function setSlugAttribute($value)
+    // {
+    //     // gets the last id stored in the table
+    //     $lastID = $this->getSlugIncrement();
 
-        // increment the returned id by one
-        ++ $lastID;
+    //     // increment the returned id by one
+    //     ++ $lastID;
 
-        // set the slug to the difference in from unix 00:00:00 until the threads creation
-        // multiply it by 1000 to get miliseconds
-        $timeSinceEpoch = Carbon::now()->diffInSeconds(Carbon::createFromTimestamp(0)) * 1000;
+    //     // set the slug to the difference in from unix 00:00:00 until the threads creation
+    //     // multiply it by 1000 to get miliseconds
+    //     $timeSinceEpoch = Carbon::now()->diffInSeconds(Carbon::createFromTimestamp(0)) * 1000;
 
-        // pick a random value from the time in seconds since unix 0 plus the incremented ID
-        $hash = random_int(0, $timeSinceEpoch + $lastID);
+    //     // pick a random value from the time in seconds since unix 0 plus the incremented ID
+    //     $hash = random_int(0, $timeSinceEpoch) + $lastID;
 
-        // encode the incremeneted and store it in the db
-        $this->attributes['slug'] = Hashids::connection('threads')->encode($hash);
-    }
+    //     // encode the incremeneted and store it in the db
+    //     $this->attributes['slug'] = Hashids::connection('threads')->encode($hash);
+    // }
 
 
-    /**
-     * getSlugIncrement
-     *
-     * @param int $value
-     * @return void
-     */
-    protected function getSlugIncrement() : int
-    {
-        // get the largest id in the table (the most recent id)
-        $result = Thread::max('id');
+    // /**
+    //  * getSlugIncrement
+    //  *
+    //  * @param int $value
+    //  * @return void
+    //  */
+    // protected function getSlugIncrement() : int
+    // {
+    //     // get the largest id in the table (the most recent id)
+    //     $result = Thread::max('id');
 
-        // if the result is null return 0 bc it is the first thread in the table
-        if ($result === null) {
-            return 0;
-        }
+    //     // if the result is null return 0 bc it is the first thread in the table
+    //     if ($result === null) {
+    //         return 0;
+    //     }
 
-        // return the result
-        return $result;
-    }
+    //     // return the result
+    //     return $result;
+    // }
 
 
     /**

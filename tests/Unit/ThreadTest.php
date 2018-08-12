@@ -36,9 +36,9 @@ class ThreadTest extends TestCase
         $threadThree = factory(Thread::class)->create();
 
         // no two threads should be equal because each one combines their incremeneted ThreadID
-        // plus the time in milliseconds from UNIX 0 to their creation 
+        // plus the time in milliseconds from UNIX 0 to their creation
         $this->assertNotEquals(
-            Hashids::connection('threads')->decode($threadTwo->slug)[0] + 1,
+            Hashids::connection('threads')->decode($threadTwo->slug)[0],
             Hashids::connection('threads')->decode($threadThree->slug)[0]
         );
 

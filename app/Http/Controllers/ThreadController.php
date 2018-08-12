@@ -95,8 +95,8 @@ class ThreadController extends Controller
         // push the user_id field into the validated array
         $validated["user_id"] = \Auth::id();
 
-        // set the slug
-        $validated['slug'] = 0;
+        // set a placeholder slug this will be replaced
+        $validated['slug'] = 'a';
         
         // create thread with validateded array
         $thread = Thread::create($validated);
