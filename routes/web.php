@@ -1,5 +1,7 @@
 <?php
 
+use Vinkla\Hashids\Facades\Hashids;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,6 +12,14 @@
 | contains the "web" middleware group. Now create something great!
 |
  */
+
+// find a thread from it's decoded hashed id
+Route::bind('thread', function ($value, $route) {
+    $id = Hashids::connection('threads')->decode($value)[0];
+
+    return \App\Thread::findOrFail($id);
+});
+
 
 Route::get('/', function () {
     return redirect()->route('threads.index');
@@ -29,7 +39,7 @@ Route::get('/threads/create', 'ThreadController@create')->name('threads.create')
 Route::get('/threads/{channel?}', 'ThreadController@index')->name('threads.index');
 Route::post('/threads', 'ThreadController@store')->name('threads.store');
 
-Route::get('/threads/{channel}/{thread}', 'ThreadController@show')->name('threads.show');
+Route::get('/threads/{channel}/{thread}/{slug}', 'ThreadController@show')->name('threads.show');
 Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy')->name('threads.destroy');  //change route
 
 // replies

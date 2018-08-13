@@ -2,7 +2,7 @@
 <div class="lu-pannel tw-px-4 lg:tw-px-6 tw-py-4 ">
   @forelse($threads as $thread)
     <div class="tw-pb-2 tw-text-xl">
-      <a href={{ route('threads.show', [$thread->channel, $thread]) }}>
+      <a href={{ route('threads.show', [$thread->channel, $thread, $thread->slug]) }}>
         <h4 class="tw-font-light">{{ $thread->title }}</h4>
       </a>
     </div>

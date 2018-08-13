@@ -79,7 +79,7 @@ class UserMentioned extends Notification
             'action' => 'mentioned you in ',
             'messageFull' => $this->thread->title,
             'messageSub' => substr($this->thread->title, 0, 35) .'...',
-            'link' => route('threads.show', [$this->thread->channel, $this->thread], false).'#reply-'.$this->reply->id
+            'link' => route('threads.show', [$this->thread->channel, $this->thread, $this->thread->slug], false).'#reply-'.$this->reply->id
         ];
     }
 }

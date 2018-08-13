@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Redis;
 use App\Traits\Views\RecordViews;
 use App\Widgets\Trending;
 use Vinkla\Hashids\Facades\Hashids;
-use Carbon\Carbon;
 
 class Thread extends Model implements SubscribableInterface
 {
@@ -23,7 +22,7 @@ class Thread extends Model implements SubscribableInterface
      * The attributes that are mass assignable.
      * @var array
      */
-    protected $fillable = ['body', 'title', 'user_id', 'channel_id', 'slug'];
+    protected $fillable = ['body', 'title', 'user_id', 'channel_id'];
     
     /**
      * Add a count to the returned model.
@@ -36,6 +35,7 @@ class Thread extends Model implements SubscribableInterface
      * @var array
      */
     protected $appends = ['is_subscribed'];
+
 
     /**
      * boot
@@ -56,15 +56,9 @@ class Thread extends Model implements SubscribableInterface
             $builder->with('user');
         });
 
-
-        static::created(function ($thread) {
-            // $sinceEpoch = $thread->created_at->diffInSeconds(\Carbon\Carbon::createFromTimestamp(0));
-
-            // $hash = $sinceEpoch + $thread->id;
-
-            $thread->slug = Hashids::connection('threads')->encode($thread->id);
-
-            $thread->save();
+        // give the thread a slug when it is being created
+        static::creating(function ($thread) {
+            $thread->slug = str_slug($thread->title);
         });
         
         static::deleting(function ($thread) {
@@ -116,76 +110,14 @@ class Thread extends Model implements SubscribableInterface
 
 
     /**
-     * Return path to current thread
+     * Get the value of the model's route key.
      *
-     * @param String $append - any additional path
-     * @return String
+     * @return mixed
      */
-    public function path(String $append = '')
+    public function getRouteKey()
     {
-        return (
-            "/threads/{$this->channel->slug}/{$this->slug}". $append
-        );
+        return Hashids::connection('threads')->encode($this->getKey());
     }
-
-
-    /**
-     * getRouteKeyName
-     *
-     * @return void
-     */
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
-
-
-    // /**
-    //  * sets the passed in thread id to a hashid slug
-    //  *
-    //  * @param mixed $slug
-    //  * @param HashidsManager $hashids
-    //  * @return void
-    //  */
-    // public function setSlugAttribute($value)
-    // {
-    //     // gets the last id stored in the table
-    //     $lastID = $this->getSlugIncrement();
-
-    //     // increment the returned id by one
-    //     ++ $lastID;
-
-    //     // set the slug to the difference in from unix 00:00:00 until the threads creation
-    //     // multiply it by 1000 to get miliseconds
-    //     $timeSinceEpoch = Carbon::now()->diffInSeconds(Carbon::createFromTimestamp(0)) * 1000;
-
-    //     // pick a random value from the time in seconds since unix 0 plus the incremented ID
-    //     $hash = random_int(0, $timeSinceEpoch) + $lastID;
-
-    //     // encode the incremeneted and store it in the db
-    //     $this->attributes['slug'] = Hashids::connection('threads')->encode($hash);
-    // }
-
-
-    // /**
-    //  * getSlugIncrement
-    //  *
-    //  * @param int $value
-    //  * @return void
-    //  */
-    // protected function getSlugIncrement() : int
-    // {
-    //     // get the largest id in the table (the most recent id)
-    //     $result = Thread::max('id');
-
-    //     // if the result is null return 0 bc it is the first thread in the table
-    //     if ($result === null) {
-    //         return 0;
-    //     }
-
-    //     // return the result
-    //     return $result;
-    // }
 
 
     /**

@@ -45,7 +45,7 @@ class ParticipateInForumTest extends TestCase
         $this->post(route('replies.store', $thread), $reply->toArray());
         
         // Then the reply should be visible on the threads page
-        $this->get($thread->path())
+        $this->get(route('threads.show', [$thread->channel, $thread, $thread->slug]))
             ->assertSee($reply->body);
     }
 
@@ -193,7 +193,7 @@ class ParticipateInForumTest extends TestCase
         $this->post(route('replies.store', $thread), $reply->toArray());
 
         // then they should see the reply when they are redirected to the threads page
-        $this->get(route('threads.show', [$thread->channel, $thread]))
+        $this->get(route('threads.show', [$thread->channel, $thread, $thread->slug]))
             ->assertSee($reply->body);
 
         // however if that user leaves another reply within the same minute
@@ -203,7 +203,7 @@ class ParticipateInForumTest extends TestCase
 
         // APPEND: AND THE REPLY SHOULD NOT BE VISIBLE ON THE PAGE BECAUSE IT WAS NEVER STORED
         // Test wasn't checking if the reply was persisted (which it was, the errors were shown but the reply was still stored)
-        $this->get(route('threads.show', [$thread->channel, $thread]))
+        $this->get(route('threads.show', [$thread->channel, $thread, $thread->slug]))
             ->assertDontSee($reply2['body']);
     }
 }

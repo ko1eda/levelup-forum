@@ -47,8 +47,8 @@ return [
         ],
 
         'threads' => [
-            'salt' => Uuid::uuid4()->toString(),
-            'length' => '8',
+            'salt' => env('THREADS_HASHID_SALT') ?? 'default-salt',
+            'length' => '6',
         ],
 
         'alternative' => [

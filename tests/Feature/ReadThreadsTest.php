@@ -8,6 +8,7 @@ use App\Thread;
 use App\Reply;
 use App\User;
 use Illuminate\Validation\Factory;
+use Vinkla\Hashids\Facades\Hashids;
 
 class ReadThreadsTest extends TestCase
 {
@@ -61,13 +62,29 @@ class ReadThreadsTest extends TestCase
             ->assertDontSee($unseenThread->title);
     }
     
-    
+    /** @test */
+    public function a_threads_id_is_hashid_encoded_when_a_user_views_the_thread()
+    {
+        // Given we have a thread
+        $hashedID = Hashids::connection('threads')->encode($this->thread->id);
+        
+        // When the user views the thread at the threads.show route
+        $expectedRoute = "/threads/{$this->thread->channel->slug}/{$hashedID}/{$this->thread->slug}";
+
+        // the uri should be in the form /threads/channel/encoded_id/slug
+        $this->assertEquals(
+            $expectedRoute,
+            route('threads.show', [$this->thread->channel, $this->thread, $this->thread->slug], false)
+        );
+    }
+
+
     /** @test */
     public function a_user_can_view_a_single_thread()
     {
         // If the uri is matching this threads id
         // Then I will see the specific thread with that title
-        $this->get($this->thread->path())
+        $this->get(route('threads.show', [$this->thread->channel, $this->thread, $this->thread->slug]))
             ->assertSee($this->thread->title);
     }
 
@@ -83,7 +100,7 @@ class ReadThreadsTest extends TestCase
         
         // When I visit the uri for the given thread
         // Then I will see the associated reply's body
-        $this->get($this->thread->path())
+        $this->get(route('threads.show', [$this->thread->channel, $this->thread, $this->thread->slug]))
             ->assertSee($reply->body);
     }
 }

@@ -95,14 +95,11 @@ class ThreadController extends Controller
         // push the user_id field into the validated array
         $validated["user_id"] = \Auth::id();
 
-        // set a placeholder slug this will be replaced
-        $validated['slug'] = 'a';
-        
         // create thread with validateded array
         $thread = Thread::create($validated);
 
         return redirect()
-            ->route('threads.show', [$thread->channel, $thread])
+            ->route('threads.show', [$thread->channel, $thread, $thread->slug])
             ->with('flash', 'Published A Thread');
     }
 
@@ -116,7 +113,7 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show(Channel $channel, Thread $thread)
+    public function show(Channel $channel, Thread $thread, String $slug)
     {
         if ($thread->channel_id === $channel->id) {
             $replies = $thread

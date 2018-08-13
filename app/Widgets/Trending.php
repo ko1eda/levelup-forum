@@ -68,7 +68,7 @@ class Trending
     {
         return json_encode([
             'title' => $thread->title,
-            'uri' => route('threads.show', [$thread->channel, $thread], false),
+            'uri' => route('threads.show', [$thread->channel, $thread, $thread->slug], false),
             'username' => $thread->user->username,
             'channel' => $thread->channel->name,
             'channelUri' => route('threads.index', [$thread->channel], false)

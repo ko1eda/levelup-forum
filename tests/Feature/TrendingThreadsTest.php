@@ -37,13 +37,13 @@ class TrendingThreadsTest extends TestCase
 
         // one visited 5 times
         for ($i = 0; $i < 5; $i++) {
-            $this->get(route('threads.show', [$threadWith5Visits->channel, $threadWith5Visits]));
+            $this->get(route('threads.show', [$threadWith5Visits->channel, $threadWith5Visits, $threadWith5Visits->slug]));
         }
         
         // and one thread visited 1 times
         $threadWithOneVisit = factory(Thread::class)->create();
 
-        $this->get(route('threads.show', [$threadWithOneVisit->channel, $threadWithOneVisit]));
+        $this->get(route('threads.show', [$threadWithOneVisit->channel, $threadWithOneVisit, $threadWithOneVisit->slug]));
 
         // Then we should have a count of two threads in the trending_threads cache
         $this->assertCount(2, $this->trending->withScores()->get());
@@ -64,7 +64,7 @@ class TrendingThreadsTest extends TestCase
         $thread = factory(Thread::class)->create();
 
         // And that thread is visited
-        $this->get(route('threads.show', [$thread->channel, $thread]));
+        $this->get(route('threads.show', [$thread->channel, $thread, $thread->slug]));
 
         // The cache should contain one item
         $this->assertCount(1, $this->trending->get());

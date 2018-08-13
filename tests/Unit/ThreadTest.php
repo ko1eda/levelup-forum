@@ -28,33 +28,15 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
-    public function a_thread_has_a_unique_slug()
+    public function a_thread_has_a_decriptive_slug()
     {
-        // given we have three threads created sequentially
-        $threadTwo = factory(Thread::class)->create();
+        // given we have a thread
+        $thread = factory(Thread::class)->create();
 
-        $threadThree = factory(Thread::class)->create();
-
-        // no two threads should be equal because each one combines their incremeneted ThreadID
-        // plus the time in milliseconds from UNIX 0 to their creation
-        $this->assertNotEquals(
-            Hashids::connection('threads')->decode($threadTwo->slug)[0],
-            Hashids::connection('threads')->decode($threadThree->slug)[0]
-        );
-
-        // this proves that they are unique
+        // then that threads slug should be a train-case version of its title
+        $this->assertEquals(str_slug($thread->title), $thread->slug);
     }
 
-    /** @test */
-    public function a_thread_can_fetch_its_path()
-    {
-        // Given we have a thread,
-        // Then that threads path function should return
-        $this->assertEquals(
-            "/threads/{$this->thread->channel->slug}/{$this->thread->slug}",
-            $this->thread->path()
-        );
-    }
 
     /** @test */
     public function a_thread_has_an_associated_user()
@@ -67,7 +49,7 @@ class ThreadTest extends TestCase
     /** @test */
     public function a_thread_has_replies()
     {
-        // Given we have a thread 
+        // Given we have a thread
         // Then It should have a collection class for potential replies
         $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $this->thread->replies);
     }
