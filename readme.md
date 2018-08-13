@@ -6,6 +6,7 @@ An open source forum project to showcase my ongoing efforts to master fullstack 
 
 ## Features
 + Thread subscriptions and user notification system.
++ All threads are created with unique hashID's.
 + Editable thread comments with favorites and @mentions.
 + Customizeable user profiles.
 + User avatar and photo uploads.
