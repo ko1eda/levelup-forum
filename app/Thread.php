@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redis;
 use App\Traits\Views\RecordViews;
 use App\Widgets\Trending;
 use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Support\Facades\Cache;
 
 class Thread extends Model implements SubscribableInterface
 {
@@ -133,6 +134,24 @@ class Thread extends Model implements SubscribableInterface
         event(new ReplyPosted($this, $reply));
 
         return $reply;
+    }
+
+    /**
+     * Set threads best_reply_id to $reply
+     *
+     * Returns a key to be used to cache the reply
+     *
+     * @return String $key
+     */
+    public function markBestReply(int $reply)
+    {
+        $this->best_reply_id = $reply;
+
+        $this->save();
+
+        $key = 'thread:' . $this->id . ':best_reply';
+
+        return $key;
     }
 
 

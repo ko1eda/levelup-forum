@@ -116,6 +116,18 @@ class Reply extends Model
 
 
     /**
+     * Return true if the reply
+     * is the best in its thread
+     *
+     * @return bool
+     */
+    public function isBest()
+    {
+        return $this->thread->best_reply_id === $this->id;
+    }
+
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function thread()
