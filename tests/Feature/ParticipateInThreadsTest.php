@@ -9,7 +9,7 @@ use App\User;
 use App\Thread;
 use App\Reply;
 
-class ParticipateInForumTest extends TestCase
+class ParticipateInThreadsTest extends TestCase
 {
     use RefreshDatabase;
 
