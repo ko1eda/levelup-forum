@@ -53,11 +53,10 @@ class TrackViewsTest extends TestCase
         $this->thread->views()->record();
   
         // get the threads info for the key
-        $class = get_class($this->thread);
         $id = $this->thread->id;
   
         // assert the thread exists for its key
-        $this->assertEquals(1, Redis::exists('test-' . $class . ':' . $id . ':views'));
+        $this->assertEquals(1, Redis::exists('test-' . 'thread' . ':' . $id . ':views'));
   
         // the thread has one view
         $this->assertEquals(1, $this->thread->views()->count());
@@ -66,6 +65,6 @@ class TrackViewsTest extends TestCase
         $this->thread->delete();
   
         //then it's view is also delted from our cache
-        $this->assertEquals(0, Redis::exists('test-' . $class . ':' . $id . ':views'));
+        $this->assertEquals(0, Redis::exists('test-' . 'thread' . ':' . $id . ':views'));
     }
 }

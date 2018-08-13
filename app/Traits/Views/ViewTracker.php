@@ -94,12 +94,17 @@ class ViewTracker
      */
     protected function setCacheKey()
     {
+        // get the last item from the class path aka the class name
+        $class = explode('\\', strtolower(get_class($this->item)));
+
+        $class = end($class);
+
         if ($this->testing) {
-            $this->cacheKey = 'test-' . get_class($this->item) . ':' . $this->item->id . ':views';
+            $this->cacheKey = 'test-' . $class . ':' . $this->item->id . ':views';
             
             return;
         }
         
-        $this->cacheKey = get_class($this->item) . ':' . $this->item->id . ':views';
+        $this->cacheKey = $class . ':' . $this->item->id . ':views';
     }
 }
