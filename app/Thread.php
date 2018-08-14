@@ -8,11 +8,9 @@ use App\Traits\RecordActivity;
 use App\Traits\SubscribableTrait;
 use App\Interfaces\SubscribableInterface;
 use App\Events\ReplyPosted;
-use Illuminate\Support\Facades\Redis;
 use App\Traits\RecordViews;
 use App\Widgets\Trending;
 use Vinkla\Hashids\Facades\Hashids;
-use Illuminate\Support\Facades\Cache;
 
 class Thread extends Model implements SubscribableInterface
 {

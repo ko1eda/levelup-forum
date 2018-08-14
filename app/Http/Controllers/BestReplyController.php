@@ -19,11 +19,12 @@ class BestReplyController extends Controller
      */
     public function store(Reply $reply)
     {
+        // check the threads policy for update permission
+        $this->authorize('update', $reply->thread);
+
         $key = $reply->thread->markBestReply($reply->id);
 
-        // !app()->environment('testing') ?: $key = 'testing-' . $key;
-
-        Redis::set($key, $reply->makeHidden(['user', 'favorites', 'thread'])->toJson());
+        Redis::hset($key, 'best_reply', $reply->makeHidden(['user', 'favorites', 'thread'])->toJson());
         
         return response([], 204);
     }
