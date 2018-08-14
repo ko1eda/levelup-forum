@@ -36,7 +36,7 @@ class TrackViewsTest extends TestCase
         $this->assertEquals(0, $this->thread->views()->count());
   
         // However if that thread is then viewd
-        $this->thread->views()->record();
+        $this->thread->views()->increment();
   
         // Then that threads views should be incremented by one
         $this->assertEquals(1, $this->thread->views()->count());
@@ -50,13 +50,13 @@ class TrackViewsTest extends TestCase
     {
         // Given we have a thread
         // And that thread has a view
-        $this->thread->views()->record();
+        $this->thread->views()->increment();
   
         // get the threads info for the key
         $id = $this->thread->id;
   
         // assert the thread exists for its key
-        $this->assertEquals(1, Redis::exists('test-' . 'thread' . ':' . $id . ':views'));
+        $this->assertEquals(1, Redis::hexists('test-thread' . ':' . $id, 'views'));
   
         // the thread has one view
         $this->assertEquals(1, $this->thread->views()->count());
@@ -65,6 +65,6 @@ class TrackViewsTest extends TestCase
         $this->thread->delete();
   
         //then it's view is also delted from our cache
-        $this->assertEquals(0, Redis::exists('test-' . 'thread' . ':' . $id . ':views'));
+        $this->assertEquals(0, Redis::hexists('test-thread' . ':' . $id, 'views'));
     }
 }

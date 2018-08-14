@@ -9,7 +9,7 @@ use App\Traits\SubscribableTrait;
 use App\Interfaces\SubscribableInterface;
 use App\Events\ReplyPosted;
 use Illuminate\Support\Facades\Redis;
-use App\Traits\Views\RecordViews;
+use App\Traits\RecordViews;
 use App\Widgets\Trending;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Support\Facades\Cache;
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Cache;
 class Thread extends Model implements SubscribableInterface
 {
 
-    use RecordActivity,RecordViews, SubscribableTrait;
+    use RecordActivity, RecordViews, SubscribableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -149,7 +149,7 @@ class Thread extends Model implements SubscribableInterface
 
         $this->save();
 
-        $key = 'thread:' . $this->id . ':best_reply';
+        $key = 'thread::' . $this->id;
 
         return $key;
     }
