@@ -32,7 +32,7 @@ class BestReplyTest extends TestCase
             ->assertStatus(403);
     
         // And the reply should not be marked as best
-        $this->assertFalse($replies[0]->fresh()->isBest());
+        $this->assertNotEquals($thread->fresh()->best_reply_id, $replies[0]->id);
     }
 
 
@@ -58,8 +58,34 @@ class BestReplyTest extends TestCase
             ->assertStatus(204);
         
          // then the first reply will be marked as best
-        $this->assertTrue($replies[0]->fresh()->isBest());
+        $this->assertEquals($thread->fresh()->best_reply_id, $replies[0]->id);
 
         // then that reply should be stored in a redis cache
+    }
+
+
+    /** @test */
+    public function a_thread_can_fetch_its_best_reply()
+    {
+        $this->signInUser();
+
+        // given we have a thread
+        $thread = factory(Thread::class)->create(['user_id' => \Auth::id()]);
+
+        // with a best reply
+        $reply = factory(Reply::class)->create(['thread_id' => $thread->id]);
+        
+        Redis::shouldReceive('hset');
+
+        // if we mark the reply
+        $this->post(route('replies.best.store', $reply));
+
+        Redis::shouldReceive('hget')
+            ->withArgs(['thread:' . $thread->id, 'best_reply']);
+
+        $thread->bestReply();
+
+        // then it will return the reply
+        // $this->assertInstanceOf('Illuminate\Database\Eloquent\Model', $thread->bestReply());
     }
 }

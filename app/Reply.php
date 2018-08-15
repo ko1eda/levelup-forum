@@ -115,16 +115,28 @@ class Reply extends Model
     }
 
 
-    /**
-     * Return true if the reply
-     * is the best in its thread
-     *
-     * @return bool
-     */
-    public function isBest()
-    {
-        return $this->thread->best_reply_id === $this->id;
-    }
+    // /**
+    //  * Return true if the reply
+    //  * is the best in its thread
+    //  *
+    //  * @return bool
+    //  */
+    // public function getIsBestAttribute()
+    // {
+    //     return $this->isBest();
+    // }
+
+
+    // /**
+    //  * Return true if the reply
+    //  * is the best in its thread
+    //  *
+    //  * @return bool
+    //  */
+    // public function isBest()
+    // {
+    //     return $this->thread->best_reply_id === $this->id;
+    // }
 
 
     /**

@@ -61,29 +61,4 @@ class ReplyTest extends TestCase
 
         $this->assertEquals($anchoredBody, $reply->anchored_body);
     }
-
-
-    /** @test */
-    public function it_can_be_marked_as_a_best_reply()
-    {
-
-        // Given we have a thread
-        $thread = factory(Thread::class)->create();
-
-        // Given we have a reply that has not been marked best
-        $reply = factory(Reply::class)->create(['thread_id' => $thread->id]);
-
-        // If we call its isBest method it should return false
-        $this->assertFalse($reply->isBest());
-
-        //however,  If we mark the reply as best
-        $thread->best_reply_id = $reply->id;
-
-        // and update the thread
-        $thread->save();
-
-        // Then the isBest method will return true if it
-        $this->assertTrue($reply->fresh()->isBest());
-    }
-
 }

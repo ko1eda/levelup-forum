@@ -11,6 +11,16 @@ export default {
     attributes: {
       type: Object,
       required: true
+    },
+
+    bestUri: {
+      type: String,
+      required: true
+    },
+
+    hasBest: {
+      type: Boolean,
+      required: true
     }
   },
 
@@ -23,9 +33,21 @@ export default {
       error: '',
       hasBeenEdited: false,
       editedBody: '',
-      editedAnchoredBody: ''
+      editedAnchoredBody: '',
+      isMarkedBest: this.hasBest
     }
   },
+
+    // Any reply whose id does not match the id 
+    // from the event emitted on our markBest method
+    // will have their isMarkedBest property set to false
+    // only one isMarkedBest can be set at a time 
+   created() {
+      window.events.$on('best-reply-selected', (id) => {
+
+        this.isMarkedBest = id === this.attributes.id;
+      });
+    },
 
   methods: {
 
@@ -121,7 +143,22 @@ export default {
         });
     },
     
-  
+    // Mark the best reply
+    handleMarkBest() {
+      // Send a post request to endpoint
+      axios.post(this.bestUri)
+        .then(res => {
+          
+          this.isMarkedBest = true;
+
+          window.events.$emit('best-reply-selected', this.attributes.id);
+
+          flash('Updating the best reply');
+
+        });
+    },
+
+
     // Delete the given reply
     // Then hide it
     // Emit a global deleted reply event

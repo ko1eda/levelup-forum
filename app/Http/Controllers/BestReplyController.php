@@ -24,7 +24,7 @@ class BestReplyController extends Controller
 
         $key = $reply->thread->markBestReply($reply->id);
 
-        Redis::hset($key, 'best_reply', $reply->makeHidden(['user', 'favorites', 'thread'])->toJson());
+        Redis::hset($key, 'best_reply', serialize($reply->makeHidden(['user', 'favorites', 'thread'])));
         
         return response([], 204);
     }

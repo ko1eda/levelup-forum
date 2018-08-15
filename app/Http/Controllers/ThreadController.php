@@ -118,6 +118,7 @@ class ThreadController extends Controller
         if ($thread->channel_id === $channel->id) {
             $replies = $thread
                 ->replies()
+                ->where('id', '<>', $thread->best_reply_id)
                 ->with('user.profile')
                 ->latest()
                 ->paginate(10);
@@ -128,7 +129,11 @@ class ThreadController extends Controller
             // Store the visited thread for 24 hours
             $this->trending->store($thread)->withExpireHours($hours = 24);
 
-            return view('threads.show', compact('thread', 'replies'));
+            return view('threads.show', [
+                'thread' => $thread,
+                'bestReply' => $thread->bestReply(),
+                'replies' => $replies
+            ]);
         }
 
         return back()->with('flash', 'Activity Forbidden~Danger');

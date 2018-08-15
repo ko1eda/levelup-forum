@@ -1,7 +1,7 @@
 <template>
   <div v-if="count">
     <hr>
-    <h3 class="tw-text-xl sm:tw-text-2xl">Replies:</h3>
+    <h3 class="tw-text-xl sm:tw-text-2xl">Replies</h3>
   </div>
 </template>
 
@@ -11,7 +11,7 @@ export default {
     initialCount: {
       type: Number,
       required: true
-    }
+    },
   },
 
   data() {

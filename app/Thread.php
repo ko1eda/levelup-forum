@@ -11,6 +11,7 @@ use App\Events\ReplyPosted;
 use App\Traits\RecordViews;
 use App\Widgets\Trending;
 use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Support\Facades\Redis;
 
 class Thread extends Model implements SubscribableInterface
 {
@@ -147,9 +148,25 @@ class Thread extends Model implements SubscribableInterface
 
         $this->save();
 
-        $key = 'thread::' . $this->id;
+        $key = 'thread:' . $this->id;
 
         return $key;
+    }
+
+
+    /**
+     * return the best reply for the thread from redis
+     *
+     * @return void
+     */
+    public function bestReply()
+    {
+        $key = 'thread:' . $this->id;
+
+        if ($item = Redis::hget($key, 'best_reply')) {
+            return  unserialize($item);
+        }
+        // return $this->replies()->where('id', $this->best_reply_id)->first();
     }
 
 
