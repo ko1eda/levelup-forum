@@ -72,12 +72,14 @@ class Reply extends Model
         // remove any best replies associated with the reply
         static::deleting(function ($reply) {
             $thread =  $reply->thread;
+            // only remove if the deleted reply was the best
+            if ($thread->best_reply_id === $reply->id) {
+                $thread->best_reply_id = null;
 
-            $thread->best_reply_id = null;
-
-            $thread->save();
-
-            Redis::hdel('thread:' .$thread->id, 'best_reply');
+                $thread->save();
+    
+                Redis::hdel('thread:' .$thread->id, 'best_reply');
+            }
         });
 
         // Fetch any mentioned users when a reply is created

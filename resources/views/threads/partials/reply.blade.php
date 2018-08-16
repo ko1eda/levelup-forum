@@ -1,6 +1,6 @@
 
 <lu-reply :attributes="{{ $reply->makeHidden('user') }}" :best-Uri={{ json_encode(route('replies.best.store', $reply, false)) }} :has-Best={{ json_encode($hasBest) }} inline-template>
-
+<transition name="fade">
   <div :class="['tw-flex tw-flex-col tw-w-full', isMarkedBest ? 'tw-border-green-lighter tw-border-4' :'tw-border-bulma tw-border'] " v-if="!deleted">
     <div class="tw-py-2 sm:tw-px-4 tw-px-2 tw-border-b tw-bg-bulma-lightest">
       <div class="tw-flex tw-justify-between tw-items-center">
@@ -87,5 +87,5 @@
   
     </div>{{-- end reply body --}}
   </div>
-
+</transition>
 </lu-reply>
