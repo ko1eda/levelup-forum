@@ -81,11 +81,49 @@ class BestReplyTest extends TestCase
         $this->post(route('replies.best.store', $reply));
 
         Redis::shouldReceive('hget')
-            ->withArgs(['thread:' . $thread->id, 'best_reply']);
+            ->withArgs(['thread:' . $thread->id, 'best_reply'])
+            ->andReturn(serialize((new Reply)));
 
         $thread->bestReply();
 
         // then it will return the reply
-        // $this->assertInstanceOf('Illuminate\Database\Eloquent\Model', $thread->bestReply());
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Model', $thread->bestReply());
+    }
+
+    /** @test */
+    public function when_a_reply_is_deleted_so_is_its_best_reply()
+    {
+        $this->signInUser();
+
+        // Given we have a thread
+        $thread = factory(Thread::class)->create(['user_id' => \Auth::id()]);
+
+        // with a best reply
+        $reply = factory(Reply::class)->create(['thread_id' => $thread->id]);
+
+        Redis::shouldReceive('hset');
+        $this->post(route('replies.best.store', $reply));
+
+        // and the thread should have a best reply set
+        $this->assertNotNull($thread->fresh()->best_reply_id);
+
+
+
+        Redis::shouldReceive('hget')
+            ->withArgs(['thread:' . $thread->id, 'best_reply'])
+            ->andReturn(serialize((new Reply)));
+        
+        // the cache should contain the best reply
+        $this->assertNotNull($thread->bestReply());
+
+        Redis::shouldReceive('hdel')
+            ->withArgs(['thread:' . $thread->id, 'best_reply'])
+            ->andReturn(1);
+  
+        // When that reply is deleted
+        $reply->delete();
+        
+        // and the thread that references it should have its best reply set to 0
+        $this->assertNull($thread->best_reply_id);
     }
 }

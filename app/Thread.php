@@ -142,9 +142,9 @@ class Thread extends Model implements SubscribableInterface
      *
      * @return String $key
      */
-    public function markBestReply(int $reply)
+    public function markBestReply(int $id)
     {
-        $this->best_reply_id = $reply;
+        $this->best_reply_id = $id;
 
         $this->save();
 

@@ -5,6 +5,7 @@ import FlashMessage from './components/Flash/FlashMessage.vue';
 import Reply from './components/Reply/Reply.vue';
 import ReplyForm from './components/Reply/ReplyForm.vue';
 import ReplyCounter from './components/Reply/ReplyCounter.vue';
+import BestReplyDivider from './components/Reply/BestReplyDivider.vue';
 import ReplyDivider from './components/Reply/ReplyDivider.vue';
 import SubscribeButton from './components/Subscription/SubscribeButton.vue';
 import AvatarUploader from './components/Upload/AvatarUploader.vue';
@@ -41,7 +42,8 @@ const app = new Vue({
       'lu-reply' : Reply,
       'lu-counter' : ReplyCounter,
       'lu-reply-form': ReplyForm, 
-      'lu-divider' : ReplyDivider,
+      'lu-reply-divider' : ReplyDivider,
+      'lu-best-reply-divider' : BestReplyDivider,
       'lu-subscribe-button' : SubscribeButton,
       'lu-avatar-uploader': AvatarUploader
     }

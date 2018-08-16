@@ -90,8 +90,6 @@ class ReplyController extends Controller
     public function destroy(Request $req, Reply $reply)
     {
         // Checks the delete policy to make sure
-        // the user has the proper credentials
-        // before they can proceed to delete a post
         // NOTE MAKE SURE YOU REGISTER ANY POLICY
         // IN THE AUTHSERVICEPROVIDER or it wont work
         $this->authorize('delete', $reply);

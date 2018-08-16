@@ -153,7 +153,7 @@ export default {
 
           window.events.$emit('best-reply-selected', this.attributes.id);
 
-          flash('Updating the best reply');
+          flash('Updated best reply');
 
         });
     },
@@ -168,8 +168,15 @@ export default {
     handleReplyDelete() {
       axios.delete(`/replies/${this.attributes.id}`)
         .then(() =>  {
+          
           this.deleted = true;
+
+          if (this.isMarkedBest) {
+            window.events.$emit('best-reply-deleted');
+          } 
+
           window.events.$emit('deletedReply');
+
           flash('Deleted a Reply!', 'danger')
         });
     }

@@ -20,7 +20,7 @@
 
         <div class='tw-flex tw-items-center tw-justify-end tw-w-12'>
           @can('update', $thread)
-            <span v-show="isMarkedBest" disabled>
+            <span v-show="isMarkedBest">
               <i class="fas fa-check-circle tw-text-green tw-cursor-pointer " title="Marked as best reply" ></i>
             </span>
 
@@ -71,7 +71,7 @@
         
 
         @can('update', $reply)
-          <div class="tw-mr-2">
+          <div class="tw-mr-2" v-if="!isMarkedBest && !this.hasBest">
             <button type="submit" class="tw-flex tw-items-center tw-text-bulma-dark" @click="handleEditing">
               <i class="fas fa-edit tw-text-xs hover:tw-text-bulma-link"></i>
               <span class="tw-ml-1 tw-text-xs sm:tw-text-sm">edit</span>
@@ -80,7 +80,7 @@
         @endif {{-- end edit/ Vue Edit Button --}}
         
       @auth
-        {{-- <lu-favorite :reply-data="{{ $reply }}" v-if="!this.hasBest"></lu-favorite>end favorites widget --}}
+        <lu-favorite :reply-data="{{ $reply }}" v-if="!isMarkedBest && !this.hasBest"></lu-favorite>
       @endauth
 
       </div>{{-- end info level --}}
