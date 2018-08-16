@@ -1,7 +1,7 @@
 <template>
-  <div v-if="count">
+  <div v-if="count > 0">
     <hr>
-    <h3 class="tw-text-xl sm:tw-text-2xl">Replies:</h3>
+    <h3 class="tw-text-xl sm:tw-text-2xl">{{ this.label }}</h3>
   </div>
 </template>
 
@@ -11,7 +11,11 @@ export default {
     initialCount: {
       type: Number,
       required: true
-    }
+    },
+    label: {
+      type: String,
+      default: 'Replies'
+    },
   },
 
   data() {

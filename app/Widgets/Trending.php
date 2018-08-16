@@ -37,7 +37,7 @@ class Trending
     {
         $this->cache = $cache;
 
-        $this->cacheKey = app()->environment('testing') ? 'testing_trending_threads' : 'trending_threads';
+        $this->cacheKey = app()->environment('testing') ? 'testing-threads:trending' : 'threads:trending';
 
         $this->withScores = false;
     }

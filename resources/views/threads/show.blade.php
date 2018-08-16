@@ -32,8 +32,6 @@
               
             @endif
           @endauth {{-- end Vue SubscribeButton component --}}
-
-
         </div>{{-- end header --}}
     
         <div class="lu-card-body tw-leading-loose"> 
@@ -55,27 +53,37 @@
           </article>
           @endguest{{-- end guest login notification --}}
               
-      
-          <lu-divider :initial-count={{ $thread->replies_count }}></lu-divider> {{-- divider between post and replies + replies heading--}}
+          @isset($bestReply)
+            <lu-best-reply-divider :has-best={{ json_encode(isset($bestReply)) }}></lu-best-reply-divider>
+            <div class="tw-px-2 tw-mb-4">
+              <div class="tw-my-4" id="reply-{{ $bestReply->id }}">
+                @include('threads.partials.reply', ['reply' => $bestReply, 'thread' => $thread, 'hasBest' => true])
+              </div>
+            </div>
+          @endif {{-- end best reply --}}
 
+          <lu-reply-divider :initial-count={{ $thread->replies_count - ($bestReply ? 1 : 0) }}></lu-reply-divider> {{-- divider between post and replies + replies heading--}}
+          
           {{-- Note the id is so that we can navigate to a given reply --}}
           {{-- on the page using a hash link ex /#reply-4 --}}
           <div class="tw-px-2 tw-mb-4">
+
             @foreach($replies as $reply)
               <div class="tw-my-4" id="reply-{{ $reply->id }}">
-                @include('threads.partials.reply')
+                @include('threads.partials.reply', ['hasBest' => false]) {{-- has best distingushes theses replies from the marked best reply --}}
               </div>
             @endforeach
+
             {{ $replies->links() }}
           </div> {{-- end replies and pagination --}}
 
         </div> {{-- end replies section --}}
       </div>{{-- end pannel --}}
-      
     </div>{{-- end column is-8 --}}
 
-    <div class="column">
 
+
+    <div class="column">
       <div class="lu-card tw-text-center">
         <div class="lu-pannel-header">
           <p class="lu-pannel-text">
@@ -95,5 +103,7 @@
       </div>{{-- end side widget --}}
 
     </div>{{-- end column --}}
+
+
   </div>
 @endsection

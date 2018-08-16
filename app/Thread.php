@@ -8,15 +8,15 @@ use App\Traits\RecordActivity;
 use App\Traits\SubscribableTrait;
 use App\Interfaces\SubscribableInterface;
 use App\Events\ReplyPosted;
-use Illuminate\Support\Facades\Redis;
-use App\Traits\Views\RecordViews;
+use App\Traits\RecordViews;
 use App\Widgets\Trending;
 use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Support\Facades\Redis;
 
 class Thread extends Model implements SubscribableInterface
 {
 
-    use RecordActivity,RecordViews, SubscribableTrait;
+    use RecordActivity, RecordViews, SubscribableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -133,6 +133,40 @@ class Thread extends Model implements SubscribableInterface
         event(new ReplyPosted($this, $reply));
 
         return $reply;
+    }
+
+    /**
+     * Set threads best_reply_id to $reply
+     *
+     * Returns a key to be used to cache the reply
+     *
+     * @return String $key
+     */
+    public function markBestReply(int $id)
+    {
+        $this->best_reply_id = $id;
+
+        $this->save();
+
+        $key = 'thread:' . $this->id;
+
+        return $key;
+    }
+
+
+    /**
+     * return the best reply for the thread from redis
+     *
+     * @return void
+     */
+    public function bestReply()
+    {
+        $key = 'thread:' . $this->id;
+
+        if ($item = Redis::hget($key, 'best_reply')) {
+            return  unserialize($item);
+        }
+        // return $this->replies()->where('id', $this->best_reply_id)->first();
     }
 
 

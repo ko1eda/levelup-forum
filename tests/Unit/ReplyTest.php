@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Reply;
 use App\User;
+use App\Thread;
 
 class ReplyTest extends TestCase
 {

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\Favoritable;
 use App\Traits\RecordActivity;
+use Illuminate\Support\Facades\Redis;
 
 class Reply extends Model
 {
@@ -67,6 +68,17 @@ class Reply extends Model
         static::addGlobalScope('user', function (Builder $builder) {
             $builder->with('user');
         });
+        
+        // remove any best replies associated with the reply
+        static::deleting(function ($reply) {
+            $thread =  $reply->thread;
+
+            $thread->best_reply_id = null;
+
+            $thread->save();
+
+            Redis::hdel('thread:' .$thread->id, 'best_reply');
+        });
 
         // Fetch any mentioned users when a reply is created
         static::created(function ($reply) {
@@ -122,6 +134,7 @@ class Reply extends Model
     {
         return $this->belongsTo(Thread::class);
     }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

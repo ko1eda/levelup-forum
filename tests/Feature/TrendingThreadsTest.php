@@ -74,5 +74,7 @@ class TrendingThreadsTest extends TestCase
 
         //the item should also be deleted
         $this->assertCount(0, $this->trending->get());
+
+        $this->trending->flush();
     }
 }

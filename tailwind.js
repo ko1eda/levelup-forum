@@ -85,10 +85,10 @@ let colors = {
   // 'green': '#38c172',
 
   // added
-  'green-light': '#00e2c0',
-  'green-lighter': '#00f3cf',
+  'green-lighter': '#54DCC9',
+  'green-light': '#2AD5BD',
   'green': '#00D1B2',
-  'green-dark' : '#00c0a4',
+  'green-dark' : '#00AB93',
   'green-darker' : '#00af95',
   'green-darkest' : '#008d78',
   

@@ -12,7 +12,7 @@
         </div>
       </div>
   
-      <div id="navbar" :class="['navbar-menu', {'is-active' : isActive }, {'tw-border-t tw-border-bulma-lighter' : isActive}]">
+      <div id="navbar" :class="['navbar-menu', {'is-active' : isActive }, {'tw-border-t tw-border-bulma-lighter' : isActive}]" v-cloak>
   
         <div class="navbar-start">
           

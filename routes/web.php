@@ -38,13 +38,12 @@ Route::name('subscriptions.')->group(function () {
 Route::get('/threads/create', 'ThreadController@create')->name('threads.create');
 Route::get('/threads/{channel?}', 'ThreadController@index')->name('threads.index');
 Route::post('/threads', 'ThreadController@store')->name('threads.store');
-
 Route::get('/threads/{channel}/{thread}/{slug}', 'ThreadController@show')->name('threads.show');
 Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy')->name('threads.destroy');  //change route
 
 // replies
 Route::post('/threads/{thread}/replies', 'ReplyController@store')->name('replies.store');
-
+Route::post('/replies/{reply}/best', 'BestReplyController@store')->name('replies.best.store');
 Route::patch('/replies/{reply}', 'ReplyController@update')->name('replies.update');
 Route::delete('/replies/{reply}', 'ReplyController@destroy')->name('replies.destroy');
 
