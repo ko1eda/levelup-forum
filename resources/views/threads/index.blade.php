@@ -22,7 +22,7 @@
       @include('shared._thread-list', ['threads' => $threads, 'displayOwner' => true])
       
       <div class="tw-flex tw-mt-2 tw-full-width tw-justify-end ">
-          {{-- {{ $threads->links() }} --}}
+          {{ $threads->links() }}
       </div>{{-- end pagination links --}}
       @endif
 
