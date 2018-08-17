@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Redis;
 
 class Activity extends Model
 {
@@ -30,13 +31,28 @@ class Activity extends Model
      * Then map over each group and take only the first $limit = 3 from each set.
      * Then return with current defaults a total of 9 items max 3 for each day
      *
+     *
+     * Caching:
+     * Set a cache key for redis
+     * Check if an item exists in redis already for that cache key, if so return it
+     *
+     * If it doesn't exist build up the feed, store it in redis with a 30 second expiree
+     * and return the non-cached version of the feed
+     *
      * @param User $user
      * @param int $limit
      * @return Collection
      */
     public static function feed(User $user, int $days = 3, int $limit = 3)
     {
-        return static::with([
+        $key = 'user:'. $user->id . ':activity_feed';
+        
+        // if already in redis just return the cached item
+        if ($feed = Redis::get($key)) {
+            return unserialize($feed);
+        }
+
+        $feed = static::with([
             'subject' => function ($q) {
                 $q->withoutGlobalScopes(['user', 'favorites']);
             }
@@ -53,5 +69,12 @@ class Activity extends Model
         ->map(function ($group) use ($limit) {
             return $group->take($limit);
         });
+
+        
+        // set expiree to 30 seconds
+        Redis::setex($key, 30, serialize($feed));
+
+
+        return $feed;
     }
 }

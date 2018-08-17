@@ -9,6 +9,7 @@ use App\Thread;
 use App\Activity;
 use App\Reply;
 use App\User;
+use Illuminate\Support\Facades\Redis;
 
 class ActivityTest extends TestCase
 {
@@ -132,7 +133,12 @@ class ActivityTest extends TestCase
         $newerThread = factory(Thread::class)->create([
             'user_id' => \Auth::user()->id
         ]);
+        
+        // Note that we are using redis to cache the feed on subsequent page refreshes
+        Redis::shouldReceive('get')
+            ->andReturn(null);
 
+        Redis::shouldReceive('setex');
 
         // If we fetch the activity feed for that user
         // for the last 3 days, with a limit of 3 items per day
