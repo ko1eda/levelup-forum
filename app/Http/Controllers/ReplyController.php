@@ -37,6 +37,10 @@ class ReplyController extends Controller
      */
     public function store(Request $req, Thread $thread)
     {
+        if ($thread->locked) {
+            return back()->with('flash', 'A moderator has locked this thread~danger');
+        }
+
         try {
             $this->authorize('create', new Reply);
         } catch (\Exception $e) {

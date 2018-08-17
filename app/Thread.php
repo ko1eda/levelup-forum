@@ -36,6 +36,13 @@ class Thread extends Model implements SubscribableInterface
      */
     protected $appends = ['is_subscribed'];
 
+    /**
+     * $casts
+     *
+     * @var array
+     */
+    protected $casts = ['locked' => 'boolean'];
+
 
     /**
      * boot
@@ -121,6 +128,22 @@ class Thread extends Model implements SubscribableInterface
 
 
     /**
+     * lock the given thread so that it may not be updated
+     *
+     * @return void
+     */
+    public function lock()
+    {
+        // if(auth()->user()->isAdmin()) {
+
+        // }
+        $this->locked = true;
+
+        $this->save();
+    }
+
+
+    /**
      * Add a reply to the given thread
      *
      *
@@ -182,7 +205,6 @@ class Thread extends Model implements SubscribableInterface
      */
     public function scopeFilter($query, $filters)
     {
- 
         return $filters->apply($query);
     }
 }

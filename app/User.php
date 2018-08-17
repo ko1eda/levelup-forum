@@ -89,6 +89,32 @@ class User extends Authenticatable
 
 
     /**
+     * a user has one role
+     * 1: admin -> can do anything on the forum
+     * 2: moderator -> can do many things especially in subforums
+     * 3: standard -> normal user account standard privlages
+     *
+     * @return void
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+
+    /**
+     * return true if the user has any role
+     * in the passed in array of roles
+     *
+     * @param array $roles
+     * @return bool
+     */
+    public function hasRoles(array $roles) : bool
+    {
+        return $this->role()->whereIn('name', $roles)->exists();
+    }
+
+    /**
      * Every User has a profile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

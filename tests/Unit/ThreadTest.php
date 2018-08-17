@@ -146,4 +146,17 @@ class ThreadTest extends TestCase
         // Then that threads is_subscribed attribute should return false
         $this->assertFalse($this->thread->is_subscribed);
     }
+
+    /** @test */
+    public function a_thread_can_be_locked()
+    {
+        // given we have a thread
+        $this->assertFalse($this->thread->locked);
+
+        // and we call the threads lock method
+        $this->thread->lock();
+
+        // then the threads is_locked property should be set to true
+        $this->assertTrue($this->thread->locked);
+    }
 }

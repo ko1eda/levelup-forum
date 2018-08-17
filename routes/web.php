@@ -38,6 +38,7 @@ Route::name('subscriptions.')->group(function () {
 Route::get('/threads/create', 'ThreadController@create')->name('threads.create');
 Route::get('/threads/{channel?}', 'ThreadController@index')->name('threads.index');
 Route::post('/threads', 'ThreadController@store')->name('threads.store');
+Route::post('threads/{thread}/lock', 'LockThreadController@store')->name('threads.lock.store'); // lock a thread
 Route::get('/threads/{channel}/{thread}/{slug}', 'ThreadController@show')->name('threads.show');
 Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy')->name('threads.destroy');  //change route
 
