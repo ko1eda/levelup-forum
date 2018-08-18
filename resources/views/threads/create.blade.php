@@ -38,7 +38,7 @@
                     
                     @foreach($channels as $channel)
                       {{-- this makes the select option the old value --}}
-                      <option value="{{ $channel->id }}" {{ old('channel_id') === $channel->id ? 'selected' : ''}}>
+                      <option value="{{ $channel->id }}" {{ old('channel_id') == $channel->id ? 'selected' : ''}}>
                         {{ $channel->name }}
                       </option>
                     @endforeach
@@ -68,6 +68,13 @@
                     {{$errors->first('body')}}   
                   </p>  
                 @endif
+
+                @if($errors->has('g-recaptcha-response'))
+                  <p class="help is-danger">
+                    {{$errors->first('g-recaptcha-response')}}   
+                  </p>  
+                @endif
+                
               </div>
             </div>
     
@@ -76,7 +83,7 @@
             
               <button type="submit" class="button is-small is-primary">Publish</button>
 
-              <a href="{{\URL::previous()}}" class="button is-small is-grey" role="button">Cancel</a>
+              <a href="{{\URL::previous() === route('threads.create') ? route('threads.index') : \Url::previous() }}" class="button is-small is-grey" role="button">Cancel</a>
     
             </div>
           </div>

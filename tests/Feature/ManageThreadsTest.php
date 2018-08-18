@@ -10,11 +10,29 @@ use App\Thread;
 use App\Channel;
 use App\Reply;
 use App\Favorite;
+use App\Rules\Recaptcha;
 
 class ManageThreadsTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        // create a mock of the recaptcha class
+        // and then bind it into the IoC container on every test
+        // when our store method is hit on the threads controller
+        // laravel will replace our actual Recaptcha class (injected as a dependency in the store method)
+        // with the mock we have bound into the container here
+        app()->singleton(Recaptcha::class, function ($app) {
+            $m = \Mockery::mock(Recaptcha::class);
+
+            $m->shouldReceive('passes')->andReturn(true);
+
+            return $m;
+        });
+    }
 
     /** @test */
     public function an_unauthenticated_user_cannot_create_a_thread()
@@ -22,11 +40,13 @@ class ManageThreadsTest extends TestCase
         $this->checkUnauthFunctionality('post', route('threads.index'));
     }
 
+    
     /** @test */
     public function an_unauthenticated_user_cannot_see_create_thread_page()
     {
         $this->checkUnauthFunctionality('get', route('threads.create'));
     }
+
 
     /** @test */
     public function an_authenticated_user_can_create_a_thread()
@@ -35,7 +55,9 @@ class ManageThreadsTest extends TestCase
         $this->signInUser();
 
         // And that user makes a POST request to our endpoint
-        $thread = factory(Thread::class)->make();
+        // note this works because we are mocking the Recaptcha validation class
+        $thread = factory(Thread::class)->make(['g-recaptcha-response' => 'token123']);
+
         $response = $this->post(route('threads.index'), $thread->toArray());
         
         // And when the user visits the threads page
@@ -106,7 +128,6 @@ class ManageThreadsTest extends TestCase
     /** @test */
     public function when_a_thread_is_deleted_so_is_its_associated_data()
     {
-
         // Given we have an authorized user
         $this->signInUser();
 
@@ -179,7 +200,6 @@ class ManageThreadsTest extends TestCase
     /** @test */
     public function a_published_thread_must_have_a_title()
     {
-
         $this->publishThread(['title' => null])
             ->assertSessionHasErrors(['title']);
     }
@@ -187,7 +207,6 @@ class ManageThreadsTest extends TestCase
     /** @test */
     public function a_published_thread_must_have_a_body()
     {
-
         $this->publishThread(['body' => null])
             ->assertSessionHasErrors(['body']);
     }
@@ -195,7 +214,6 @@ class ManageThreadsTest extends TestCase
     /** @test */
     public function a_published_thread_must_have_a_valid_channel()
     {
-
         // The channel_id must not be null
         $this->publishThread(['channel_id' => null])
             ->assertSessionHasErrors(['channel_id']);
@@ -205,18 +223,38 @@ class ManageThreadsTest extends TestCase
             ->assertSessionHasErrors(['channel_id']);
     }
 
+    /** @test */
+    public function a_thread_requires_recaptcha_verification()
+    {
+        // use unset to remove our mocked recaptcha class
+        // from the instance of IoC container returned from app()
+        unset(app()[Recaptcha::class]);
+
+        // given we have a user
+        $this->signInUser();
+
+        // and that user tries to create a thread
+        $thread = factory(Thread::class)->make();
+
+        // if they do not fill out the recaptcha token (check the box)
+        // then they will recieve an error
+        $this->withExceptionHandling()
+            ->post(route('threads.store'), $thread->toArray())
+            ->assertSessionHasErrors('g-recaptcha-response');
+    }
 
     // This method is not a test it is being used
-    // by the various validation tests 
+    // by the various validation tests
     // above to publish threads
     protected function publishThread($override = [])
     {
-
         // Given that we have an authenticated user
         $this->signInUser();
 
         // And that user creates a thread
-        $thread = factory(Thread::class)->make($override);
+        // add the fake token for our mocked recaptcha validator class
+        // and merge it with any parameters that were already passed in
+        $thread = factory(Thread::class)->make(array_merge($override, ['g-recaptcha-response'=>'some-fake-token']));
         
         // If that thread does not have any of the valid data
         // Then laravel will flash a validation error message to the session

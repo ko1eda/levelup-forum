@@ -7,10 +7,8 @@ use Illuminate\Http\Request;
 use App\Channel;
 use App\Filters\ThreadFilter;
 use App\Rules\SpamFree;
-use Illuminate\Support\Facades\Redis;
+use App\Rules\Recaptcha;
 use App\Widgets\Trending;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Client;
 
 class ThreadController extends Controller
 {
@@ -81,35 +79,22 @@ class ThreadController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * show
+     * we are injecting recaptcha here so that we can
+     * mock it in our tests see ManageThreadsTest
      *
      * @param  \Illuminate\Http\Request  $req
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $req, Client $client)
+    public function store(Request $req, Recaptcha $recaptcha)
     {
-        // send the recaptcha response to google
-        $recaptchaResult = $client->post('https://www.google.com/recaptcha/api/siteverify', [
-            'form_params' => [
-                'secret' => config('services.recaptcha.secret'),
-                'response' => $req->get('g-recaptcha-response'),
-                'remoteip' => $req->ip() // get the users ip
-            ]
-        ]);
-
-        // If the requests returned json object success param returns false
-        if (!json_decode($recaptchaResult->getBody())->success) {
-            return back()->with('flash', 'Please fill out the recaptcha~danger');
-        }
-
-
         $validated = $req->validate([
             'body' => ['required', app(SpamFree::class)],
             'title' => ['required', 'max:80', app(SpamFree::class)],
-            'channel_id' => 'required|exists:channels,id'
+            'channel_id' => 'required|exists:channels,id',
+            'g-recaptcha-response' =>  [$recaptcha, 'required']
         ]);
 
-        // push the user_id field into the validated array
+        // push the user_id field into the validated $arrayName = array('' => , );
         $validated["user_id"] = \Auth::id();
 
         // create thread with validateded array
