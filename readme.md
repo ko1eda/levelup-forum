@@ -13,6 +13,7 @@ An open source forum project to showcase my ongoing efforts to master fullstack 
 + Customizeable user profiles.
 + User avatar and photo uploads.
 + Configurable spam detection system with keyword detection, repeated key detection and comment throttling.
++ Recaptcha verification.
 + User registration system with email confirmation.
 + Thread filters for active, popular, new, etc.
 + Trending threads with Redis as well as various other caching. 
