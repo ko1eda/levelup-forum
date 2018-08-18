@@ -89,7 +89,7 @@
           </div>
           
           <div class="tw-flex tw-justify-center tw-mt-4 md:tw-mt-8">
-            <div class="g-recaptcha" data-sitekey={{config('services.recaptcha.site')}}></div>
+            <div class="g-recaptcha" data-sitekey={{ config('services.recaptcha.site') }} name='g-recaptcha-response'></div>
           </div>
           {{-- recaptcha --}}
         </form>

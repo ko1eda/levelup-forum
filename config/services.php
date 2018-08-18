@@ -35,9 +35,10 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    // note the default values here are test keys provided by google https://developers.google.com/recaptcha/docs/faq
     'recaptcha' => [
-        'secret' => env('RECAPTCHA_SECRET'),
-        'site' => env('RECAPTCHA_SITE')
+        'secret' => env('RECAPTCHA_SECRET', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'),
+        'site' => env('RECAPTCHA_SITE', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI')
     ],
 
 ];
