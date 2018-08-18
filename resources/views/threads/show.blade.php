@@ -10,28 +10,36 @@
             {{ $thread->title }}
           </p>
 
-          {{-- if the user has permission to update/delete the thread  --}}
-          @can('delete', $thread)
-            <form action="{{ route('threads.destroy', [$thread->channel, $thread]) }}" method="POST">
-              @method('delete'){{-- delete method spoofing --}}
-              @csrf
-              <button type="submit" class="tw-flex tw-items-center">
-                <a class="delete"></a>
-              </button>
-            </form>
-          @endcan {{-- end delete button --}}
-         
+          <div class="tw-flex tw-justify-end tw-items-center tw-w-24 ">
+            <lu-lock-button 
+              :endpoint={{ json_encode(route('threads.lock.store', $thread)) }}
+              :locked={{ json_encode($thread->locked) }}>
+            </lu-lock-button>
+  
+            {{-- if the user has permission to update/delete the thread  --}}
+            @can('delete', $thread)
+              <form action="{{ route('threads.destroy', [$thread->channel, $thread]) }}" method="POST">
+                @method('delete'){{-- delete method spoofing --}}
+                @csrf
+                <button type="submit" class="tw-flex tw-items-center">
+                  <a class="delete hover:tw-bg-red-light "></a>
+                </button>
+              </form>
+            @endcan {{-- end delete button --}}
+           
+  
+            @auth {{-- if user is authenticated and it they do not own the thread  --}}
+              @if($thread->user_id !== \Auth::user()->id)
+  
+                <lu-subscribe-button 
+                  :subscribed="{{ $thread->makeHidden('user') }}" 
+                  :endpoint="{{ json_encode(route('subscriptions.threads.store', $thread)) }}">
+                </lu-subscribe-button>
+                
+              @endif
+            @endauth {{-- end Vue SubscribeButton component --}}
 
-          @auth {{-- if user is authenticated and it they do not own the thread  --}}
-            @if($thread->user_id !== \Auth::user()->id)
-
-              <lu-subscribe-button 
-                :subscribed="{{ $thread->makeHidden('user') }}" 
-                :endpoint="{{ json_encode(route('subscriptions.threads.store', $thread)) }}">
-              </lu-subscribe-button>
-              
-            @endif
-          @endauth {{-- end Vue SubscribeButton component --}}
+          </div>{{-- end header buttons --}}
         </div>{{-- end header --}}
     
         <div class="lu-card-body tw-leading-loose"> 
@@ -40,7 +48,7 @@
     
         <div class="lu-card-section tw-py-0 ">
           @auth
-            @include('threads.partials.reply-form')
+            @include('threads.partials.reply-form', ['thread' => $thread])
           @endauth
 
           @guest

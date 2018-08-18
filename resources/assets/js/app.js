@@ -7,6 +7,7 @@ import ReplyForm from './components/Reply/ReplyForm.vue';
 import ReplyCounter from './components/Reply/ReplyCounter.vue';
 import BestReplyDivider from './components/Reply/BestReplyDivider.vue';
 import ReplyDivider from './components/Reply/ReplyDivider.vue';
+import LockButton from './components/Lock/LockButton.vue';
 import SubscribeButton from './components/Subscription/SubscribeButton.vue';
 import AvatarUploader from './components/Upload/AvatarUploader.vue';
 
@@ -44,6 +45,7 @@ const app = new Vue({
       'lu-reply-form': ReplyForm, 
       'lu-reply-divider' : ReplyDivider,
       'lu-best-reply-divider' : BestReplyDivider,
+      'lu-lock-button' : LockButton,
       'lu-subscribe-button' : SubscribeButton,
       'lu-avatar-uploader': AvatarUploader
     }

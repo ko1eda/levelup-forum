@@ -1,5 +1,5 @@
-<lu-reply-form :api-path={{ json_encode(route('api.users.index')) }} inline-template>
-    <form action="{{ route('replies.store', $thread) }}" method="POST">
+<lu-reply-form :api-path={{ json_encode(route('api.users.index')) }} :locked={{ json_encode($thread->locked) }} inline-template>
+    <form action="{{ route('replies.store', $thread) }}" method="POST" v-if="!threadIsLocked">
       {{ csrf_field() }}
       
       <div class="field">
@@ -35,6 +35,12 @@
         </div>
       </div>
     
-    </form>
+    </form>{{-- end reply form --}}
+
+    <article class="message is-danger" v-else v-cloak>
+      <div class="message-body tw-p-4 tw-text-sm md:tw-text-base">
+        Sorry, it looks like the thread has been locked by an administrator.
+      </div>
+    </article>{{-- end reply locked message --}}
   
 </lu-reply-form>

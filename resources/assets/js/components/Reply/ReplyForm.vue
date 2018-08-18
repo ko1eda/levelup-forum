@@ -14,6 +14,11 @@ export default {
     apiPath: {
       type: String, 
       required: true
+    },
+
+    locked: {
+      type: Boolean, 
+      required: true
     }
   },
 
@@ -24,7 +29,17 @@ export default {
       temp: [],
       endOfArr: 0,
       prevSearchedTerm: '',
+      threadIsLocked: this.locked
     }
+  },
+
+
+  created() {
+    // when the thread is locked hide the reply form
+    // and display a message (message is in template)
+    window.events.$on('thread-locked', () => {
+      this.threadIsLocked = true;
+    });
   },
 
   methods : {
@@ -73,3 +88,4 @@ export default {
 
 }
 </script>
+

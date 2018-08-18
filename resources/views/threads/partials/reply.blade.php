@@ -10,7 +10,7 @@
           <img src="{{ $reply->user->profile->avatar_path }}" alt="avatar" class="tw-mr-2">
 
           <a href="{{ route('profiles.show', $reply->user) }}" class="username ">
-            <h1 class="sm:tw-text-base tw-text-sm tw-font-light tw-inline">
+            <h1 class="tw-text-base tw-font-light tw-inline">
               <span class=''>{{ $reply->user->username }}</span>
             </h1>
           </a>
