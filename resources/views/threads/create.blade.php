@@ -75,11 +75,16 @@
             <div class="control is-grouped">
             
               <button type="submit" class="button is-small is-primary">Publish</button>
+
               <a href="{{\URL::previous()}}" class="button is-small is-grey" role="button">Cancel</a>
     
             </div>
           </div>
-    
+          
+          <div class="tw-flex tw-justify-center tw-mt-4 md:tw-mt-8">
+            <div class="g-recaptcha" data-sitekey={{config('services.recaptcha.site')}}></div>
+          </div>
+          {{-- recaptcha --}}
         </form>
       </div>
     </div>

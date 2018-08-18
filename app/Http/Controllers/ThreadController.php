@@ -9,6 +9,8 @@ use App\Filters\ThreadFilter;
 use App\Rules\SpamFree;
 use Illuminate\Support\Facades\Redis;
 use App\Widgets\Trending;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
 
 class ThreadController extends Controller
 {
@@ -84,8 +86,23 @@ class ThreadController extends Controller
      * @param  \Illuminate\Http\Request  $req
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $req)
+    public function store(Request $req, Client $client)
     {
+        // send the recaptcha response to google
+        $recaptchaResult = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                'secret' => config('services.recaptcha.secret'),
+                'response' => $req->get('g-recaptcha-response'),
+                'remoteip' => $req->ip() // get the users ip
+            ]
+        ]);
+
+        // If the requests returned json object success param returns false
+        if (!json_decode($recaptchaResult->getBody())->success) {
+            return back()->with('flash', 'Please fill out the recaptcha~danger');
+        }
+
+
         $validated = $req->validate([
             'body' => ['required', app(SpamFree::class)],
             'title' => ['required', 'max:80', app(SpamFree::class)],
