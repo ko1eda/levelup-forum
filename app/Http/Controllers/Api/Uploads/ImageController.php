@@ -40,7 +40,7 @@ class ImageController extends Controller
      */
     public function __construct(ImageManager $imageManager)
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'throttle:15,1']);
 
         $this->imageManager = $imageManager;
     }
