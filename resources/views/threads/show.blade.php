@@ -11,10 +11,12 @@
           </p>
 
           <div class="tw-flex tw-justify-end tw-items-center tw-w-24 ">
-            <lu-lock-button 
-              :endpoint={{ json_encode(route('threads.lock.store', $thread)) }}
-              :locked={{ json_encode($thread->locked) }}>
-            </lu-lock-button>
+            @can('lock', $thread)
+              <lu-lock-button 
+                :endpoint={{ json_encode(route('threads.lock.store', $thread)) }}
+                :locked={{ json_encode($thread->locked) }}>
+              </lu-lock-button>
+            @endcan
   
             {{-- if the user has permission to update/delete the thread  --}}
             @can('delete', $thread)
@@ -27,19 +29,15 @@
               </form>
             @endcan {{-- end delete button --}}
            
-  
-            @auth {{-- if user is authenticated and it they do not own the thread  --}}
-              @if($thread->user_id !== \Auth::user()->id)
-  
-                <lu-subscribe-button 
-                  :subscribed="{{ $thread->makeHidden('user') }}" 
-                  :endpoint="{{ json_encode(route('subscriptions.threads.store', $thread)) }}">
-                </lu-subscribe-button>
-                
-              @endif
-            @endauth {{-- end Vue SubscribeButton component --}}
-
+            @can('subscribe', $thread)
+              <lu-subscribe-button 
+                :subscribed="{{ $thread->makeHidden('user') }}" 
+                :endpoint="{{ json_encode(route('subscriptions.threads.store', $thread)) }}">
+              </lu-subscribe-button>
+            @endcan {{-- end Vue SubscribeButton component --}}
+            
           </div>{{-- end header buttons --}}
+
         </div>{{-- end header --}}
     
         <div class="lu-card-body tw-leading-loose"> 
@@ -53,7 +51,7 @@
 
           @guest
           <article class="message is-warning">
-            <div class="message-body tw-p-4">
+            <div class="message-body tw-p-4 tw-text-sm md:tw-text-base">
               Please <a href="/login" class="tw-font-semibold tw-no-underline">login</a>
               or <a href="/register" class="tw-font-semibold tw-no-underline">register</a>
               to join this discussion.

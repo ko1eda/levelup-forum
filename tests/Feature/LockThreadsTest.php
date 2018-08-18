@@ -69,6 +69,25 @@ class LockThreadsTest extends TestCase
         $this->assertTrue($thread->fresh()->locked);
     }
 
+    /** @test */
+    public function a_moderator_or_admin_may_unlock_a_thread()
+    {
+        // Given we have a moderator user account
+        $this->signInUser($admin = factory(User::class)->states('admin')->create());
+
+        // if that user visits a thread
+        $thread = factory(Thread::class)->create(['locked' => true]);
+
+        $this->assertTrue($thread->locked);
+
+        // and hits our lock thread endpoint
+        $this->json('DELETE', route('threads.lock.destroy', $thread))
+            ->assertStatus(204);
+
+        // then the thread shouldn't be locked (should be unlocked)
+        $this->assertFalse($thread->fresh()->locked);
+    }
+
 
     /** @test */
     public function if_a_thread_is_locked_no_replies_can_be_posted()

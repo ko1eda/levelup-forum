@@ -1,9 +1,9 @@
 <template>
   <div class="tw-mr-4 tw--mt-1">
-    <span v-if="isLocked">
+    <span v-show="isLocked" @click="unlock">
       <i class="fas fa-lock tw-text-red-light tw-cursor-pointer" title="The thread is locked"></i>
     </span>
-    <span v-else @click="lock">
+    <span v-show="!isLocked" @click="lock">
       <i class="fas fa-lock-open tw-text-bulma-light hover:tw-text-red-light tw-cursor-pointer" title="Lock the thread"></i>
     </span>
   </div>
@@ -37,6 +37,17 @@ export default {
           window.events.$emit('thread-locked');
 
           this.isLocked = true;
+
+        });
+    },
+
+    unlock () {
+      axios.delete(this.endpoint)
+        .then((res) => {
+
+          window.events.$emit('thread-unlocked');
+
+          this.isLocked = false;
 
         });
     }

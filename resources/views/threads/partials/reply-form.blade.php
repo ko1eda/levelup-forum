@@ -1,5 +1,5 @@
 <lu-reply-form :api-path={{ json_encode(route('api.users.index')) }} :locked={{ json_encode($thread->locked) }} inline-template>
-    <form action="{{ route('replies.store', $thread) }}" method="POST" v-if="!threadIsLocked">
+    <form action="{{ route('replies.store', $thread) }}" method="POST" v-if="!threadIsLocked" v-cloak>
       {{ csrf_field() }}
       
       <div class="field">

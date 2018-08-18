@@ -40,6 +40,10 @@ export default {
     window.events.$on('thread-locked', () => {
       this.threadIsLocked = true;
     });
+
+    window.events.$on('thread-unlocked', () => {
+      this.threadIsLocked = false;
+    });
   },
 
   methods : {

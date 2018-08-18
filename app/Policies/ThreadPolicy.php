@@ -58,4 +58,34 @@ class ThreadPolicy
         // or update the thread in any way
         return $thread->user_id === $user->id;
     }
+
+
+    // using these in threads.show view
+
+    /**
+     * Return true if the user has any
+     * of the specified roles
+     *
+     * @param User $user
+     * @param Thread $thread
+     * @return void
+     */
+    public function lock(User $user, Thread $thread)
+    {
+        return $user->hasRoles(['admin', 'moderator']);
+    }
+
+
+    /**
+     * Return true if the thread was not
+     * created by the user
+     *
+     * @param User $user
+     * @param Thread $thread
+     * @return void
+     */
+    public function subscribe(User $user, Thread $thread)
+    {
+        return $thread->user_id !== $user->id;
+    }
 }
