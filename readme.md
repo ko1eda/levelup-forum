@@ -6,9 +6,10 @@ An open source forum project to showcase my ongoing efforts to master fullstack 
 
 ## Features
 + Thread subscriptions and user notification system.
++ Basic role system with admin, moderator and user accounts.
 + All threads are created with unique hashID's.
 + Editable thread comments with favorites and @mentions.
-+ A thread owner can designate a threads best reply. 
++ A thread owner can designate a threads best reply.
 + Customizeable user profiles.
 + User avatar and photo uploads.
 + Configurable spam detection system with keyword detection, repeated key detection and comment throttling.
