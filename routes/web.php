@@ -41,7 +41,8 @@ Route::post('/threads', 'ThreadController@store')->name('threads.store');
 Route::post('threads/{thread}/lock', 'LockThreadController@store')->name('threads.lock.store'); // lock a thread
 Route::delete('threads/{thread}/lock', 'LockThreadController@destroy')->name('threads.lock.destroy'); // unlock a thread
 Route::get('/threads/{channel}/{thread}/{slug}', 'ThreadController@show')->name('threads.show');
-Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy')->name('threads.destroy');  //change route
+Route::delete('/threads/{channel}/{thread}/{slug}', 'ThreadController@destroy')->name('threads.destroy');  // delete a thread
+Route::patch('/threads/{channel}/{thread}/{slug}', 'ThreadController@update')->name('threads.update');  // update a thread
 
 // replies
 Route::post('/threads/{thread}/replies', 'ReplyController@store')->name('replies.store');

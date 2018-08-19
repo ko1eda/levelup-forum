@@ -29,7 +29,8 @@ export default {
       temp: [],
       endOfArr: 0,
       prevSearchedTerm: '',
-      threadIsLocked: this.locked
+      threadIsLocked: this.locked,
+      threadIsEditing: false
     }
   },
 
@@ -44,6 +45,15 @@ export default {
     window.events.$on('thread-unlocked', () => {
       this.threadIsLocked = false;
     });
+
+    window.events.$on('thread-editing', () => {
+      this.threadIsEditing = true;
+    });
+
+    window.events.$on('thread-editing-cancel', () => {
+      this.threadIsEditing = false;
+    });
+
   },
 
   methods : {

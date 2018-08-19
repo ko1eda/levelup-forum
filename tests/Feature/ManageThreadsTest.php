@@ -69,6 +69,44 @@ class ManageThreadsTest extends TestCase
             ->assertSee($thread->body);
     }
 
+    /** @test */
+    public function a_threads_owner_can_update_their_thread()
+    {
+        // given we have a authenticated user
+        $this->signInUser();
+
+        // and a thread that the user owns
+        $thread = factory(Thread::class)->create(['user_id' => \Auth::id()]);
+        
+        // when the user hits the edit button on their thread patch to /threads/{channel}/{thread}/{slug}'
+        // and the user enters a different body
+        $this->json('PATCH', route('threads.update', [$thread->channel, $thread, $thread->slug]), [
+            'body' => 'Updated the body ;P'
+        ]);
+        
+         // then the threads body should be changed
+        $this->assertEquals($thread->fresh()->body, 'Updated the body ;P');
+    }
+
+    /** @test */
+    public function if_you_do_not_own_a_thread_you_cannot_update_it()
+    {
+        // given we have a authenticated user
+        $this->signInUser();
+
+        // and a thread that the user does not own
+        $thread = factory(Thread::class)->create([]);
+        
+        // when the user hits the edit button on their thread patch to /threads/{channel}/{thread}/{slug}'
+        // and the user enters a different body
+        // they will recieve a 403 forbidden response
+        $this->withExceptionHandling()->json('PATCH', route('threads.update', [$thread->channel, $thread, $thread->slug]), [
+            'body' => 'Updated the body ;P'
+        ])
+        ->assertStatus(403);
+    }
+
+
     /**
      * Deletion tests
      *
@@ -85,14 +123,14 @@ class ManageThreadsTest extends TestCase
         // then they will be redirected to the login page
         $this->checkUnauthFunctionality(
             'delete',
-            route('threads.destroy', [$thread->channel, $thread])
+            route('threads.destroy', [$thread->channel, $thread, $thread->slug])
         );
 
         // Given a user is logged in and tries to delete
         // a thread that does not belong to them
         // Assert 403 forbidden, response
         $this->signInUser()
-            ->delete(route('threads.destroy', [$thread->channel, $thread]))
+            ->delete(route('threads.destroy', [$thread->channel, $thread, $thread->slug]))
             ->assertStatus(403);
     }
 
@@ -113,7 +151,7 @@ class ManageThreadsTest extends TestCase
         ]);
         
         // When the user deletes their thread
-        $route = route('threads.destroy', [$thread->channel, $thread]);
+        $route = route('threads.destroy', [$thread->channel, $thread, $thread->slug]);
 
         $this->json('DELETE', $route)
             ->assertStatus(204);
@@ -145,7 +183,7 @@ class ManageThreadsTest extends TestCase
         $favorite = $reply->addFavorite();
         
         // If that user
-        $route = route('threads.destroy', [$thread->channel, $thread]);
+        $route = route('threads.destroy', [$thread->channel, $thread, $thread->slug]);
 
         // When the user deletes the thread
         $this->delete($route);

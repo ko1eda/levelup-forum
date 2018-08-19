@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-mr-4 tw--mt-1">
+  <div class="tw-mr-4 tw-align-center">
     <span v-show="isLocked" @click="unlock">
       <i class="fas fa-lock tw-text-red-light tw-cursor-pointer" title="The thread is locked"></i>
     </span>

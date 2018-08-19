@@ -1,14 +1,9 @@
 import Vue from 'vue';
 import axios from 'axios';
 import Navbar from './components/Navbar/Navbar';
-import FlashMessage from './components/Flash/FlashMessage.vue';
-import Reply from './components/Reply/Reply.vue';
-import ReplyForm from './components/Reply/ReplyForm.vue';
+import Thread from './components/Thread/Thread.vue';
 import ReplyCounter from './components/Reply/ReplyCounter.vue';
-import BestReplyDivider from './components/Reply/BestReplyDivider.vue';
-import ReplyDivider from './components/Reply/ReplyDivider.vue';
-import LockButton from './components/Lock/LockButton.vue';
-import SubscribeButton from './components/Subscription/SubscribeButton.vue';
+import FlashMessage from './components/Flash/FlashMessage.vue';
 import AvatarUploader from './components/Upload/AvatarUploader.vue';
 
 // Global axios instance with csrf token
@@ -40,13 +35,8 @@ const app = new Vue({
     components: {
       'lu-navbar' : Navbar,
       'lu-flash-message' : FlashMessage,
-      'lu-reply' : Reply,
+      'lu-thread' : Thread,
       'lu-counter' : ReplyCounter,
-      'lu-reply-form': ReplyForm, 
-      'lu-reply-divider' : ReplyDivider,
-      'lu-best-reply-divider' : BestReplyDivider,
-      'lu-lock-button' : LockButton,
-      'lu-subscribe-button' : SubscribeButton,
       'lu-avatar-uploader': AvatarUploader
     }
 });

@@ -119,7 +119,7 @@ class SubscribeToThreadsTest extends TestCase
         $this->assertEquals(1, $user1->notifications()->count());
     
         // if the user deletes the thread,
-        $this->json('DELETE', route('threads.destroy', [$thread->channel, $thread]));
+        $this->json('DELETE', route('threads.destroy', [$thread->channel, $thread, $thread->slug]));
         
         // then there should be no subscriptions left in the thread
         $this->assertEquals(0, $thread->subscriptions()->count());

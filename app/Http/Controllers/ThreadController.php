@@ -142,17 +142,6 @@ class ThreadController extends Controller
     }
 
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Thread $thread)
-    {
-        //
-    }
-
     
     /**
      * Update the specified resource in storage.
@@ -161,9 +150,15 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Thread $thread)
+    public function update(Channel $channel, Thread $thread, String $slug, Request $req)
     {
-        //
+        $this->authorize('update', $thread);
+
+        $thread->body = $req->validate(['body' => ['required', app(SpamFree::class)]])['body'];
+
+        $thread->save();
+
+        return response($thread->makeHidden(['user', 'channel']), 200);
     }
 
 
@@ -182,7 +177,7 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Channel $channel, Thread $thread)
+    public function destroy(Channel $channel, Thread $thread, String $slug)
     {
 
         // Checks ThreadPolicy to make sure
