@@ -29,82 +29,51 @@
     </div>
     {{-- end threads column --}}
 
-  {{-- There should not be trending threads if there are no threads --}}
-  @if(count($trendingThreads) && count($threads))
     <div class="column">
-      <div class="lu-card tw-px-4">
+      <div class="columns tw-mb-2 hide-sb-widget">
+        <div class="column">
+            <div class="lu-card tw-px-4  hide-sb">
+              <div class="lu-card-header tw-px-4 tw-text-center ">
+                <span class=""> 
+                  Search
+                </span>
+              </div>{{-- end card header --}}
+    
+              <div class="tw-px-4 tw-py-6">
+                <form action="{{ route('search.threads')}}" >
+                  <div class="field has-addons tw-w-full">
+      
+                    <div class="control has-icons-left tw-w-4/5 ">
+                      <input class="input is-small " type="text" placeholder="Search" name='q'>
+                      <span class="icon is-small is-left">
+                          <i class="fas fa-search"></i>
+                      </span>
+                    </div>
+                    
+                    <div class="control">
+                      <button class="button is-small is-light">Submit</button>
+                    </div>
+                    
+                  </div>
+                </form>
+              </div>{{-- end search bar --}}
 
-       <div class="lu-card-header tw-px-4 tw-text-center ">
-        <span class=""> 
-          Trending Threads 
-        </span>
-       </div>{{-- end card header --}}
+            </div> 
+        </div>{{-- end searchbar column --}}
+      </div>{{-- end search bar row --}}
 
-       @foreach($trendingThreads as $thread)
-        <div class="tw-py-4 lg:tw-p-4 tw-text-sm tw-flex tw-justify-between tw-items-center">
-          <div class="tw-flex tw-flex-col tw-w-full">    
+      @if(count($trendingThreads) && count($threads))
+        <div class="columns">
+          <div class="column">
 
-            <span class="tw-pr-4 md:tw-pr-0 lg:tw-pr-4 tw-mb-2">
-              <a href="{{ $thread->uri }}">{{ $thread->title }}</a>
-            </span>
+            @include('threads.partials._trending')
 
+          </div>
+        </div>
+      @endif {{-- end trending row --}}
 
-            <div class="lu-level tw-px-0 tw-py-0 tw-text-xs ">
-
-              <div class="lu-level-item tw-text-grey-darker tw-w-32 lg:tw-w-32 md:tw-justify-center tw-mr-0" title="Thread Owner">
-                <i class="fas fa-user tw-mr-1 tw-align-middle "></i>
-                <a href={{ route('profiles.show', $thread->username) }}>
-                  <span class="tw-text-green hover:tw-text-green-dark tw-font-semibold tw-align-middle">
-                    {{ $thread->username }}
-                  </span>
-                </a>
-              </div>{{-- end user name --}}
-        
-              <div class="lu-level-item tw-mr-0 " title="Thread channel">
-                <i class="fas fa-folder-open tw-mr-1 tw-text-grey-darker tw-align-middle "></i>
-                <a href="{{$thread->channelUri}}">
-                  <span class="tw-align-middle">
-                    / {{ $thread->channel }}
-                  </span>
-                </a>
-              </div>{{-- end replies count --}}
-            </div>{{-- end level --}}
-
-          </div>{{-- end text column with level --}}
-
-
-          <span class="tw-text-center lg:tw-mr-2">
-            <span class="">
-              {{ $thread->view_count }}
-            </span>
-
-            <br>
-            Points
-          </span>{{-- end view count column --}}
-          
-        </div>{{-- end thread list --}}
-
-        @endforeach
-
-      </div>{{-- end lu-card --}}
-
-    </div>{{-- end trending column --}}
-  @endif
+    </div>{{-- end right column --}}
 
 
   </div>{{-- end row --}}
-  
- 
 @endsection
-
-
-{{-- <style>
-
-  .trending-tablet-sizing {
-    @media (max-width: 767) {
-      width: 50%;
-    }
-  }
-
-</style> --}}
-

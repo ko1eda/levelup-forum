@@ -30,5 +30,7 @@
         <env name="QUEUE_DRIVER" value="sync"/>
         <env name="DB_DATABASE" value="forum_test"/>
         <env name="MAIL_DRIVER" value="array"/>
+        <env name="SCOUT_DRIVER" value='null' />
+        <env name="ELASTICSEARCH_INDEX" value='test'/>
     </php>
 </phpunit>

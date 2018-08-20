@@ -25,8 +25,8 @@ return [
     'throttle' => [
 
         'threads' => [
-            'routes' => ['show', 'store'],
-            'frequency' => '20,1'
+            'routes' => ['store', 'update'],
+            'frequency' => '5,1'
         ],
 
         'replies' => [

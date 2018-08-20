@@ -40,6 +40,15 @@ html {
   }
 }
 
+// Hide the search bar on small screens
+.hide-sb-widget {
+  @media (max-width: 767px) {
+    // width: 58.33% !important;
+    display: none !important;
+    padding: 0px;
+  }
+}
+
 
 
 @import "components/_lu-pannel";
