@@ -12,11 +12,15 @@ use App\Traits\RecordViews;
 use App\Widgets\Trending;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Support\Facades\Redis;
+use Laravel\Scout\Searchable;
 
 class Thread extends Model implements SubscribableInterface
 {
 
-    use RecordActivity, RecordViews, SubscribableTrait;
+    use RecordActivity,
+        RecordViews,
+        SubscribableTrait,
+        Searchable;
 
     /**
      * The attributes that are mass assignable.

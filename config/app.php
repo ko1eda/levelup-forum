@@ -146,6 +146,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        
 
         /*
          * Package Service Providers...
@@ -153,6 +154,8 @@ return [
 
         Intervention\Image\ImageServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
+        Laravel\Scout\ScoutServiceProvider::class,
+        ScoutEngines\Elasticsearch\ElasticsearchProvider::class,
 
         /*
          * Application Service Providers...
