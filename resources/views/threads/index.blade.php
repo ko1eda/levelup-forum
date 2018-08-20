@@ -32,7 +32,7 @@
     <div class="column">
       <div class="columns tw-mb-2 hide-sb-widget">
         <div class="column">
-            <div class="lu-card tw-px-4  hide-sb">
+            <div class="lu-card tw-px-4 hide-sb">
               <div class="lu-card-header tw-px-4 tw-text-center ">
                 <span class=""> 
                   Search

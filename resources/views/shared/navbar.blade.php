@@ -12,23 +12,40 @@
         </div>
       </div>
   
-      <div id="navbar" :class="['navbar-menu', {'is-active' : isActive }, {'tw-border-t tw-border-bulma-lighter' : isActive}]" v-cloak>
-  
+      <div id="navbar" :class="['navbar-menu tw-shadow-none', {'is-active' : isActive }, {'tw-border-t tw-border-bulma-lighter' : isActive}]" v-cloak>
         <div class="navbar-start">
-          
+
+          <div class="navbar-item hide-search">
+            <form action="{{ route('search.threads')}}" >
+              <div class="field has-addons tw-w-full">
+  
+                <div class="control has-icons-left tw-w-full ">
+                  <input class="input is-small " type="text" placeholder="Search" name='q'>
+                  <span class="icon is-small is-left">
+                      <i class="fas fa-search"></i>
+                  </span>
+                </div>
+                
+                <div class="control">
+                  <button class="button is-small is-light">Submit</button>
+                </div>
+                
+              </div>
+            </form>
+          </div> {{-- end searchbar  --}}
+
           <div class="navbar-item has-dropdown is-hoverable ">
-            {{-- this just moves the notification widget up higher in the mobile drop down menu --}}
-            {{-- it is completely hidden on anything with a screen size above 1025px --}}
-            @auth
-              <lu-notification-widget v-if="isActive" class="hidden-non-touch tw-border-b tw-border-bulma-lighter"
+            @if(Auth::check() && count( Auth::user()->unreadNotifications))
+              {{-- it is completely hidden on anything with a screen size above 1025px --}}
+              <lu-notification-widget v-if="isActive" class="hidden-non-touch"
                 :user-data="{{ \Auth::user()->makeHidden('email') }}"
                 :index-route={{ json_encode(route('users.notifications.index', \Auth::user(), false )) }}
                 :mark-route={{ json_encode(route('users.notifications.update', \Auth::user(), false)) }}
                 :navbar-Active="isActive">
               </lu-notification-widget>
-            @endauth
+            @endif
 
-            <a class="navbar-link">
+            <a href="{{ route('threads.index') }}" class="navbar-link">
               Browse
             </a>
             <div class="navbar-dropdown is-boxed">
@@ -71,7 +88,7 @@
             {{-- end notifications vue component --}}
   
             <div class="navbar-item has-dropdown is-hoverable ">
-              <a class="navbar-link">
+              <a class="navbar-link tw-text-green tw-font-bold lg:tw-text-bulma-dark lg:tw-font-normal hover:tw-text-bulma-link">
                 {{ Auth::user()->name }}
               </a>
               <div class="navbar-dropdown is-boxed">
