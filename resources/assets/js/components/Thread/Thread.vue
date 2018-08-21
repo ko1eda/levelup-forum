@@ -34,9 +34,9 @@ export default {
         body : this.thread.body,
         editedBody : this.thread.body,
         error: '',
-
       }
     },
+
 
 
   methods : {
@@ -48,14 +48,14 @@ export default {
 
     unsetEditing () {
       this.editing = false;
-
+      
       window.events.$emit('thread-editing-cancel');
     },
 
-
+  
     handleUpdate () {
       // iF the user tries to submit the error message 
-      if (this.body === this.error) {
+      if (this.error) {
 
         this.handleCancel();
 
@@ -102,7 +102,6 @@ export default {
       this.error = '';
     },
 
-
     resetBodyState() {
       if (this.hasBeenEdited) {
         this.body = this.editedBody;
@@ -120,6 +119,7 @@ export default {
 
       this.unsetEditing();
     },
+
   }
 }
 </script>

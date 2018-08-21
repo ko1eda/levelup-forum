@@ -53,37 +53,32 @@
               @endif
             </div>
     
-            <div class="field">
+            <div class="field editor-height">
               <label class="label">Content</label>
               <div class="control">
-                <textarea 
-                class="textarea" 
-                id="thread-body" 
-                rows="6" 
-                name="body"
-                required>{{ old('body') }}</textarea>
-      
-                @if($errors->has('body'))
-                  <p class="help is-danger">
-                    {{$errors->first('body')}}   
-                  </p>  
-                @endif
-
-                @if($errors->has('g-recaptcha-response'))
-                  <p class="help is-danger">
-                    {{$errors->first('g-recaptcha-response')}}   
-                  </p>  
-                @endif
-                
+                <lu-text-editor name="body" :body={{ json_encode(old('body'))  }}></lu-text-editor>
               </div>
             </div>
     
           <div class="field">
+
+              @if($errors->has('body'))
+                <p class="help is-danger tw-mb-2">
+                  {{$errors->first('body')}}   
+                </p>  
+              @endif
+
+              @if($errors->has('g-recaptcha-response'))
+                <p class="help is-danger tw-mb-2">
+                  {{$errors->first('g-recaptcha-response')}}   
+                </p>  
+              @endif
+
             <div class="control is-grouped">
             
               <button type="submit" class="button is-small is-primary">Publish</button>
 
-              <a href="{{\URL::previous() === route('threads.create') ? route('threads.index') : \Url::previous() }}" class="button is-small is-grey" role="button">Cancel</a>
+              <a href="{{ route('threads.index') }}" class="button is-small is-grey" role="button">Cancel</a>
     
             </div>
           </div>
@@ -97,3 +92,4 @@
     </div>
   </div>
 @endsection
+

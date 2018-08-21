@@ -7,7 +7,7 @@
   
       <div class="tw-flex tw-justify-end tw-items-center tw-w-24 tw-text-sm ">
         @can('update', $thread)
-          <span class="tw-mr-4 tw-cursor-pointer" @click="unsetEditing" v-show="editing">
+          <span class="tw-mr-4 tw-cursor-pointer" @click="handleCancel" v-show="editing">
             <i class="fas fa-edit tw-text-bulma-link" title="Close the editor"></i>
           </span>
 
@@ -48,7 +48,9 @@
     <div v-if="editing" class="lu-card-body" v-cloak>
       <div class="field">
         <div class="control">
-          <textarea class="textarea" rows='10' :class="this.error ? 'tw-text-red' : '' " v-model="body"></textarea>
+          {{-- note :body.sync is the same as passing body as a prop and then listning for a @update:body event from the text-editor --}}
+          <lu-text-editor :prev="this.body" :height="['tw-h-64']" :body.sync="body" ></lu-text-editor>
+
         </div>
       </div>{{-- end textarea --}}
 
@@ -60,7 +62,7 @@
       </div>{{-- end update/cancel buttons --}}
     </div>{{-- edit form for the thread --}}
 
-    <div class="lu-card-body tw-leading-loose" v-text="editedBody" v-if="!editing"></div>{{-- end thread body --}}
+    <div class="lu-card-body tw-leading-loose" v-html="editedBody" v-if="!editing"></div>{{-- end thread body --}}
 
 
 

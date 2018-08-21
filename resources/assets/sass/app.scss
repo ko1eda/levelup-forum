@@ -49,6 +49,15 @@ html {
   }
 }
 
+// threads.create quill editor
+.editor-height {
+  @media (max-width: 1023px) {
+    height: 12rem;
+  }
+
+  height: 10.75rem;
+}
+
 
 
 @import "components/_lu-pannel";
