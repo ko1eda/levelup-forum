@@ -1,5 +1,5 @@
 
-<lu-reply :attributes="{{ $reply->makeHidden('user') }}" :best-Uri={{ json_encode(route('replies.best.store', $reply, false)) }} :has-Best={{ json_encode($hasBest) }} inline-template>
+<lu-reply :attributes="{{ $reply->makeHidden('user') }}" :best-Uri={{ json_encode(route('replies.best.store', $reply, false)) }} :has-Best={{ json_encode($hasBest) }} :users-path={{ json_encode(route('api.users.index')) }} inline-template>
 <transition name="fade">
   <div :class="['tw-flex tw-flex-col tw-w-full', isMarkedBest ? 'tw-border-green-lighter tw-border-4' :'tw-border-bulma tw-border'] " v-if="!deleted">
     <div class="tw-py-2 sm:tw-px-4 tw-px-2 tw-border-b tw-bg-bulma-lightest">
@@ -45,7 +45,10 @@
 
           <div class="field">
             <div class="control">
-              <textarea class="textarea" :class="this.error ? 'tw-text-red' : '' " v-model="body"></textarea>
+              {{-- <textarea class="textarea" :class="this.error ? 'tw-text-red' : '' " v-model="body"></textarea> --}}
+              <at-ta :members="members" >
+                <textarea class="textarea" v-model="body" @input="debounceInput"></textarea>
+              </at-ta>
             </div>
           </div>{{-- end textarea --}}
 

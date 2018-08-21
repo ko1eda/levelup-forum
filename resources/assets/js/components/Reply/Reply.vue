@@ -1,11 +1,15 @@
 
 <script>
 import Favorite from '../Favorite/Favorite.vue';
+import atMentions from '../../ mixins/atMentions.js';
 export default {
 
   components : {
     'lu-favorite' : Favorite
   },
+
+  
+  mixins : [atMentions],
 
   props: {
     attributes: {

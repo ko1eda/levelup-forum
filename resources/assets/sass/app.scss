@@ -19,6 +19,12 @@ a {
 
 }
 
+blockquote {
+  @apply .tw-bg-bulma-lightest .tw-italic ;
+  border-left: 5px solid #dbdbdb;
+  padding: 0 1.5em;
+}
+
 html {
   // @apply .tw-bg-bulma-lightest ;
   background: #F1F2F5;
@@ -51,11 +57,11 @@ html {
 
 // threads.create quill editor
 .editor-height {
-  @media (max-width: 1023px) {
-    height: 12rem;
-  }
+  height: 10.5rem;
+}
 
-  height: 10.75rem;
+.editor-height-lg {
+  height: 18.75rem;
 }
 
 
