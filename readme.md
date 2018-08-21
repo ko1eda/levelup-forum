@@ -23,7 +23,7 @@ An open source forum project to showcase my ongoing efforts to master fullstack 
 
 ## Installation
 
-> ***Prequisite***: to run the project files you must have PHP 7 And Redis installed on your development machine.
+> ***Prequisite***: to run the project files you must have PHP 7 and Redis installed on your development machine.
 
 > ***Note***: If you are a docker user instead of installing Redis or PHP on your dev machine you can use the laradock submodule linked in this directory. Make sure you edit the directories .env.example file to fit your needs and then rename it to .env before you run docker.
 
@@ -32,7 +32,7 @@ cd laradock
 
 mv ./.env.example ./.env
 
-docker-compose up -d nginx mysql redis workspace 
+docker-compose up -d nginx mysql redis workspace elasticsearch
 ```
 
 More info can be found at http://laradock.io/documentation/
