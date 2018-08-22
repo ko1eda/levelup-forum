@@ -96,7 +96,7 @@ export default {
     handleReplyUpdate() {
       // IF the user tries to submit the error message 
       // return to the previously stored reply
-      if (this.body === this.error) {
+      if (this.error) {
 
         this.handleReplyCancel();
 

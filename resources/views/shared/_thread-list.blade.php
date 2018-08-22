@@ -10,7 +10,7 @@
     {{-- end thread title --}}
   
     <div class="tw-pb-2 tw-text-sm lg:tw-text-base">
-      {{$thread->body}}
+      {!! $thread->body !!}
     </div>
     {{-- end thread body --}}
   

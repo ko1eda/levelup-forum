@@ -46,7 +46,7 @@
     </div>{{-- end header --}}
     
     <div v-if="editing" class="lu-card-body" v-cloak>
-      <div class="field editor-height-lg">
+      <div class="field tw-mb-0">
         <div class="control">
           {{-- note :body.sync is the same as passing body as a prop and then listning for a @update:body event from the text-editor --}}
           <lu-text-editor :height="['tw-h-64']" :body.sync="body" ></lu-text-editor>

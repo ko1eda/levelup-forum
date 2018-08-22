@@ -43,12 +43,11 @@
       <div class=" tw-mb-1 sm:tw-text-base tw-text-sm" v-cloak>
         <div v-if="editing">
 
-          <div class="field">
+          <div class="field tw-mb-0">
             <div class="control">
-              {{-- <textarea class="textarea" :class="this.error ? 'tw-text-red' : '' " v-model="body"></textarea> --}}
-              <at-ta :members="members" >
-                <textarea class="textarea" v-model="body" @input="debounceInput"></textarea>
-              </at-ta>
+              <at :members="members" >
+                <lu-text-editor :body.sync="body" @input="debounceInput" :height="['tw-h-24']"></lu-text-editor>
+              </at>
             </div>
           </div>{{-- end textarea --}}
 

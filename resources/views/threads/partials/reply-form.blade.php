@@ -3,32 +3,32 @@
       <form action="{{ route('replies.store', $thread) }}" method="POST" v-if="!threadIsLocked && !threadIsEditing" v-cloak>
         {{ csrf_field() }}
         
-        <div class="field">
+        <div class="field tw-mb-0">
           <label class="label">
             <h1 class="tw-text-lg">
-              Reply:
+              Leave a Reply:
             </h1>
           </label>
           
-          <div class="control">
-            <at-ta :members="members" >
-              <textarea class="textarea" name="body" @input="debounceInput"></textarea>
-            </at-ta>
+          <div class="control ">
+            <at :members="members" >
+              <lu-text-editor name="body" @input="debounceInput" :height="['tw-h-24']"></lu-text-editor>
+            </at>
           </div>
         </div>
         
-        <div class="field">
-          <div class="control">
-      
-            <p class="help is-danger">
-              @if(count($errors->all()))
+
+        @if(count($errors->all()))
+          <div class="field">
+            <div class="control">
+              <p class="help is-danger">
                 {{ $errors->first() }}  
-              @endif
-            </p>
-            {{-- end spam dection error check --}}
-      
+              </p>
+            </div>
           </div>
-        </div>
+        @endif
+        {{-- end spam dection error check --}}
+      
       
         <div class="field">
           <div class="control">

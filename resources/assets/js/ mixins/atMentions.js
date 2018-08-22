@@ -1,10 +1,12 @@
 import AtTa from 'vue-at/dist/vue-at-textarea';
+import At from 'vue-at'
 import {debounce} from 'lodash';
 
 export default {
 
   components: {
-    AtTa
+    AtTa,
+    At
   },
 
   props: {
@@ -46,7 +48,7 @@ export default {
 
       // if there is a fresh @split bring up the previously searched term
       // as options
-      if(this.temp[this.endOfArr] === '' && this.endOfArr > 1) {
+      if(this.temp[this.endOfArr].trim() === '' && this.endOfArr > 1) {
         search = this.prevSearchedTerm;
       }
       
@@ -63,9 +65,15 @@ export default {
     },
 
     // debounce the user input into the text area
-    debounceInput: debounce(function(e) {
-      console.log(e)
-      this.fetchUsers(e.target.value);
+    debounceInput: debounce(function(inputArray) {
+      // html tagged input which we don't want here
+      let tagged = inputArray[0]; 
+      
+      // plain text input
+      let cleaned = inputArray[1];
+    
+      this.fetchUsers(cleaned);
+  
     }, 500), 
   },
 }

@@ -53,7 +53,7 @@
               @endif
             </div>
     
-            <div class="field editor-height">
+            <div class="field tw-mb-0">
               <label class="label">Content</label>
               <div class="control">
                 <lu-text-editor name="body" :body={{ json_encode(old('body'))  }}></lu-text-editor>
