@@ -46,6 +46,7 @@ class Reply extends Model
 
     /**
      * Collection of mentioned users in the replies body
+     * This is used primarly for notifying users that they were mentiond
      *
      * @var \Illuminate\Database\Eloquent\Collection
      */
@@ -115,20 +116,34 @@ class Reply extends Model
 
 
     /**
-     * Convert any body text with mentions to a profile link
+     * Purify the reply body so that no unwanted
+     * tags are present when it is outputted
      *
-     * @return void
+     * Note: the anchored body below is also purified
+     *
+     * @return String
+     */
+    public function getBodyAttribute($body)
+    {
+        return \Purify::clean($body);
+    }
+
+
+    /**
+     * Convert any body text with mentions to a profile link
+     * This attribute is used in the threads.show views so that
+     * when a reply is edited its mentions do not show up as links
+     *
+     * @return String
      */
     public function getAnchoredBodyAttribute($body)
     {
         return preg_replace_callback('/@([A-Za-z0-9-.]*[^\W\s])/im', function ($matches) {
             return "<a href=" .route('profiles.show', $matches[1]) .">{$matches[0]}</a>";
         }, $this->body);
-
-        // $this->attributes['body'] = $replaced;
     }
 
-
+  
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

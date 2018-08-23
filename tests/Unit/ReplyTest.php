@@ -12,7 +12,7 @@ use App\Thread;
 class ReplyTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     /** @test */
     public function a_reply_has_an_associated_user()
     {
@@ -53,12 +53,26 @@ class ReplyTest extends TestCase
     public function it_wraps_mentioned_users_usernames_in_anchor_tags()
     {
         // given we have a reply that mentions a user
-        $reply = new \App\Reply(['body'=> 'hey @fred-savage what is up ?']);
+        $reply = new \App\Reply(['body' => 'hey @fred-savage what is up ?']);
 
         // then the reply should have the ability to replace any mentioned users with their profile links
         $anchoredBody = "hey <a href=" . route('profiles.show', 'fred-savage') . ">@fred-savage</a> what is up ?";
 
 
         $this->assertEquals($anchoredBody, $reply->anchored_body);
+    }
+
+
+    /** @test */
+    public function a_replies_body_is_stripped_of_unwanted_tags_and_html()
+    {
+        // Given we have a reply whose body contains harmful html
+        $reply = factory(Reply::class)->create([
+            'body' => '<script> () => alert("haha")</script> <p>Whelp, <a href="wwww.yeah.com" @click="alert("aaaaa")"></a></p>'
+        ]);
+         
+ 
+        // When the replies body is returned, the body should not contain any harmful or unwanted characters
+        $this->assertEquals($reply->body, '<p>Whelp, <a href="wwww.yeah.com"></a></p>');
     }
 }
