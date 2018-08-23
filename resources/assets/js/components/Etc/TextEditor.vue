@@ -49,7 +49,7 @@ export default {
     height: {
       type: Array, 
       default: function () {
-        return ['tw-h-24']
+        return ['tw-h-48']
       } 
     },
 
