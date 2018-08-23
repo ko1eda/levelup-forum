@@ -1,8 +1,16 @@
 <template>
   <div>
-    <quill-editor v-model="content" :options="options" :class="this.height" @input="onInput" ref="editor"></quill-editor>
-    <input type="hidden" :name="this.name" :value="replaced">
-    <p class="tw-mt-1 tw-text-right tw-text-sm tw-text-italic"> Supports Markdown </p>
+      <quill-editor 
+        v-model="content" 
+        :options="options" 
+        :class="this.size" 
+        @input="onInput"  
+        @focus='onFocus' 
+        @blur='onBlur' 
+        ref="editor">
+      </quill-editor>
+      <input type="hidden" :name="this.name" :value="replaced">
+      <p class="tw-mt-1 tw-text-right tw-text-sm tw-text-italic"> Supports Markdown </p>
   </div>
 </template>
 
@@ -47,10 +55,12 @@ export default {
     this.options.modules.toolbar = false;
   },
 
+
   data () {
     return {
       content: this.body,
       replaced: this.content,
+      size: this.height,
       options: {
         modules :  {
          markdownShortcuts: {},
@@ -73,6 +83,16 @@ export default {
       
       this.$emit('input', [event, this.$refs.editor.quill.getText().slice(0, -1)])
     },
+
+    // increase the size and transition it
+    onFocus (event) {
+      this.size = ['tw-h-64', 'motion'];
+    },
+
+    // set the size back to default
+    onBlur (event) {
+      this.size = this.height.concat(['motion']);
+    }
   },
 
   watch: {
@@ -85,5 +105,8 @@ export default {
 
 
 <style lang="scss" scoped>
-
+  .motion{
+    transition: height 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
 </style>
