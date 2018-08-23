@@ -42,7 +42,7 @@ class SearchTest extends TestCase
             $count++;
 
             $results = $this->json('GET', route('search.threads', "q={$search}"))->json();
-        } while (empty($results['data']) && $count < 50);
+        } while (empty($results['data']) && $count < 200);
 
 
         // then only the two threads contiaining that keyword should be returned
