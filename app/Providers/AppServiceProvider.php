@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Redis;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,7 +22,17 @@ class AppServiceProvider extends ServiceProvider
 
         // load all channels into the navbar dropdown
         \View::composer(['shared.navbar', 'threads.create'], function ($view) {
+            if ($channels = Redis::get('Channels:list')) {
+                $channels = unserialize($channels);
+
+                return $view->with(compact('channels'));
+            }
+
             $channels = \App\Channel::latest()->get();
+
+            // store channels for one day in redis
+            Redis::setex('Channels:list', (60 * 60 * 24), serialize($channels));
+
             
             return $view->with(compact('channels'));
         });
