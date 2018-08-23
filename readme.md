@@ -12,6 +12,7 @@ An open source forum project to showcase my ongoing efforts to master fullstack 
 + A thread owner can designate a threads best reply.
 + Customizeable user profiles.
 + User avatar and photo uploads.
++ Integerated Quilljs editor for markdown support. 
 + Configurable spam detection system with keyword detection, repeated key detection and comment throttling.
 + Recaptcha verification.
 + User registration system with email confirmation.
