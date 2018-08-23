@@ -10,7 +10,7 @@
         ref="editor">
       </quill-editor>
       <input type="hidden" :name="this.name" :value="replaced">
-      <p class="tw-mt-1 tw-text-right tw-text-sm tw-text-italic"> Supports Markdown </p>
+      <p class="tw-mt-1 tw-text-right tw-text-sm"> Supports Markdown </p>
   </div>
 </template>
 
@@ -37,6 +37,11 @@ export default {
     toolbar: {
       type: Boolean,
       default: true
+    },
+
+    supportsMentions : {
+      type: Boolean,
+      default: false
     },
 
     body: {},
@@ -76,11 +81,16 @@ export default {
 
   methods : {
     onInput (event) {
-      this.$emit('update:body', event);
+      // replace line breaks from @mentions in
+      // the hidden input
+      if (this.supportsMentions) {
+        this.replaced = this.content.replace(/<p><br><\/p>/g, '');
+      } else {
+        this.$emit('update:body', event);
 
-      // replace any unecessary line breaks from @mentions
-      this.replaced = this.content.replace(/<p><br><\/p>/g, '');
-      
+        this.replaced = this.content;
+      }
+
       this.$emit('input', [event, this.$refs.editor.quill.getText().slice(0, -1)])
     },
 

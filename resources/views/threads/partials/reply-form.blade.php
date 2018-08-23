@@ -11,8 +11,8 @@
           </label>
           
           <div class="control ">
-            <at :members="members" >
-              <lu-text-editor name="body" @input="debounceInput" :height="['tw-h-24']"></lu-text-editor>
+            <at :members="members" :allow-spaces="false">
+              <lu-text-editor name="body" @input="debounceInput" :height="['tw-h-24']" :supports-mentions="true"></lu-text-editor>
             </at>
           </div>
         </div>

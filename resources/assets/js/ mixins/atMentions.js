@@ -57,9 +57,9 @@ export default {
           this.members = data;
 
           // if a matched was returned then the previous search was a good search
-          // so it should be saved to use again
+          // so it should be saved to use again but just the first letter
           if(data.length !== 0 ) {
-            this.prevSearchedTerm = this.temp[this.endOfArr];
+            this.prevSearchedTerm = this.temp[this.endOfArr].charAt(0);
           }
         });
     },

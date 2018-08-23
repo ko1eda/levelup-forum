@@ -45,7 +45,7 @@
 
           <div class="field tw-mb-0">
             <div class="control">
-              <at :members="members" >
+              <at :members="members" :allow-spaces="false">
                 <lu-text-editor :body.sync="body" @input="debounceInput" :height="['tw-h-24']"></lu-text-editor>
               </at>
             </div>

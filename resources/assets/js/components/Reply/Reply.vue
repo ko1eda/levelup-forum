@@ -113,8 +113,9 @@ export default {
 
       // if all checks pass send the patch request
       // we only update the body because the anchored body is derrived from the regular body
+      // note I am replacing any line breaks from the quill editor when a @mention is added
       axios.patch(`/replies/${this.attributes.id}`, {
-        body: this.body
+        body: this.body.replace(/<p><br><\/p>/g, '')
       })
         .then(({data}) => {
           // set body to new plain body
