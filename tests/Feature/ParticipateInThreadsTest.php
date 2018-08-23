@@ -178,7 +178,7 @@ class ParticipateInThreadsTest extends TestCase
 
 
     /** @test */
-    public function a_given_user_cannot_reply_to_a_thread_more_than_once_per_x_minutes()
+    public function a_given_user_cannot_reply_to_a_thread_more_than_x_times_per_x_minutes()
     {
         // if the user tries to post multiple times in the same minute then the user will
         // recieve an authoriziation exception
@@ -196,10 +196,11 @@ class ParticipateInThreadsTest extends TestCase
         $this->get(route('threads.show', [$thread->channel, $thread, $thread->slug]))
             ->assertSee($reply->body);
 
-        // however if that user leaves another reply within the same minute
+        // however if that user leaves x replies within the same minute
         // then an error will be thrown
-        $this->post(route('replies.store', $thread), $reply2 = factory(Reply::class)->make()->toArray())
-            ->assertSessionHasErrors();
+        for ($i=0; $i < config('spam.repliesPerMinute'); $i++) {
+            $this->post(route('replies.store', $thread), $reply2 = factory(Reply::class)->make()->toArray());
+        }
 
         // APPEND: AND THE REPLY SHOULD NOT BE VISIBLE ON THE PAGE BECAUSE IT WAS NEVER STORED
         // Test wasn't checking if the reply was persisted (which it was, the errors were shown but the reply was still stored)

@@ -20,6 +20,10 @@ return [
 
     'threshold' => 1,
 
+    // The amount of replies you can post a minute
+    // before recieving an error message
+    'repliesPerMinute' => 5,
+
     // Throttle the number of times a user or ip can hit certain routes
     // for a given controller
     'throttle' => [

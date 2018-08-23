@@ -157,8 +157,11 @@ class User extends Authenticatable
      */
     public function hasRepliedWithin(int $timeInMinutes = 1)
     {
-        return $this->replies()
+        $numReplies = $this->replies()
             ->where('created_at', '>=', \Carbon\Carbon::now()->subMinutes($timeInMinutes))
-            ->exists();
+            ->count();
+        
+        // if the number of of replies in the last x minutes is >= the allowed amount
+        return $numReplies >= config('spam.repliesPerMinute') ? true : false ;
     }
 }
