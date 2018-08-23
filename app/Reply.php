@@ -105,7 +105,7 @@ class Reply extends Model
     {
         $usersArr = array(array());
 
-        preg_match_all('/@([A-Za-z0-9-.]*[^\W\s])/im', $this->body, $usersArr, PREG_PATTERN_ORDER);
+        preg_match_all('/@([A-Za-z0-9-]*\.?[^\s\n@.]+)/im', $this->body, $usersArr, PREG_PATTERN_ORDER);
 
         $this->mentionedUsers = User::whereIn('username', $usersArr[1])
         ->where('id', '<>', $this->user->id)
@@ -134,11 +134,12 @@ class Reply extends Model
      * This attribute is used in the threads.show views so that
      * when a reply is edited its mentions do not show up as links
      *
+     * https://regex101.com/r/e2BEFI/1
      * @return String
      */
     public function getAnchoredBodyAttribute($body)
     {
-        return preg_replace_callback('/@([A-Za-z0-9-.]*[^\W\s])/im', function ($matches) {
+        return preg_replace_callback('/(?<!\*\s)@([A-Za-z0-9-]*\.?[^\s\n@.]+)/im', function ($matches) {
             return "<a href=" .route('profiles.show', $matches[1]) .">{$matches[0]}</a>";
         }, $this->body);
     }

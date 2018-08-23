@@ -62,6 +62,20 @@ class ReplyTest extends TestCase
         $this->assertEquals($anchoredBody, $reply->anchored_body);
     }
 
+    /** @test */
+    public function it_does_not_wrap_doc_blocks_in_anchor_tags()
+    {
+        // given we have a has a doc block
+        $reply = new \App\Reply([
+            'body' => '* @param'
+        ]);
+
+        // then that doc block should not be recognized as a reply
+        $anchoredBody = '* @param';
+
+        $this->assertEquals($anchoredBody, $reply->anchored_body);
+    }
+
 
     /** @test */
     public function a_replies_body_is_stripped_of_unwanted_tags_and_html()
