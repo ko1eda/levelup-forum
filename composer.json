@@ -13,6 +13,7 @@
         "laravel/scout": "^4.0",
         "laravel/tinker": "^1.0",
         "predis/predis": "^1.1",
+        "stevebauman/purify": "^2.0",
         "tamayo/laravel-scout-elastic": "^3.0",
         "vinkla/hashids": "^5.0"
     },

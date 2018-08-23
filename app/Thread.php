@@ -132,6 +132,19 @@ class Thread extends Model implements SubscribableInterface
 
 
     /**
+     * clean any html before the thread is returned
+     * by the application
+     *
+     * @param mixed $body
+     * @return void
+     */
+    public function getBodyAttribute($body)
+    {
+        return \Purify::clean($body);
+    }
+
+    
+    /**
      * Add a reply to the given thread
      *
      *

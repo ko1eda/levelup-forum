@@ -10,7 +10,7 @@
     {{-- end thread title --}}
   
     <div class="tw-pb-2 tw-text-sm lg:tw-text-base">
-      {!! $thread->body !!}
+      <lu-html-renderer :to-render="{{ json_encode( $thread->body) }}"></lu-html-renderer>
     </div>
     {{-- end thread body --}}
   
@@ -31,7 +31,7 @@
       <div class="lu-level-item tw-text-grey-darker ">
         <i class="fas fa-clock tw-mr-1 tw-text-grey-darker tw-align-middle"></i>
         <span class="tw-align-middle">
-          {{ $thread->created_at->diffForHumans()}}
+          {{ $thread->created_at->diffForHumans() }}
         </span>
       </div>
       {{-- end timestamp --}}

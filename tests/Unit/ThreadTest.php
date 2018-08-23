@@ -121,7 +121,7 @@ class ThreadTest extends TestCase
 
     
     /** @test */
-    public function a_threads_is_subscribed_property_can_determine_if_the_auth_user_has_subscribed()
+    public function a_threads_is_subscribed_property_can_determin_if_the_auth_user_has_subscribed()
     {
         // Given we have a logged in user
         $user = factory(User::class)->create();
@@ -145,5 +145,18 @@ class ThreadTest extends TestCase
         
         // Then that threads is_subscribed attribute should return false
         $this->assertFalse($this->thread->is_subscribed);
+    }
+
+    /** @test */
+    public function a_threads_body_is_stripped_of_unwanted_tags_and_html()
+    {
+        // Given we have a thread whose body contains harmful html
+        $thread = factory(Thread::class)->create([
+            'body' => '<script> () => alert("haha")</script> <p>Whelp, <a href="wwww.yeah.com" @click="alert("aaaaa")"></a></p>'
+        ]);
+        
+
+        // When the threads body is returned, the body should not contain any harmful or unwanted characters
+        $this->assertEquals($thread->body, '<p>Whelp, <a href="wwww.yeah.com"></a></p>');
     }
 }

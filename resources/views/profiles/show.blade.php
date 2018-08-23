@@ -82,7 +82,7 @@
         Top Threads
       </h1>
 
-      @include('shared._thread-list', ['threads' => $threads])
+      @include('threads.partials._list', ['threads' => $threads])
 
     </div>{{-- end threads column--}}
 

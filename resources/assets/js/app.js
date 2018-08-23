@@ -2,7 +2,8 @@ import Vue from 'vue';
 import axios from 'axios';
 import Navbar from './components/Navbar/Navbar';
 import Thread from './components/Thread/Thread.vue';
-import TextEditor from './components/Editor/TextEditor.vue';
+import TextEditor from './components/Etc/TextEditor.vue';
+import HtmlRenderer from './components/Etc/HtmlRenderer.vue';
 import ReplyCounter from './components/Reply/ReplyCounter.vue';
 import FlashMessage from './components/Flash/FlashMessage.vue';
 import AvatarUploader from './components/Upload/AvatarUploader.vue';
@@ -29,8 +30,9 @@ window.flash = function(message, level = null) {
   window.events.$emit('flashEvent', {message, level});
 }
 
-
+// etc components
 Vue.component('lu-text-editor', TextEditor);
+Vue.component('lu-html-renderer', HtmlRenderer);
 
 // Our Vue instance
 const app = new Vue({
