@@ -29,7 +29,7 @@ abstract class Spam
      */
     public function __construct($threshold = null)
     {
-        $this->threshold = $threshold ? $threshold : config('spam.threshold');
+        $this->threshold = $threshold ?? config('spam.threshold');
     }
 
 

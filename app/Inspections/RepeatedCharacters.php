@@ -16,7 +16,8 @@ class RepeatedCharacters extends Spam
      */
     public function scan(String $message)
     {
-        $regExFull = '/(.)\1{9,}/mi';
+        // match any non space or non-newline character
+        $regExFull = '/([^\s\n])\1{15,}/mi';
 
         $this->numHits += preg_match_all($regExFull, $message);
 

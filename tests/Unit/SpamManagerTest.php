@@ -37,13 +37,17 @@ class SpamManagerTest extends TestCase
     public function it_checks_for_repeated_keypress()
     {
         // Create a new spam filter
-        $filter = app()->makeWith(RepeatedCharacters::class, [null, $treshold = 2]);
-
-        // If a message with repeated characters is run through the filter
-        $repeatedStr = 'dude what the hell aaaaaaaaaaaaaaa uuuuuuuuuuuuuuuuuuu';
+        $filter = app()->makeWith(RepeatedCharacters::class, ['threshold' => 2]);
+     
+        // If a message with 15 + repeated characters is run through the filter
+        $repeatedStr = 'dude what the hell aaaaaaaaaaaaaaaaaaaaaaaaa uuuuuuuuuuuuuuuuuuuuuuu';
     
+     
         // Then an exception will be thrown
         $this->expectException(\Exception::class);
         $filter->scan($repeatedStr);
+
+        // however this should not effect space characters (important for code insertion)
+        $this->assertFalse($filter->scan('                               '));
     }
 }
