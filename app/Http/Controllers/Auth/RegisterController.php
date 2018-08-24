@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use App\POPO\TokenGenerator;
 
 class RegisterController extends Controller
 {
@@ -73,8 +74,8 @@ class RegisterController extends Controller
         $u->username = $data['username'];
         $u->email = $data['email'];
         $u->password = Hash::make($data['password']);
-        $u->confirmation_token = str_limit(md5($data['email'] . str_random()), 35, '');
-
+        $u->confirmation_token = TokenGenerator::generate($data['email'], 32);
+        
         $u->save();
 
         return $u;
