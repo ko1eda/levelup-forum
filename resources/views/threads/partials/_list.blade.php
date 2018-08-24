@@ -2,14 +2,14 @@
 <div class="lu-pannel tw-px-4 lg:tw-px-6 tw-py-4 ">
   
   @forelse($threads as $thread)
-    <div class="tw-pb-2 tw-text-xl">
+    <div class="tw-pb-2 tw-text-xl lg:tw-text-2xl">
       <a href={{ route('threads.show', [$thread->channel, $thread, $thread->slug]) }}>
         <h4 class="tw-font-light">{{ $thread->title }}</h4>
       </a>
     </div>
     {{-- end thread title --}}
   
-    <div class="tw-pb-2 tw-text-sm lg:tw-text-base">
+    <div class="tw-pb-2 tw-text-sm ">
       <lu-html-renderer :to-render="{{ json_encode( $thread->body) }}"></lu-html-renderer>
     </div>
     {{-- end thread body --}}
