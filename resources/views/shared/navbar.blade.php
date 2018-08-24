@@ -95,9 +95,14 @@
                 <a href="{{ route('threads.create') }}" class="navbar-item">
                   New Thread
                 </a>
+                <a href="{{ route('channels.create') }}" class="navbar-item">
+                  New Channel
+                </a>
+                
                 <a class="navbar-item" href="{{ route('profiles.show', Auth::user()) }}">
                   My Profile
                 </a>
+
                 <a class="navbar-item" href="/threads/?by={{ Auth::user()->name }}">
                   My Threads
                 </a>

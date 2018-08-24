@@ -10,7 +10,7 @@
         ref="editor">
       </quill-editor>
       <input type="hidden" :name="this.name" :value="replaced">
-      <p class="tw-mt-1 tw-text-right tw-text-sm"> Supports Markdown </p>
+      <p class="tw-mt-1 tw-text-right tw-text-sm" v-if="this.label"> Supports Markdown </p>
   </div>
 </template>
 
@@ -39,11 +39,28 @@ export default {
       default: true
     },
 
+    // hide the supports markdown label 
+    label : {
+      type : Boolean,
+      default : true
+    },
+
+    animation : {
+      type : Boolean,
+      default : true
+    },
+
+    placeholder : {
+      type: String,
+      default : 'What\'s on your mind...'
+    },
+
     supportsMentions : {
       type: Boolean,
       default: false
     },
 
+    // used for v-sync with threads and replies
     body: {},
 
     height: {
@@ -74,7 +91,7 @@ export default {
             ['blockquote', 'code-block'],
           ]
         },
-        placeholder: 'What\'s on your mind...'
+        placeholder: this.placeholder
       }
     }
   },
@@ -96,12 +113,16 @@ export default {
 
     // increase the size and transition it
     onFocus (event) {
-      this.size = ['tw-h-64', 'motion'];
+      if(this.animation) {
+        this.size = ['tw-h-64', 'motion'];
+      }
     },
 
     // set the size back to default
     onBlur (event) {
-      this.size = this.height.concat(['motion']);
+       if(this.animation) {
+        this.size = this.height.concat(['motion']);
+       }
     }
   },
 

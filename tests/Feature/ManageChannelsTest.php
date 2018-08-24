@@ -1,0 +1,79 @@
+<?php
+
+namespace Tests\Feature;
+
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Notification;
+use App\User;
+use App\Notifications\ChannelCreated;
+use App\Rules\Recaptcha;
+
+class ManageChannelsTest extends TestCase
+{
+    use RefreshDatabase;
+
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        // mock recaptcha for any tests
+        app()->singleton(Recaptcha::class, function ($app) {
+            return \Mockery::mock(Recaptcha::class, function ($mock) {
+                $mock->shouldReceive('passes')->andReturn(true);
+            });
+        });
+    }
+
+
+    /** @test */
+    public function an_non_confirmed_user_cannot_create_a_new_channel()
+    {
+        $this->signInUser(factory(User::class)->states('unconfirmed')->create());
+
+        $this->post(route('channels.store'), [
+            'name' => 'sports',
+            'description' => 'some text',
+            'g-recaptcha-response' => 'some-token'
+        ])
+        ->assertRedirect(route('threads.index'))
+        ->assertSessionHas('flash', 'First confirm your email address~danger');
+    }
+
+
+    /** @test */
+    public function an_authenticated_confirmed_user_can_create_a_new_channel()
+    {
+        Notification::fake();
+
+        // Given we have a user
+        $this->signInUser();
+
+        // and 3 administrators
+        factory(User::class, 3)->states('admin')->create();
+
+
+        // and that user navigates to /channels/create
+        // and when that user creates a channel
+        Redis::shouldReceive('setex');
+  
+        $this->post(route('channels.store'), [
+            'name' => 'sports',
+            'description' => 'some text',
+            'g-recaptcha-response' => 'some-token'
+        ])
+        ->assertRedirect(route('threads.index'))
+        ->assertSessionHas('flash');
+
+        // then the channel should be stored in redis under the given confirmation key
+        
+        // (get all users where role is administrator)
+        $admins = User::where('role_id', 1)->get();
+
+        // and all administrators should be notified that there is a pending channel request
+        Notification::assertSentTo($admins, ChannelCreated::class);
+    }
+}

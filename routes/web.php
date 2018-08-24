@@ -43,6 +43,11 @@ Route::get('/threads/{channel}/{thread}/{slug}', 'ThreadController@show')->name(
 Route::delete('/threads/{channel}/{thread}/{slug}', 'ThreadController@destroy')->name('threads.destroy');  // delete a thread
 Route::patch('/threads/{channel}/{thread}/{slug}', 'ThreadController@update')->name('threads.update');  // update a thread
 
+// Channels
+Route::get('/channels/create', 'ChannelController@create')->name('channels.create');
+Route::post('/channels', 'ChannelController@store')->name('channels.store');
+Route::get('/channels/confirmation/create', 'ChannelConfirmationController@create')->name('channels.confirm.create');
+
 // replies
 Route::post('/threads/{thread}/replies', 'ReplyController@store')->name('replies.store');
 Route::post('/replies/{reply}/best', 'BestReplyController@store')->name('replies.best.store');
