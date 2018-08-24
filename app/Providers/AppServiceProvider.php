@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
 
         // load all channels into the navbar dropdown
         \View::composer(['shared.navbar', 'threads.create'], function ($view) {
-            if ($channels = Redis::get('Channels:list')) {
+            if ($channels = Redis::get('channels:list')) {
                 $channels = unserialize($channels);
 
                 return $view->with(compact('channels'));

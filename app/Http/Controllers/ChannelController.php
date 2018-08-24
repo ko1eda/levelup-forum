@@ -54,7 +54,7 @@ class ChannelController extends Controller
         $v['description'] = strip_tags($v['description']);
         
         // set the to use with redis, the token will serve as a confirmation token
-        $key = 'UnconfirmedChannel:' . $token = TokenGenerator::generate($v['slug'], $length = 25);
+        $key = 'unconfirmed_channel:' . $token = TokenGenerator::generate($v['slug'], $length = 25);
         
         // store the user and their profile information
         $v['user'] = auth()->user()->load('profile')->toArray();
