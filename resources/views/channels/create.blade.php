@@ -36,8 +36,8 @@
               <div class="control">
                 <lu-text-editor 
                 name="description" 
+                :height="['tw-h-24']"
                 :animation="false"
-                :height="['tw-h-24']" 
                 :body={{ json_encode(old('body'))  }} 
                 placeholder="A brief summary of your channel..." 
                 :label="false"></lu-text-editor>

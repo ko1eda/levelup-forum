@@ -18,6 +18,7 @@
 <script>
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
+import {debounce} from 'lodash';
 import Quill from 'quill'
 import { quillEditor } from 'vue-quill-editor';
 import MarkdownShortcuts from 'quill-markdown-shortcuts-for-vue-quill-editor'
@@ -112,18 +113,20 @@ export default {
     },
 
     // increase the size and transition it
-    onFocus (event) {
-      if(this.animation) {
-        this.size = ['tw-h-64', 'motion'];
-      }
-    },
+    onFocus: debounce(function (event) {
+       if(this.animation) {
+
+          this.size = ['tw-h-64', 'motion'];
+       }
+    }, 100),
 
     // set the size back to default
-    onBlur (event) {
+    onBlur : debounce(function (event) {
        if(this.animation) {
         this.size = this.height.concat(['motion']);
+     
        }
-    }
+    }, 300)
   },
 
   watch: {
