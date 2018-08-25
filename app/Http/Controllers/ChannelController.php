@@ -47,17 +47,20 @@ class ChannelController extends Controller
             'g-recaptcha-response' =>  [$recaptcha, 'required']
         ]);
 
+        // unset the recaptcha response b/c we don't need it anymore
+        unset($v['g-recaptcha-response']);
+        
         // set the slug equl to a slugified version of the channel name (may change this later)
         $v['slug'] = str_slug($v['name']);
         
         // strip tags from the description
         $v['description'] = strip_tags($v['description']);
         
+        // store the user to be retrieved later
+        $v['user_id'] = auth()->id();
+
         // set the to use with redis, the token will serve as a confirmation token
         $key = 'unconfirmed_channel:' . $token = TokenGenerator::generate($v['slug'], $length = 25);
-        
-        // store the user and their profile information
-        $v['user'] = auth()->user()->load('profile')->toArray();
         
         // serialize the validated data in redis for one week
         $redis::setex($key, (60*60*24*7), serialize($v));

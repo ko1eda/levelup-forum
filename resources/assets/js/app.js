@@ -2,6 +2,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import Navbar from './components/Navbar/Navbar';
 import Thread from './components/Thread/Thread.vue';
+import Card from './components/Etc/Card.vue';
 import TextEditor from './components/Etc/TextEditor.vue';
 import HtmlRenderer from './components/Etc/HtmlRenderer.vue';
 import ReplyCounter from './components/Reply/ReplyCounter.vue';
@@ -42,6 +43,7 @@ const app = new Vue({
       'lu-navbar' : Navbar,
       'lu-flash-message' : FlashMessage,
       'lu-thread' : Thread,
+      'lu-card' : Card,
       'lu-counter' : ReplyCounter,
       'lu-avatar-uploader': AvatarUploader
     }

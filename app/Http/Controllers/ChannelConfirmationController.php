@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
+use App\User;
 
 class ChannelConfirmationController extends Controller
 {
@@ -24,12 +26,23 @@ class ChannelConfirmationController extends Controller
      *
      * @return void
      */
-    public function create()
+    public function create(Request $req)
     {
-        // load the channel info from redis based on the query string token
-        // pass the information to the view
+        if ($data = Redis::get('unconfirmed_channel:' . $req->query('tokenID'))) {
+            $data = unserialize($data);
 
-        echo 'hellooooo';
+            $user = User::with('profile:profile_photo_path,user_id')->where('id', $data['user_id'])->first();
+
+            $channel = array_only($data, ['slug', 'name', 'description']);
+
+            return view('channels.confirmation.create', [
+                'data' => [$user, $channel]
+            ]);
+        }
+
+        return redirect()
+            ->route('threads.index')
+            ->with('flash', 'Someone has already handled the request~link');
     }
 
     /**
@@ -40,6 +53,7 @@ class ChannelConfirmationController extends Controller
     public function store()
     {
       // store the confirmed channel in the database
+      // notify the user that their channel was selected
     }
 
     /**
