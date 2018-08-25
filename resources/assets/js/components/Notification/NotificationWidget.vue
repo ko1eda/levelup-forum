@@ -17,18 +17,18 @@
     <div v-for="(notification) in unread" :key = "notification.id">
       <div class="hover-effect navbar-item tw-cursor-pointer hover:tw-bg-green">
 
-        <div class="tw-flex tw-items-center">
-          <div class='circle tw-mr-2 tw-rounded-full tw-bg-red tw-w-3 tw-h-3' @click="handleMarkRead(notification.id)"></div>
+        <div class="tw-flex tw-items-center tw-w-full">
+          <div class='circle tw-mr-2 tw-rounded-full tw-bg-red tw-w-3 tw-h-3' @click="handleMarkRead(notification.id)" title="Delete notifcation"></div>
          
-          <a :href="notification.data.link" @click="handleMarkRead(notification.id)" class="tw-px-4">
+          <a :href="notification.data.link" @click="handleMarkRead(notification.id)" class="tw-px-4 tw-flex-1" title="Go to notification">
             <span class="tw-mr-1 tw-text-xs tw-font-bold ">
               {{notification.data.username}}:
             </span>
-            <br>
             <span class="tw-text-xs">
-              {{ notification.data.action }}
-              <span class="tw-italic">{{ notification.data.messageSub }}</span>
-            </span> 
+              {{ notification.data.action }}  
+            </span>
+            <br>
+            <span class="tw-text-xs" v-if="notification.data.messageSub">{{ notification.data.messageSub }}</span>
           </a> 
           <!-- end link to notifiable item -->
         </div><!-- end notification body -->
@@ -140,7 +140,7 @@ export default {
 
   .limit-w {
     max-width: 500px;
-    min-width: 400px;
+    min-width: 350px;
     overflow: hidden;
   }
 

@@ -75,8 +75,7 @@ class ChannelCreated extends Notification
         return [
             'username' => '@'. $this->channelCreator->username,
             'action' => 'proposed a new channel ',
-            'messageFull' => 'Click to view confirmation page',
-            'messageSub' => 'Click to view confirmation page',
+            'messageSub' => 'Check it out',
             'link' =>  $this->uri
         ];
     }
