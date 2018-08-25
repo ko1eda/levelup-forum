@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="columns is-centered">
-  <div class="column is-8-tablet is-6-desktop">
+  <div class="column is-9-tablet is-6-desktop">
     <lu-card :data="{{ json_encode($data) }}">
 
     </lu-card>

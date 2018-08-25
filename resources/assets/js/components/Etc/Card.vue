@@ -1,45 +1,48 @@
 <template>
-  <div class="lu-card tw-p-6">
-    <div class="tw-flex tw-mb-8">
-      <div class="tw-w-1/2 tw-flex tw-justify-center tw-items-center tw-mr-4 tw-mt-2">
-        <div class="tw-rounded-full tw-border tw-border-bulma-darkest tw-h-24 tw-w-24 md:tw-h-32 md:tw-w-32 tw-overflow-hidden">
+  <div class="lu-card tw-shadow tw-border tw-border-grey tw-p-6 md:tw-p-8">
+    <div class="tw-flex tw-mb-6 tw-justify-center tw-max-w-full">
+      <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-w-1/3 tw-mr-4 md:tw-mr-2 ">
+        <div class="tw-rounded-full tw-border tw-border-bulma-darker tw-h-24 tw-w-24 md:tw-h-32 md:tw-w-32 tw-overflow-hidden tw-mb-1">
           <img :src="this.data[0].profile.profile_photo_path" alt="">
         </div>
+        <p class="tw-text-xl tw-font-light">
+          <span v-text=" this.data[0].username" class=""></span>
+        </p>
       </div>
 
-      <div class="tw-w-full tw-flex tw-flex-col tw-justify-around ">
-        <p class="tw-text-2xl md:tw-text-4xl tw-font-light tw-align-top">
-          <span class="">@</span>
-          <span v-text="this.data[0].username" class=""></span>
+      <div class="tw-flex tw-flex-col tw-justify-between ">
+        <span class="tw-text-base md:tw-text-2xl md:tw-font-light ">Requested a new channel!</span>
+        <p class="tw-text-sm md:tw-text-base ">
+          <span>Name:</span>
+          <span v-text="this.data[1].name" class=""></span>
         </p>
         <p class="tw-text-sm md:tw-text-base">
-          <span>Has rquested a new channel</span>
-          <span v-text="'/' + this.data[1].name" class="tw-font-bold"></span>
-        </p>
-        <p class="tw-text-sm md:tw-text-base">
-          <span>Description:</span>
+          <span>Tagline: </span>
           <span v-text="this.data[1].description" class="tw-"></span>
         </p>
-      </div>
-    </div>
 
-    <div class="tw-pt-6">
-      
+        <p></p>
+        <p></p> <!-- for spacing -->
+
+      </div><!-- end name and description -->
+
+    </div><!-- end first col -->
+
+    <div class="tw-">   
       <div class="field is-grouped is-grouped-centered">
         <p class="control">
-          <a class="button is-primary tw-w-32 lg:tw-w-48 is-small">
+          <a class="button is-primary tw-w-32 md:tw-w-48 is-small">
             Approve
           </a>
         </p>
 
         <p class="control">
-          <a class="button is-danger tw-w-32 lg:tw-w-48 is-small">
+          <a class="button is-danger tw-w-32 md:tw-w-48 is-small">
             Decline
           </a>
         </p>
       </div>
-      
-    </div>
+    </div><!-- end buttons -->
   </div>
 </template>
 
