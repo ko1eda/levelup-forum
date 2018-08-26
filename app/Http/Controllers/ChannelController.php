@@ -70,7 +70,7 @@ class ChannelController extends Controller
         ->inRandomOrder()
         ->limit(5)
         ->get();
-        
+    
         // send notifications to all admins
         Notification::send($admins, new ChannelCreated(auth()->user(), $token));
         

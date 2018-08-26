@@ -76,4 +76,28 @@ class ManageChannelsTest extends TestCase
         // and all administrators should be notified that there is a pending channel request
         Notification::assertSentTo($admins, ChannelCreated::class);
     }
+
+
+    /** @test */
+    public function when_an_administrator_approves_a_channel_it_is_added_to_the_channels_list_and_the_creator_is_notified()
+    {
+        // given we an admin
+        $admin = factory(User::class)->states('admin')->create();
+
+        $this->signInUser($admin);
+
+        // and a pending channel request stored in redis
+        Redis::shouldReceive('get', 'unconfirmed_channel:12345')
+            ->andReturn(serialize(['name' => 'some channel name', 'slug' => str_slug('some channel name')]));
+
+        Redis::shouldReceive('del', 'unconfirmed_channel:12345');
+
+        // if an admin sends an ajax request to /channels/confirmation/store?tokenID=
+        $res = $this->json('POST', route('channels.confirm.store', 'tokenID=12345'))->json();
+
+        // then the channel should be stored in the database
+        $this->assertEquals($res['name'], 'some channel name');
+
+        // and the channel creator should recieve a notification stating that their channel was selected
+    }
 }

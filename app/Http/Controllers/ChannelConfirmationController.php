@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use App\User;
+use App\Channel;
 
 class ChannelConfirmationController extends Controller
 {
@@ -50,10 +51,25 @@ class ChannelConfirmationController extends Controller
      *
      * @return void
      */
-    public function store()
+    public function store(Request $req, Redis $redis)
     {
-      // store the confirmed channel in the database
-      // notify the user that their channel was selected
+        if (!$data = $redis::get('unconfirmed_channel:' . $req->query('tokenID'))) {
+            return response('', 404);
+        }
+
+        $data = unserialize($data);
+
+        $channel = Channel::create([
+            'name' => $data['name'],
+            'slug' => $data['slug']
+        ]);
+
+        $redis::del('unconfirmed_channel:' . $req->query('tokenID'));
+        
+        // remove channels list from the cache because it was updated
+        $redis::del('channels:list');
+
+        return response($channel->fresh(), 200);
     }
 
     /**

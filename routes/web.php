@@ -47,6 +47,7 @@ Route::patch('/threads/{channel}/{thread}/{slug}', 'ThreadController@update')->n
 Route::get('/channels/create', 'ChannelController@create')->name('channels.create');
 Route::post('/channels', 'ChannelController@store')->name('channels.store');
 Route::get('/channels/confirmation/create', 'ChannelConfirmationController@create')->name('channels.confirm.create');
+Route::post('/channels/confirmation', 'ChannelConfirmationController@store')->name('channels.confirm.store');
 
 // replies
 Route::post('/threads/{thread}/replies', 'ReplyController@store')->name('replies.store');

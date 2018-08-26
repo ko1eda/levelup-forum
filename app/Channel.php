@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Channel extends Model
 {
     /**
+     * $fillable
+     *
+     * @var array
+     */
+    protected $fillable = ['name', 'slug'];
+
+    /**
      * Change the key that laravel uses
      * for route model binding
      * @return String

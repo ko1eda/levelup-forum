@@ -1,47 +1,29 @@
 <template>
-  <div class="lu-card tw-shadow tw-border tw-border-grey tw-p-6 md:tw-p-8">
+  <div class="lu-card tw-shadow tw-border tw-border-grey tw-p-8 ">
     <div class="tw-flex tw-mb-6 tw-justify-center tw-max-w-full">
-      <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-w-1/3 tw-mr-4 md:tw-mr-2 ">
+      <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-w-1/3 tw-mr-2 tw-mt-2">
         <div class="tw-rounded-full tw-border tw-border-bulma-darker tw-h-24 tw-w-24 md:tw-h-32 md:tw-w-32 tw-overflow-hidden tw-mb-1">
-          <img :src="this.data[0].profile.profile_photo_path" alt="">
+          <slot :data="this.data" name="photo"></slot>
         </div>
         <p class="tw-text-xl tw-font-light">
-          <span v-text=" this.data[0].username" class=""></span>
+          <slot :data="this.data" name="username"></slot>
         </p>
       </div>
 
-      <div class="tw-flex tw-flex-col tw-justify-between ">
-        <span class="tw-text-base md:tw-text-2xl md:tw-font-light ">Requested a new channel!</span>
-        <p class="tw-text-sm md:tw-text-base ">
-          <span>Name:</span>
-          <span v-text="this.data[1].name" class=""></span>
-        </p>
-        <p class="tw-text-sm md:tw-text-base">
-          <span>Tagline: </span>
-          <span v-text="this.data[1].description" class="tw-"></span>
-        </p>
+      <div class="tw-flex tw-flex-col tw-justify-between " style="width:270px">
+        <slot :data="this.data" name="card-title"></slot>
+        
+        <slot name="body" :data="this.data"></slot>
 
         <p></p>
+        <p></p>
         <p></p> <!-- for spacing -->
-
       </div><!-- end name and description -->
 
     </div><!-- end first col -->
 
     <div class="tw-">   
-      <div class="field is-grouped is-grouped-centered">
-        <p class="control">
-          <a class="button is-primary tw-w-32 md:tw-w-48 is-small">
-            Approve
-          </a>
-        </p>
-
-        <p class="control">
-          <a class="button is-danger tw-w-32 md:tw-w-48 is-small">
-            Decline
-          </a>
-        </p>
-      </div>
+     <slot name="buttons" :approve="approve" :decline="decline"></slot>
     </div><!-- end buttons -->
   </div>
 </template>
@@ -54,12 +36,37 @@ export default {
     data : {
       type : Array,
       required: true
+    },
+
+    approveUri : {
+      type : String
+    },
+
+    declineUri : {
+      type : String
     }
   },
 
-  data () {
-    return {
-     
+  methods: {
+    approve () {
+      let regex = /tokenID=(.+)/gi;
+
+      axios.post(this.approveUri +  regex.exec(window.location.search)[0])
+        .then(res => {
+          flash('Channel approved, redirecting...');
+          
+          setTimeout(() => {
+            window.location = "/threads";
+          }, 500) 
+
+        });
+    },
+
+    decline () {
+      axios.post(this.declineUri)
+        .then(res => {
+
+        });
     }
   }
 }
