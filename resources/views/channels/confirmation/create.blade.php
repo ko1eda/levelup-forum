@@ -22,28 +22,28 @@
 
       <template  slot="body" slot-scope="{ data }">
         <p class="tw-text-sm md:tw-text-base ">
-            <span>Name:</span>
-            <span v-text="data[1].name" class=""></span>
-          </p>
-          <p class="tw-text-sm md:tw-text-base ">
-            <span>Tagline:</span>
-            <span v-text="data[1].description" class="tw-"></span>
-          </p>
+          <span>Name:</span>
+          <span v-text="data[1].name" class=""></span>
+        </p>
+        <p class="tw-text-sm md:tw-text-base ">
+          <span>Tagline:</span>
+          <span v-text="data[1].description" class="tw-"></span>
+        </p>
       </template>
 
 
       <div class="field is-grouped is-grouped-centered" slot="buttons" slot-scope="{approve, decline}">
-          <p class="control">
-            <a class="button is-primary tw-w-32 md:tw-w-48 is-small" @click="approve" >
-              Approve
-            </a>
-          </p>
-  
-          <p class="control">
-            <a class="button is-danger tw-w-32 md:tw-w-48 is-small" @click="decline">
-              Decline
-            </a>
-          </p>
+        <p class="control">
+          <a class="button is-primary tw-w-32 md:tw-w-48 is-small" @click="approve" >
+            Approve
+          </a>
+        </p>
+
+        <p class="control">
+          <a class="button is-danger tw-w-32 md:tw-w-48 is-small" @click="decline">
+            Decline
+          </a>
+        </p>
       </div>
 
     </lu-card>

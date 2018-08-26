@@ -67,9 +67,10 @@ class ChannelController extends Controller
 
         // notify 5 random admins
         $admins = \App\User::where('role_id', 1)
-        ->inRandomOrder()
-        ->limit(5)
-        ->get();
+                    // ->where('id', '<>', auth()->id)
+                    ->inRandomOrder()
+                    ->limit(5)
+                    ->get();
     
         // send notifications to all admins
         Notification::send($admins, new ChannelCreated(auth()->user(), $token));

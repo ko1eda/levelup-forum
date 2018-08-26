@@ -19,7 +19,16 @@ class ChannelCreated extends Notification
      *
      * @var String $uri
      */
-    protected $uri;
+    protected $absoluteUri;
+
+
+    /**
+     * the uri containing the unique token
+     * that retrieves the Channel from redis
+     *
+     * @var String $uri
+     */
+    protected $relativeUri;
 
     
     /**
@@ -39,7 +48,9 @@ class ChannelCreated extends Notification
     {
         $this->channelCreator = $channelCreator;
 
-        $this->uri = route('channels.confirm.create', 'tokenID=' . $token);
+        $this->absoluteUri = route('channels.confirm.create', 'tokenID=' . $token);
+
+        $this->relativeUri = route('channels.confirm.create', 'tokenID=' . $token, false);
     }
 
     /**
@@ -61,7 +72,7 @@ class ChannelCreated extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new Mailable($this->channelCreator, $this->uri))->to($admin = $notifiable->email);
+        return (new Mailable($this->channelCreator, $this->absoluteUri))->to($admin = $notifiable->email);
     }
 
     /**
@@ -76,7 +87,7 @@ class ChannelCreated extends Notification
             'username' => '@'. $this->channelCreator->username,
             'action' => 'proposed a new channel ',
             'messageSub' => 'Check it out',
-            'link' =>  $this->uri
+            'link' =>   $this->relativeUri
         ];
     }
 }
