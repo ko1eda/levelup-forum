@@ -48,6 +48,7 @@ Route::get('/channels/create', 'ChannelController@create')->name('channels.creat
 Route::post('/channels', 'ChannelController@store')->name('channels.store');
 Route::get('/channels/confirmation/create', 'ChannelConfirmationController@create')->name('channels.confirm.create');
 Route::post('/channels/confirmation', 'ChannelConfirmationController@store')->name('channels.confirm.store');
+Route::delete('/channels/confirmation', 'ChannelConfirmationController@destroy')->name('channels.confirm.destroy');
 
 // replies
 Route::post('/threads/{thread}/replies', 'ReplyController@store')->name('replies.store');

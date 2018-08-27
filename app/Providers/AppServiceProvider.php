@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
             $channels = \App\Channel::latest()->get();
 
             // store channels for one day in redis
-            Redis::setex('Channels:list', (60 * 60 * 24), serialize($channels));
+            Redis::setex('channels:list', (60 * 60 * 24), serialize($channels));
 
             
             return $view->with(compact('channels'));

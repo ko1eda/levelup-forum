@@ -40,8 +40,8 @@ class ManageChannelsTest extends TestCase
             'description' => 'some text',
             'g-recaptcha-response' => 'some-token'
         ])
-        ->assertRedirect(route('threads.index'))
-        ->assertSessionHas('flash', 'First confirm your email address~danger');
+            ->assertRedirect(route('threads.index'))
+            ->assertSessionHas('flash', 'First confirm your email address~danger');
     }
 
 
@@ -60,14 +60,14 @@ class ManageChannelsTest extends TestCase
         // and that user navigates to /channels/create
         // and when that user creates a channel
         Redis::shouldReceive('setex');
-  
+
         $this->post(route('channels.store'), [
             'name' => 'sports',
             'description' => 'some text',
             'g-recaptcha-response' => 'some-token'
         ])
-        ->assertRedirect(route('threads.index'))
-        ->assertSessionHas('flash');
+            ->assertRedirect(route('threads.index'))
+            ->assertSessionHas('flash');
 
         // then the channel should be stored in redis under the given confirmation key
         
@@ -107,5 +107,23 @@ class ManageChannelsTest extends TestCase
 
         // and the channel creator should recieve a notification stating that their channel was selected
         Notification::assertTimesSent(1, ChannelConfirmed::class);
+    }
+
+
+    /** @test */
+    public function when_an_admin_denies_a_channel_it_is_removed_from_the_redis_cache()
+    {
+        // given we an admin
+        $admin = factory(User::class)->states('admin')->create();
+
+        $this->signInUser($admin);
+  
+        // and a pending channel request stored in redis
+        Redis::shouldReceive('del', 'unconfirmed_channel:12345')
+            ->andReturn(1);
+  
+          // if an admin sends an ajax request to /channels/confirmation/store?tokenID=
+        $this->json('DELETE', route('channels.confirm.destroy', 'tokenID=12345'))
+            ->assertStatus(204);
     }
 }

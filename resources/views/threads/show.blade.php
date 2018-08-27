@@ -25,6 +25,12 @@
             </a>
           </p>{{-- end user info --}}
 
+          <p class="lu-pannel-text">
+           In / <a href={{ route('threads.index', $thread->channel) }} class="">
+                  {{ $thread->channel->slug}}
+                </a>
+          </p>{{-- end user info --}}
+
         <lu-counter :initial-count={{ $thread->replies_count }}></lu-counter> {{-- end Vue reply count component --}}
 
         </div>

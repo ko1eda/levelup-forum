@@ -23,7 +23,6 @@ class ChannelConfirmationController extends Controller
     }
 
 
-
     /**
      * Show the channels confirmation create form
      *
@@ -40,7 +39,7 @@ class ChannelConfirmationController extends Controller
         $data = unserialize($data);
 
         $user = User::with('profile:profile_photo_path,user_id')
-                    ->where('id', $data['user_id'])->first();
+            ->where('id', $data['user_id'])->first();
 
         $channel = array_only($data, ['slug', 'name', 'description']);
 
@@ -48,6 +47,7 @@ class ChannelConfirmationController extends Controller
             'data' => [$user, $channel]
         ]);
     }
+    
 
     /**
      * Store the confirmed channel in the db
@@ -60,7 +60,7 @@ class ChannelConfirmationController extends Controller
     public function store(Request $req, Redis $redis)
     {
         if (!$data = $redis::get('unconfirmed_channel:' . $req->query('tokenID'))) {
-            return response('The channel was not found on the server', 404);
+            return response('Channel not found', 404);
         }
 
         $data = unserialize($data);
@@ -84,13 +84,21 @@ class ChannelConfirmationController extends Controller
         return response($channel, 200);
     }
 
+    
     /**
-     * confirm
+     * Remove the proposed channel from redis
      *
      * @return void
      */
-    public function delete()
+    public function destroy(Request $req, Redis $redis)
     {
-      // delete the nonconfirmed channel from redis
+        $response = $redis::del('unconfirmed_channel:' . $req->query('tokenID'));
+
+        // if nothing was deleted
+        if ($response === 0) {
+            return response('Channel not found', 404);
+        }
+
+        return response('', 204);
     }
 }

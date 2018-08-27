@@ -4,7 +4,7 @@
 @section('content')
 <div class="columns is-centered">
   <div class="column is-9-tablet is-6-desktop">
-  <lu-card :data="{{ json_encode($data) }}" :approve-uri={{ json_encode(route('channels.confirm.store', '', false)) }}>
+  <lu-card :data="{{ json_encode($data) }}" :approve-uri={{ json_encode(route('channels.confirm.store', '', false)) }} :decline-uri={{ json_encode(route('channels.confirm.destroy', '', false)) }}>
 
       <template slot="photo" slot-scope="{ data }">
         <img :src="data[0].profile.profile_photo_path" alt="User Avatar">

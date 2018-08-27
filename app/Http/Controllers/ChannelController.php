@@ -65,9 +65,10 @@ class ChannelController extends Controller
         // serialize the validated data in redis for one week
         $redis::setex($key, (60*60*24*7), serialize($v));
 
-        // notify 5 random admins
+        // notify 5 random admins however if the user submitting is an admin
+        // do not notify them
         $admins = \App\User::where('role_id', 1)
-                    // ->where('id', '<>', auth()->id)
+                    ->where('id', '<>', auth()->user()->id)
                     ->inRandomOrder()
                     ->limit(5)
                     ->get();

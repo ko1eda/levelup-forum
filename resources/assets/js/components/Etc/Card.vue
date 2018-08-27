@@ -49,6 +49,7 @@ export default {
 
   methods: {
     approve () {
+      // get the query string without the ? 
       let regex = /tokenID=(.+)/gi;
 
       axios.post(this.approveUri +  regex.exec(window.location.search)[0])
@@ -63,8 +64,16 @@ export default {
     },
 
     decline () {
-      axios.post(this.declineUri)
+      // get the query string without the ? 
+      let regex = /tokenID=(.+)/gi;
+
+      axios.delete(this.declineUri  +  regex.exec(window.location.search)[0])
         .then(res => {
+          flash('Channel declined, redirecting...', 'danger');
+          
+          setTimeout(() => {
+            window.location = "/threads";
+          }, 500) 
 
         });
     }
