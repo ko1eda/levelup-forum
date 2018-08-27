@@ -36,7 +36,7 @@ class UserRegistered extends Notification
     {
         return [
             'username' => '@' . config('forum.admin'),
-            'action' => 'Reminder,',
+            'action' => 'reminder',
             'message' => 'register you email to participate in the forums!',
             'messageSub' => 'register you email to participate in the forums!',
             'link' => ''

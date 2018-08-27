@@ -3,6 +3,7 @@ import axios from 'axios';
 import Navbar from './components/Navbar/Navbar';
 import Thread from './components/Thread/Thread.vue';
 import Card from './components/Etc/Card.vue';
+import Modal from './components/Etc/Modal.vue';
 import TextEditor from './components/Etc/TextEditor.vue';
 import HtmlRenderer from './components/Etc/HtmlRenderer.vue';
 import ReplyCounter from './components/Reply/ReplyCounter.vue';
@@ -34,6 +35,7 @@ window.flash = function(message, level = null) {
 // etc components
 Vue.component('lu-text-editor', TextEditor);
 Vue.component('lu-html-renderer', HtmlRenderer);
+Vue.component('lu-modal', Modal);
 
 // Our Vue instance
 const app = new Vue({

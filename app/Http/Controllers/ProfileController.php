@@ -70,8 +70,16 @@ class ProfileController extends Controller
             'avatar_path' => 'nullable',
             'profile_photo_path' => 'nullable',
             'banner_path' => 'nullable',
-            'hide_activities' => 'boolean|nullable'
+            'hide_activities' => 'boolean|nullable',
+            'delete_account' => 'boolean|nullable'
         ]);
+
+        if ($validated['delete_account']) {
+            $user->delete();
+            
+            return redirect()
+                ->route('threads.index');
+        }
         
         // If the hide activities checkbox is unchecked (null), set it's value to 0
         // Normalize the input

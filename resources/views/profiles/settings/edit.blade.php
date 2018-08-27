@@ -65,6 +65,38 @@
   
       </div>{{-- end hide activity feed column --}}
     </div>{{-- end hide activity feed row --}}
+
+
+    <hr class="tw-my-4">
+  
+    <div class="columns"> 
+      <div class="column is-1">
+      
+      </div>{{-- end number col --}}
+  
+      <div class="column tw-flex tw-items-center sm:tw-justify-start tw-justify-center tw-text-red">
+        Delete your account?
+      </div>{{-- end description col --}}
+  
+      <div class="column is-4">
+        <div class="tw-flex tw-flex-col settings__img-box tw-justify-center tw-items-center">
+          <lu-modal>
+            <template slot-scope="{ handleOpen, isOpen }" slot="trigger">
+              <input type="checkbox" @click="handleOpen" name="delete_account" value="1" :checked="isOpen ? true : false">
+            </template>
+
+            <span slot="heading">Are you sure about this?</span>
+
+            <div class="md:tw-text-center md:tw-text-base tw-leading-loose tw-text-sm " slot="body">
+              We will delete all information associated with this account. 
+              <br>
+              While you can always re-register, we'd hate to see you go.
+            </div>
+          </lu-modal>
+
+        </div>
+      </div>{{-- end delete account column --}}
+    </div>{{-- end delete account row --}}
   
     <hr class="tw-my-4">
   
@@ -74,6 +106,8 @@
     {{-- end update profile button --}}
   
   </div>
+
+  
 </form>
 
 @endsection
