@@ -54,7 +54,7 @@ trait SubscribableTrait
     public function addSubscription(int $userID = null)
     {
         $this->subscriptions()->firstOrCreate([
-            'user_id' => $userID ? $userID : \Auth::user()->id
+            'user_id' => $userID ? $userID : \Auth::id()
         ]);
 
         return $this;

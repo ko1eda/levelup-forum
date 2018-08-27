@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
 use App\Reply;
+use App\Thread;
+use App\Favorite;
+use App\Subscription;
 
 class UserTest extends TestCase
 {
@@ -61,5 +64,56 @@ class UserTest extends TestCase
 
         // then that user is assigned a role of standard
         $this->assertEquals('user', $user->role->name);
+    }
+
+    /** @test */
+    public function when_a_user_is_deleted_so_is_all_their_associated_information()
+    {
+        // given we have a registered user
+        $this->signInUser($user = factory(User::class)->create());
+
+        // and that user has a profile
+        $profile = $user->profile;
+
+        // a thread
+        $thread = factory(Thread::class)->create(['user_id' => $user->id]);
+
+        // a reply
+        $reply = factory(Reply::class)->create(['user_id' => $user->id]);
+
+        // a favorite
+        $favorite = Favorite::create([
+            'user_id' => $user->id,
+            'favoritable_type' => 'Reply',
+            'favoritable_id' => factory(Reply::class)->create()->id
+        ])
+        ->fresh();
+        
+        // a subscription
+        $threadNotByUser = factory(Thread::class)->create()
+                                ->addSubscription();
+        
+        // this will add a notification for the logged in user
+        $threadNotByUser->addReply(factory(Reply::class)->make()->toArray());
+
+        $subscription = Subscription::where('user_id', $user->id)->first();
+        
+        $notification = $user->notifications->first();
+
+        // when that user deletes their account
+        $user->delete();
+
+        // all the associated data should be deleted
+        $this->assertDatabaseMissing('profiles', ['id' => $profile->id]);
+
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+
+        $this->assertDatabaseMissing('favorites', ['id' => $favorite->id]);
+
+        $this->assertDatabaseMissing('subscriptions', ['id' => $subscription->id]);
+
+        $this->assertDatabaseMissing('notifications', ['id' => $notification->id]);
     }
 }

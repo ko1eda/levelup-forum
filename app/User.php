@@ -56,10 +56,21 @@ class User extends Authenticatable
             $profile->save();
         });
 
-        // When a user is deleted so is their profile
-        // static::deleting(function ($user) {
-        //     Profile::find($user->id)->firstOrFail()->delete();
-        // });
+        // Note: using higher order messages here instead of writing call backs
+        // https://laravel.com/docs/5.6/collections#higher-order-messages
+        static::deleting(function ($user) {
+            $user->profile->delete();
+
+            $user->threads->each->delete();
+
+            $user->replies->each->delete();
+
+            $user->notifications->each->delete();
+
+            Favorite::where('user_id', $user->id)->get()->each->delete();
+
+            Subscription::where('user_id', $user->id)->get()->each->delete();
+        });
     }
 
 
@@ -143,7 +154,7 @@ class User extends Authenticatable
         return $this->hasMany(Reply::class);
     }
 
-
+    
     /**
      * Determine if the user has a reply in the database with a created_at timestamp
      * within a range of minutes UP TO the specified threshold time.
