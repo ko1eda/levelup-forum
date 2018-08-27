@@ -34,7 +34,7 @@ class ProfilesTest extends TestCase
     public function a_user_has_a_profile()
     {
         // Given we have a user
-        // and that user navigates to their profile        
+        // and that user navigates to their profile
        // Then That user should see their name
         $this->get($this->profileURI)
             ->assertSee($this->user->name);
@@ -104,7 +104,7 @@ class ProfilesTest extends TestCase
         $filePath = $this->json('post', route('api.uploads.images.store', ['test-avatars', \Auth::user()]), [
             'file' => $file = UploadedFile::fake()->image('image.jpg')
         ])
-        ->decodeResponseJson('path');
+            ->decodeResponseJson('path');
     
         // Then that avatar should be stored under the given file path
         Storage::disk('public')->assertExists($filePath);
@@ -117,7 +117,7 @@ class ProfilesTest extends TestCase
         // Then the stored path name on the users profile should be equal to the
         // avatars path in local storage
         $this->assertEquals(asset('storage/' . $filePath), \Auth::user()->profile->avatar_path);
-    
+
     }
 
 
@@ -137,7 +137,7 @@ class ProfilesTest extends TestCase
         $filePath2 = $this->json('post', route('api.uploads.images.store', ['test-avatars', \Auth::user()]), [
             'file' => UploadedFile::fake()->image('avatar.jpg')
         ])
-        ->decodeResponseJson('path');
+            ->decodeResponseJson('path');
 
 
         // then that user should have 2 files under thier avatars directory
@@ -174,6 +174,36 @@ class ProfilesTest extends TestCase
 
         // Then that users profile should not display the activity feed
         $this->get(route('profiles.show', \Auth::user()))
-            ->assertDontSee('Activity Feed');
+            ->assertDontSee('Recent Activity');
+    }
+
+    /** @test */
+    public function when_a_profile_is_deleted_all_user_related_content_is_deleted_from_storage()
+    {
+        // given we have a user
+        $this->signInUser();
+
+        // if that user hits the avatar endpoint with an avatar
+        $filePath = $this->json('post', route('api.uploads.images.store', ['test-avatars', \Auth::user()]), [
+            'file' => UploadedFile::fake()->image('avatar.jpg')
+        ])->json();
+
+
+        $this->patch(route('profiles.settings.update', \Auth::user()), [
+            'avatar_path' => $filePath['path']
+        ]);
+
+        // and that user has a profile photo
+        $this->assertEquals(asset('storage/' . $filePath['path']), \Auth::user()->profile->avatar_path);
+
+        $this->assertEquals(1, count(Storage::disk('public')->files('test-avatars/' . \Auth::id())));
+
+        $this->assertTrue(\File::exists(public_path() . '/storage/' . 'test-avatars/' . \Auth::id()));
+
+        // when that users profile is deleted
+        \Auth::user()->profile->delete();
+
+        // then any directory corresponding to a _path attribute on profile should be deleted so avatar_path, profile_photo_path, banner_path etc
+        $this->assertFalse(\File::exists(public_path() . '/storage/' . 'test-avatars/' . \Auth::id()));
     }
 }

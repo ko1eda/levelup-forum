@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 
 class Profile extends Model
 {
@@ -15,6 +16,26 @@ class Profile extends Model
     ];
 
 
+    public static function boot()
+    {
+        parent::boot();
+
+        // this will delete any directory corresponding to a _path attribute on the profile
+        // so avatar_path, for profile with id 3 would delete the directory avatars/3
+        static::deleting(function ($profile) {
+            foreach ($profile->getAttributes() as $key => $value) {
+                if (preg_match('/[_]path$/', $key)) {
+                    $temp = explode('/', $value);
+
+                     // ex delete directory 'avatars/3
+                    if (\File::exists(public_path() . '/storage/' . $temp[0] . '/' . $profile->user->id)) {
+                        \File::deleteDirectory(public_path() . '/storage/' . $temp[0] . '/' . $profile->user->id);
+                    }
+                }
+            };
+        });
+    }
+
     /**
      * A profile belongs to a user
      *
@@ -22,7 +43,7 @@ class Profile extends Model
      */
     public function user()
     {
-        return $this->belongsTo(App::User);
+        return $this->belongsTo(User::class);
     }
 
 
