@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\POPO\TokenGenerator;
-use Illuminate\Support\Facades\Redis;
-use App\Notifications\ChannelCreated;
-use Illuminate\Support\Facades\Notification;
 use App\Rules\Recaptcha;
+use App\Jobs\StoreUnconfirmedChannel;
 
 class ChannelController extends Controller
 {
@@ -39,42 +36,15 @@ class ChannelController extends Controller
      *
      * @return void
      */
-    public function store(Request $req, Redis $redis, Recaptcha $recaptcha)
+    public function store(Request $req, Recaptcha $recaptcha)
     {
-        $v = $req->validate([
+        $validated = $req->validate([
             'name' => 'required|unique:channels,name|max:50',
             'description' => 'required',
             'g-recaptcha-response' =>  [$recaptcha, 'required']
         ]);
 
-        // unset the recaptcha response b/c we don't need it anymore
-        unset($v['g-recaptcha-response']);
-        
-        // set the slug equl to a slugified version of the channel name (may change this later)
-        $v['slug'] = str_slug($v['name']);
-        
-        // strip tags from the description
-        $v['description'] = strip_tags($v['description']);
-        
-        // store the user to be retrieved later
-        $v['user_id'] = auth()->id();
-
-        // set the to use with redis, the token will serve as a confirmation token
-        $key = 'unconfirmed_channel:' . $token = TokenGenerator::generate($v['slug'], $length = 25);
-        
-        // serialize the validated data in redis for one week
-        $redis::setex($key, (60*60*24*7), serialize($v));
-
-        // notify 5 random admins however if the user submitting is an admin
-        // do not notify them
-        $admins = \App\User::where('role_id', 1)
-                    ->where('id', '<>', auth()->user()->id)
-                    ->inRandomOrder()
-                    ->limit(5)
-                    ->get();
-    
-        // send notifications to all admins
-        Notification::send($admins, new ChannelCreated(auth()->user(), $token));
+        StoreUnconfirmedChannel::dispatch($validated, auth()->user());
         
         return redirect()
             ->route('threads.index')

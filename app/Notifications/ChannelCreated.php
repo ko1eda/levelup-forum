@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use App\User;
 use App\Mail\Channel\ConfirmationSent as Mailable;
 
-class ChannelCreated extends Notification
+class ChannelCreated extends Notification implements ShouldQueue
 {
     use Queueable;
 
