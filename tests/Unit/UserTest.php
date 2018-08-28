@@ -101,7 +101,9 @@ class UserTest extends TestCase
         $notification = $user->notifications->first();
 
         // when that user deletes their account
-        $user->delete();
+        $this->patch(route('profiles.settings.update', \Auth::user()), [
+            'delete_account' => '1'
+        ]);
 
         // all the associated data should be deleted
         $this->assertDatabaseMissing('profiles', ['id' => $profile->id]);

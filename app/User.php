@@ -55,22 +55,6 @@ class User extends Authenticatable
 
             $profile->save();
         });
-
-        // Note: using higher order messages here instead of writing call backs
-        // https://laravel.com/docs/5.6/collections#higher-order-messages
-        static::deleting(function ($user) {
-            $user->profile->delete();
-
-            $user->threads->each->delete();
-
-            $user->replies->each->delete();
-
-            $user->notifications->each->delete();
-
-            Favorite::where('user_id', $user->id)->get()->each->delete();
-
-            Subscription::where('user_id', $user->id)->get()->each->delete();
-        });
     }
 
 

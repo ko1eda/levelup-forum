@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Activity;
-use App\Profile;
+use App\Jobs\DeleteUserAccount;
 
 class ProfileController extends Controller
 {
@@ -77,10 +77,13 @@ class ProfileController extends Controller
         // cannot access the variable if it doesn't exist
         // so do a isset check to avoid errors
         if (isset($validated['delete_account'])) {
-            $user->delete();
+            DeleteUserAccount::dispatch($user);
             
+            auth()->logout();
+
             return redirect()
-                ->route('threads.index');
+                ->route('threads.index')
+                ->with('flash', 'Your account was removed');
         }
         
         // If the hide activities checkbox is unchecked (null), set it's value to 0
