@@ -74,7 +74,9 @@ class ProfileController extends Controller
             'delete_account' => 'boolean|nullable'
         ]);
 
-        if ($validated['delete_account']) {
+        // cannot access the variable if it doesn't exist
+        // so do a isset check to avoid errors
+        if (isset($validated['delete_account'])) {
             $user->delete();
             
             return redirect()
