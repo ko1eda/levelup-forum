@@ -26,8 +26,7 @@ class ProfilesTest extends TestCase
 
         $this->profileURI = route('profiles.show', $this->user);
 
-        // Clear any test directories created by these tests
-        Storage::disk('public')->deleteDirectory('test-avatars/');
+        Storage::fake('s3');
     }
 
     /** @test */
@@ -101,14 +100,15 @@ class ProfilesTest extends TestCase
     
         // if that user hits the avatar endpoint with an avatar
         // Note that you can fake files for tests using the UploadedFile class
-        $filePath = $this->json('post', route('api.uploads.images.store', ['test-avatars', \Auth::user()]), [
+        $filePath = $this->json('post', route('api.uploads.images.store', \Auth::user()), [
             'file' => $file = UploadedFile::fake()->image('image.jpg')
         ])
             ->decodeResponseJson('path');
     
         // Then that avatar should be stored under the given file path
         Storage::disk('public')->assertExists($filePath);
-    
+        
+        
         // And if the user updates the profile settings page (aka in this case submits the image)
         $this->patch(route('profiles.settings.update', \Auth::user()), [
             'avatar_path' => $filePath
@@ -116,32 +116,32 @@ class ProfilesTest extends TestCase
     
         // Then the stored path name on the users profile should be equal to the
         // avatars path in local storage
-        $this->assertEquals(asset('storage/' . $filePath), \Auth::user()->profile->avatar_path);
+        $this->assertEquals('https://s3.amazonaws.com/oneupforum/'. auth()->user()->id . '/avatar.png', \Auth::user()->profile->avatar_path);
 
     }
 
 
 
     /** @test */
-    public function when_a_user_updates_a_file_on_their_profile_all_related_tempory_files_are_deleted()
+    public function when_a_user_updates_a_file_on_their_profile_all_tempory_files_are_deleted()
     {
         // Given we have a user and exception handling is turned on
         $this->signInUser();
 
         // if that user hits the avatar endpoint with an avatar
-        $this->json('post', route('api.uploads.images.store', ['test-avatars', \Auth::user()]), [
+        $this->json('post', route('api.uploads.images.store', \Auth::user()), [
             'file' => UploadedFile::fake()->image('avatar.jpg')
         ]);
 
         // And then hits that endpoint again
-        $filePath2 = $this->json('post', route('api.uploads.images.store', ['test-avatars', \Auth::user()]), [
+        $filePath2 = $this->json('post', route('api.uploads.images.store', \Auth::user()), [
             'file' => UploadedFile::fake()->image('avatar.jpg')
         ])
             ->decodeResponseJson('path');
 
 
         // then that user should have 2 files under thier avatars directory
-        $this->assertEquals(2, count(Storage::disk('public')->files('test-avatars/' . \Auth::id())));
+        $this->assertEquals(2, count(Storage::disk('public')->files(\Auth::id())));
 
          // however when the user updates their profile (aka submits thier avatar choice)
         $this->patch(route('profiles.settings.update', \Auth::user()), [
@@ -149,10 +149,7 @@ class ProfilesTest extends TestCase
         ]);
 
         // Then their avatars directory should only have one avatar in it
-        $this->assertEquals(1, count(Storage::disk('public')->files('test-avatars/' . \Auth::id())));
-
-        // And that avatar should correspond to the avatar that was submitted by the user
-        $this->assertEquals($filePath2, Storage::disk('public')->files('test-avatars/' . \Auth::id())[0]);
+        $this->assertEquals(0, count(Storage::disk('public')->files(\Auth::id())));
     }
 
 
@@ -184,7 +181,7 @@ class ProfilesTest extends TestCase
         $this->signInUser();
 
         // if that user hits the avatar endpoint with an avatar
-        $filePath = $this->json('post', route('api.uploads.images.store', ['test-avatars', \Auth::user()]), [
+        $filePath = $this->json('post', route('api.uploads.images.store', \Auth::user()), [
             'file' => UploadedFile::fake()->image('avatar.jpg')
         ])->json();
 
@@ -193,17 +190,12 @@ class ProfilesTest extends TestCase
             'avatar_path' => $filePath['path']
         ]);
 
-        // and that user has a profile photo
-        $this->assertEquals(asset('storage/' . $filePath['path']), \Auth::user()->profile->avatar_path);
-
-        $this->assertEquals(1, count(Storage::disk('public')->files('test-avatars/' . \Auth::id())));
-
-        $this->assertTrue(\File::exists(public_path() . '/storage/' . 'test-avatars/' . \Auth::id()));
+        $this->assertTrue(\File::exists(public_path() . '/storage/' . \Auth::id()));
 
         // when that users profile is deleted
         \Auth::user()->profile->delete();
 
         // then any directory corresponding to a _path attribute on profile should be deleted so avatar_path, profile_photo_path, banner_path etc
-        $this->assertFalse(\File::exists(public_path() . '/storage/' . 'test-avatars/' . \Auth::id()));
+        $this->assertFalse(\File::exists(public_path() . '/storage/' . \Auth::id()));
     }
 }

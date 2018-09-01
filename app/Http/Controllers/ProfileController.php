@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Activity;
 use App\Jobs\DeleteUserAccount;
+use Illuminate\Http\File;
 
 class ProfileController extends Controller
 {
@@ -90,16 +91,11 @@ class ProfileController extends Controller
         // Normalize the input
         $validated['hide_activities'] = $validated['hide_activities'] ?? 0;
 
+        $updateable = $this->uploadToCloud($validated, $user);
         
-        // Check if the paths to the files actually exist
-        // and remove all temporary files for any updated fields
-        $this->checkPathExistence($validated, 'public')
-            ->removeTemporaryFiles($validated, 'public', $user);
+        $this->removeTempFiles($validated, $user);
 
-
-        // update the users profile
-        $user->profile->update($validated);
-
+        $user->profile->update($updateable);
 
         return back()->with('flash', 'Updated your profile');
     }
@@ -108,57 +104,51 @@ class ProfileController extends Controller
     /**
      * Loop thorugh the filtered array of non-null inputs,
      * If an input key matches the regex (which looks for '_path' at the end of a string)
-     * Then check if that path exists in our local storage.
+     * then upload the file to s3 under id/attribute_name and replace the validated arrays
+     * path keys with the path to the corresponding s3 resources.
      *
-     * If the path does not exist, throw an exception
      * @param array $validated
-     * @return self
+     * @param App\User $user
+     * @return $validated - a mapped over version with local file paths replaced to s3 paths
      */
-    protected function checkPathExistence(array $validated, String $disk)
+    protected function uploadToCloud(array $validated, User $user)
     {
         foreach ($validated as $key => $value) {
-            if (preg_match('/[_]path$/', $key)) {
+            $matches = [];
+            // if there is any attribute with _path get every word before _path https://regex101.com/r/ZF5VHS/1
+            preg_match('/(\w+)_path$/i', $key, $matches);
 
-                if (!\Storage::disk($disk)->exists($value)) {
-                    throw new \Exception('Invalid Image path Exception');
-                }
+            // if there is a match upload to s3 bucket ex: user_id/profile_photo.png
+            if (isset($matches[0])) {
+                \Storage::disk('s3')->putFileAs($user->id, new File(public_path() . '/storage/' . $value), $matches[1] . '.png', 'public');
+
+                $validated[$key] = config('filesystems.disks.s3.url') . '/' . $user->id . '/' . $matches[1] . '.png';
             }
         }
 
-        return $this;
+        return $validated;
     }
 
     /**
      * Loop through the filtered array of non null inputs,
      * If an input ends in _path (meaning it is a path to a file in storage)
-     * Then grab the root directory for that file type for the given user, and delete all files
-     * whose paths are not the validated path (delete all the tempoary files)
+     * delete all temp files in it
      *
      * @param array $validated
-     * @param String $disk
      * @param User $user
      * @return self
      */
-    protected function removeTemporaryFiles(array $validated, String $disk, User $user)
+    protected function removeTempFiles(array $validated, User $user)
     {
         foreach ($validated as $key => $value) {
             if (preg_match('/[_]path$/', $key)) {
-                // Get the directory name for a given path
-                // ex $value = 'avatars/userid/i0923902492
-                // then $temp[0] will be 'avatars'
-                $temp = explode('/', $value);
+                // get all files under a users temp directory
+                // this returns an array with structure [0 => '4/8930940394903.jpeg]
+                $files = \Storage::disk('public')->files($user->id);
 
-                // get all files under that directory ex: 'avatars/4
-                // this returns an array with structure [0 => '/avatars/4/8930940394903.jpeg]
-                $files = \Storage::disk($disk)->files($temp[0] . '/' . $user->id);
-
-                // loop through the returned files
-                // delete any file that is not equal
-                // to the input value for the given path
+                // delete all temp files
                 foreach ($files as $file) {
-                    if ($file !== $value) {
-                        \Storage::disk('public')->delete($file);
-                    }
+                    \Storage::disk('public')->delete($file);
                 }
             }
         }

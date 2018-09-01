@@ -73,10 +73,7 @@ export default {
       // If there are no files uploaded return 
       if(e.target.files.length === 0) return ;
 
-      //replace /avatars/ with /profile-photos/ in our path
-      let path =  this.endpoint.replace(/avatars/i, 'profile-photos');
-
-      this.upload(e, path)
+      this.upload(e, this.endpoint)
         .then(({data}) => {
           // Append the base path to the file to the 
           // stored path 
@@ -84,7 +81,22 @@ export default {
 
           this.rawProfilePhotoPath = data.path;
      
-          this.errors = []
+          this.errors = [];
+        })
+        .then(() => {
+            // upload the avatar after the full picture
+            this.upload(e, this.endpoint + '?size=45')
+              .then(({data}) => {
+                this.hasSuccessfulUpload = true;
+                
+                this.rawAvatarPath = data.path;
+
+              })
+              .catch((error) => {
+                // Get any errors for the given input key
+                // ex get all errors for errors: {avatar: []}
+                // this.errors = error.response.data.errors[this.sendAs]
+              })
         })
         .catch((error) => {
           // Get any errors for the given input key
@@ -92,21 +104,8 @@ export default {
           this.errors = error.response.data.errors[this.sendAs];
         })
 
-
-      // upload the avatar after the full picture
-      this.upload(e, this.endpoint + '?size=45')
-        .then(({data}) => {
-          this.hasSuccessfulUpload = true;
-          
-          this.rawAvatarPath = data.path;
-
-        })
-        .catch((error) => {
-          // Get any errors for the given input key
-          // ex get all errors for errors: {avatar: []}
-          // this.errors = error.response.data.errors[this.sendAs]
-        })
-
+      
+    
     }
   }
 };

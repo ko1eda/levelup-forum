@@ -20,19 +20,11 @@ class Profile extends Model
     {
         parent::boot();
 
-        // this will delete any directory corresponding to a _path attribute on the profile
-        // so avatar_path, for profile with id 3 would delete the directory avatars/3
+        // delete all directories in s3 and on the local drive belonging to a user
         static::deleting(function ($profile) {
-            foreach ($profile->getAttributes() as $key => $value) {
-                if (preg_match('/[_]path$/', $key)) {
-                    $temp = explode('/', $value);
+            \File::deleteDirectory(public_path() . '/storage/' . $profile->user->id);
 
-                     // ex delete directory 'avatars/3
-                    if (\File::exists(public_path() . '/storage/' . $temp[0] . '/' . $profile->user->id)) {
-                        \File::deleteDirectory(public_path() . '/storage/' . $temp[0] . '/' . $profile->user->id);
-                    }
-                }
-            };
+            \Storage::disk('s3')->deleteDirectory($profile->user->id);
         });
     }
 
@@ -55,11 +47,9 @@ class Profile extends Model
      */
     public function getAvatarPathAttribute($avatar_path)
     {
-        return asset(
-            $avatar_path ? "storage/{$avatar_path}" : 'https://imgplaceholder.com/50x50/cccccc/757575/fa-user'
-        );
+        return $avatar_path ?? 'https://imgplaceholder.com/50x50/cccccc/757575/fa-user';
     }
-
+    
     /**
      * getProfilePhotoPathAttribute
      *
@@ -68,8 +58,6 @@ class Profile extends Model
      */
     public function getProfilePhotoPathAttribute($profile_photo_path)
     {
-        return asset(
-            $profile_photo_path ? "storage/{$profile_photo_path}" : 'https://imgplaceholder.com/450x450/cccccc/757575/fa-user'
-        );
+        return $profile_photo_path ?? 'https://imgplaceholder.com/450x450/cccccc/757575/fa-user';
     }
 }

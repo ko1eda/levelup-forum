@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-cloak>
     <slot name="trigger" :handle-open="handleOpen" :is-Open="isOpen"></slot>
    
     <div class="modal tw-px-2 md:tw-px-0" v-if="isOpen">

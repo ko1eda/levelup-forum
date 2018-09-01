@@ -79,7 +79,7 @@ Route::prefix('api')->group(function () {
         Route::get('/profiles/users', 'Users\UserController@index')->name('api.users.index');
 
         // Uploads routes
-        Route::post('/uploads/images/{key}/{user}', 'Uploads\ImageController@store')
+        Route::post('/uploads/images/{user}', 'Uploads\ImageController@store')
             ->name('api.uploads.images.store');
 
         // User Notifications

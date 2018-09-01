@@ -20,19 +20,6 @@ class ImageController extends Controller
 
 
     /**
-     * $allowedDirectoryKeys
-     *
-     * @var array
-     */
-    protected $allowedDirectoryKeys = [
-        'profile-photos',
-        'avatars',
-        'banners',
-        'test-avatars'
-    ];
-
-
-    /**
      * __construct
      *
      * @param ImageManager $imageManager
@@ -51,57 +38,21 @@ class ImageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $req, String $key, User $user)
+    public function store(Request $req, User $user)
     {
         $validated = $req->validate([
             'file' => 'required|image|max:1024'
         ]);
         
-        // If the user tries to store a file in a directory
-        // that is not in our whitelist return 404 not found
-        if (!in_array($key, $this->allowedDirectoryKeys, true)) {
-            return response([], 404);
-        }
-
-        // Relative path to the resource we are storing
-        $filePath = $key .'/'. $user->id ;
-       
-        // dd(public_path() . '/' . $filePath);
         // If no directory exists for our path create one
-        if (!\File::isDirectory(public_path() . '/storage/' . $filePath)) {
-            Storage::makeDirectory('public/' . $filePath);
+        if (!file_exists(public_path() . '/storage/' .  $user->id)) {
+            \File::makeDirectory(public_path() . '/storage/' .  $user->id);
         }
 
-        // dd(is_writable(public_path('storage/' . $filePath)));
-        $filePath = $this->processImage($validated['file'], $filePath, $req->query('size') ?? 450);
+        $filePath = $this->processImage($req, $req->query('size') ?? 450);
 
         return response(['path' => $filePath], 200);
     }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
 
     /**
      * Processes the validated image,
@@ -114,14 +65,14 @@ class ImageController extends Controller
      * @param int $size the cropped size of the file
      * @return String
      */
-    protected function processImage($file, String $filePath, int $size)
+    protected function processImage(Request $req, int $size)
     {
         $this->imageManager
-            ->make($file->getPathName())
+            ->make($req->file('file')->getPathName())
             ->encode('png')
             ->resize($size, $size)
-            ->save(public_path('storage/' . $filePath) . $fileName = '/' .Uuid::uuid4()  . '.png');
+            ->save(public_path('storage/' . $req->user()->id) . $fileName = '/' .Uuid::uuid4()  . '.png');
 
-        return $filePath . $fileName;
+        return $req->user()->id . $fileName;
     }
 }

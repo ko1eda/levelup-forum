@@ -16,7 +16,7 @@ class UploadImagesTest extends TestCase
     /** @test */
     public function only_members_can_upload_an_image()
     {
-        $this->checkUnauthFunctionality('post', route('api.uploads.images.store', ['avatars', 1]), [], '', true, 401);
+        $this->checkUnauthFunctionality('post', route('api.uploads.images.store', 1), [], '', true, 401);
     }
 
 
@@ -28,7 +28,7 @@ class UploadImagesTest extends TestCase
         
         // if that user uploads their avatar
         // then that avatar must be in a valid format
-        $this->checkUnauthFunctionality('post', route('api.uploads.images.store', ['files', \Auth::user()]), [
+        $this->checkUnauthFunctionality('post', route('api.uploads.images.store', \Auth::user()), [
             'file' => 'not-a-valid-image'
         ], '', true, 422);
     }
@@ -36,14 +36,14 @@ class UploadImagesTest extends TestCase
 
 
     /** @test */
-    public function an_image_will_be_stored_in_a_directory_corresponding_to_the_routes_passed_in_key_and_user_id()
+    public function an_temporary_image_will_be_stored_in_a_directory_corresponding_to_the_users_id()
     {
         // Given we have a user
         $this->signInUser();
         // Storage::fake('public');
 
         // And that user hits our images endpoint with
-        $filePath = $this->json('post', route('api.uploads.images.store', ['test-avatars', \Auth::user()]), [
+        $filePath = $this->json('post', route('api.uploads.images.store', \Auth::user()), [
             'file' => $file = UploadedFile::fake()->image('image.jpg')
         ])
         ->decodeResponseJson('path');
@@ -52,22 +52,6 @@ class UploadImagesTest extends TestCase
         Storage::disk('public')->assertExists($filePath);
 
         // This will just remove the directory since we cannot use storage fake
-        Storage::disk('public')->deleteDirectory('test-avatars');
-    }
-
-
-    /** @test */
-    public function an_image_cannot_be_stored_under_a_directory_name_that_we_do_not_allow()
-    {
-        // Given we have a user
-        $this->signInUser();
-
-        // And that user hits our images endpoint with the key lasagna
-        // then that user should recieve a 404 response because it is not on our whitelist
-        // of appropriate directory names
-        $this->json('post', route('api.uploads.images.store', ['lasagna', \Auth::user()]), [
-            'file' => UploadedFile::fake()->image('image.jpg')
-        ])
-        ->assertStatus(404);
+        Storage::disk('public')->deleteDirectory(\Auth::id());
     }
 }

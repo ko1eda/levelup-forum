@@ -35,7 +35,7 @@
       <div class="column is-4">
 
       <lu-avatar-uploader 
-        :endpoint= {{ json_encode( route('api.uploads.images.store', ['avatars',$user], false) ) }} 
+        :endpoint= {{ json_encode( route('api.uploads.images.store', $user, false) ) }} 
         :current-avatar={{  json_encode( $user->profile->profile_photo_path  ) }}
         send-as="file">
       </lu-avatar-uploader>
