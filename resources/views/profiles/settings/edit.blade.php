@@ -85,9 +85,9 @@
               <input type="checkbox" @click="handleOpen" name="delete_account" value="1" :checked="isOpen ? true : false">
             </template>
 
-            <span slot="heading">Are you sure about this?</span>
+            <span slot="heading" v-cloak>Are you sure about this?</span>
 
-            <div class="md:tw-text-center md:tw-text-base tw-leading-loose tw-text-sm " slot="body">
+            <div class="md:tw-text-center md:tw-text-base tw-leading-loose tw-text-sm " slot="body" v-cloak>
               We will delete all information associated with this account. 
               <br>
               While you can always re-register, we'd hate to see you go.
