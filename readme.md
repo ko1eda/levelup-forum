@@ -23,10 +23,11 @@ An open source forum project to showcase my ongoing efforts to master fullstack 
 
 
 ## Installation
+ > __Note__: The latest update, v0.17.0 and onward uses Amazon S3 for user upload storage. If you do not have an Amazon S3 account but would still like to use the application, you may use v0.16.0 or below which still utilize the local storage driver. 
 
-> ***Prequisite***: to run the project files you must have PHP 7 and Redis installed on your development machine.
+> ***Prequisite***: to run the project files you must have PHP 7, Redis and ElasticSearch installed on your development machine.
 
-> ***Note***: If you are a docker user instead of installing Redis or PHP on your dev machine you can use the laradock submodule linked in this directory. Make sure you edit the directories .env.example file to fit your needs and then rename it to .env before you run docker.
+> ***Note***: __If you are a docker user__ instead of installing Redis, PHP or ElasticSearch on your dev machine you can use the laradock submodule linked in this directory. Make sure you edit the directories .env.example file to fit your needs and then rename it to .env before you run docker.
 
 ```
 cd laradock 
