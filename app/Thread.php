@@ -71,6 +71,11 @@ class Thread extends Model implements SubscribableInterface
         static::creating(function ($thread) {
             $thread->slug = str_slug($thread->title);
         });
+
+        // award the user points when they create a new thread
+        static::created(function ($thread) {
+            $thread->user->award()->modelCreated($thread);
+        });
         
         static::deleting(function ($thread) {
             // Delete all replies associated with the
@@ -121,6 +126,18 @@ class Thread extends Model implements SubscribableInterface
 
 
     /**
+     * A thread can award a user reputation points
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function awardable()
+    {
+        return $this->morphMany(Award::class, 'awardable');
+    }
+
+
+
+    /**
      * Get the value of the model's route key.
      *
      * @return mixed
@@ -147,12 +164,13 @@ class Thread extends Model implements SubscribableInterface
     /**
      * Add a reply to the given thread
      *
-     *
      * @return App\Reply $reply
      */
     public function addReply(array $reply)
     {
         $reply = $this->replies()->create($reply);
+
+        $reply->user->award()->modelCreated($reply);
 
         event(new ReplyPosted($this, $reply));
 
@@ -162,16 +180,18 @@ class Thread extends Model implements SubscribableInterface
     
     /**
      * Set threads best_reply_id to $reply
-     *
+     * Award the replies owner points for best reply
      * Returns a key to be used to cache the reply
      *
      * @return String $key
      */
-    public function markBestReply(int $id)
+    public function markBestReply(Reply $reply)
     {
-        $this->best_reply_id = $id;
+        $this->best_reply_id = $reply->id;
 
         $this->save();
+
+        $reply->user->award()->bestReply($reply);
 
         $key = 'thread:' . $this->id;
 

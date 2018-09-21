@@ -161,4 +161,15 @@ class Reply extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
+    /**
+     * A reply can award a user reputation points
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function awardable()
+    {
+        return $this->morphMany(Award::class, 'awardable');
+    }
 }

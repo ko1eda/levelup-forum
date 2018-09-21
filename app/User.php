@@ -101,7 +101,7 @@ class User extends Authenticatable
      * return true if the user has any role
      * in the passed in array of roles
      *
-     * @param array $roles
+    * @param array $roles
      * @return bool
      */
     public function hasRoles(array $roles) : bool
@@ -139,6 +139,24 @@ class User extends Authenticatable
     }
 
     
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function awards()
+    {
+        return $this->hasMany(Award::class);
+    }
+
+
+    /**
+     * @return App\Award
+     */
+    public function award()
+    {
+        return new Award([], $this);
+    }
+
+
     /**
      * Determine if the user has a reply in the database with a created_at timestamp
      * within a range of minutes UP TO the specified threshold time.

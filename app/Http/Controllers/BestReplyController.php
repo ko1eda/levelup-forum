@@ -22,7 +22,7 @@ class BestReplyController extends Controller
         // check the threads policy for update permission
         $this->authorize('update', $reply->thread);
 
-        $key = $reply->thread->markBestReply($reply->id);
+        $key = $reply->thread->markBestReply($reply);
 
         Redis::hset($key, 'best_reply', serialize($reply->makeHidden(['user', 'favorites', 'thread'])));
         

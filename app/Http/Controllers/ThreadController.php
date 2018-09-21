@@ -99,7 +99,7 @@ class ThreadController extends Controller
 
         // create thread with validateded array
         $thread = Thread::create($validated);
-
+        
         return redirect()
             ->route('threads.show', [$thread->channel, $thread, $thread->slug])
             ->with('flash', 'Published A Thread');
