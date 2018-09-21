@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\POPO\Reputation;
 
 class User extends Authenticatable
 {
@@ -140,6 +141,8 @@ class User extends Authenticatable
 
     
     /**
+     * A user can have many rewards, which earn them reputation
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function awards()
@@ -149,11 +152,13 @@ class User extends Authenticatable
 
 
     /**
-     * @return App\Award
+     * Object to interface with user reputation.
+     *
+     * @return App\POPO\Reputation
      */
-    public function award()
+    public function reputation() : Reputation
     {
-        return new Award([], $this);
+        return new Reputation($this);
     }
 
 

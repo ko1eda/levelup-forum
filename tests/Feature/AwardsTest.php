@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Thread;
 use App\User;
+use App\Reply;
 
 class AwardsTest extends TestCase
 {
@@ -69,5 +70,25 @@ class AwardsTest extends TestCase
 
         // then the previous user should have a best_reply_removed award
         $this->assertCount(1, $user->awards()->where('type', 'best_reply_removed')->get());
+    }
+
+
+    /** @test */
+    public function when_a_reply_is_favorited_the_replies_owner_recieves_a_reply_favorited_award()
+    {
+        // Given we have a signed in user
+        $this->signInUser();
+        
+        // and a non signed in user
+        $user = factory(User::class)->create();
+
+        // and that user creates a thread
+        $reply = factory(Reply::class)->create(['user_id' => $user->id]);
+
+        // when the signed in user favorites the non signed in users reply
+        $reply->addFavorite();
+
+        // then the non signed in user should have reply favorited award
+        $this->assertCount(1, $user->awards()->where('type', 'reply_favorited')->get());
     }
 }

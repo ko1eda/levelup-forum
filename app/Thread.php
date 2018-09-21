@@ -74,7 +74,7 @@ class Thread extends Model implements SubscribableInterface
 
         // award the user points when they create a new thread
         static::created(function ($thread) {
-            $thread->user->award()->modelCreated($thread);
+            $thread->user->reputation()->modelCreated($thread);
         });
         
         static::deleting(function ($thread) {
@@ -170,7 +170,7 @@ class Thread extends Model implements SubscribableInterface
     {
         $reply = $this->replies()->create($reply);
 
-        $reply->user->award()->modelCreated($reply);
+        $reply->user->reputation()->modelCreated($reply);
 
         event(new ReplyPosted($this, $reply));
 
@@ -191,7 +191,7 @@ class Thread extends Model implements SubscribableInterface
 
         $this->save();
 
-        $reply->user->award()->bestReply($reply);
+        $reply->user->reputation()->bestReply($reply);
 
         $key = 'thread:' . $this->id;
 

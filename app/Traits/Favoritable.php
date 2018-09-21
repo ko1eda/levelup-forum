@@ -43,14 +43,17 @@ trait Favoritable
      * the favoirtable id, and favoritable type
      * are provided automatically by laravel
      *
-     * firstOrCreate ensures if a favorite already exists in the db
-     * its user_id corresponds to the logged user
+     * firstOrCreate ensures if a favorite already exists for the given reply in the db
+     * and its user_id corresponds to the logged users id,
      * that user cannot create the favorite (aka favorite the entity) twice
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function addFavorite()
     {
+        // increment the users reputation because their reply was favorited
+        $this->user->reputation()->replyFavorited($this);
+
         return $this->favorites()
             ->firstOrCreate(['user_id' => \Auth::user()->id]);
     }
