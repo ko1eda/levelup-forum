@@ -24,6 +24,7 @@ class Reputation
         'best_reply_marked' => 50,
         'best_reply_removed' => -50,
         'thread_created' => 10,
+        'thread_deleted' => -10,
         'reply_created' => 2,
         'reply_favorited' => 4,
     ];
@@ -56,6 +57,24 @@ class Reputation
             'user_id' => $this->user->id,
             'type' => $sn . '_created',
             'value' => $this->values[$sn . '_created'],
+        ]);
+    }
+
+
+    /**
+     * When a model is DELETED a user recieves the correct award
+     *
+     * @param Model $model
+     * @return void
+     */
+    public function modelDeleted(Model $model) : void
+    {
+        $sn = strtolower((new \ReflectionClass($model))->getShortName());
+
+        $model->awardable()->create([
+            'user_id' => $this->user->id,
+            'type' => $sn . '_deleted',
+            'value' => $this->values[$sn . '_deleted'],
         ]);
     }
 

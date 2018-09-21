@@ -27,6 +27,22 @@ class AwardsTest extends TestCase
     }
 
     /** @test */
+    public function when_a_thread_is_deleted_a_user_recieves_a_thread_deleted_award()
+    {
+        // Given we have a user
+        $this->signInUser($user = factory(User::class)->create());
+        
+        // and that user creates a thread
+        $thread = factory(Thread::class)->create(['user_id' => auth()->id()]);
+
+        // then if that thread is deleted
+        $thread->delete();
+
+        // then that user should recieve a thread_created award
+        $this->assertCount(1, $user->awards()->where('type', 'thread_deleted')->get());
+    }
+
+    /** @test */
     public function when_a_reply_is_created_that_user_recieves_a_reply_created_award()
     {
         // Given we have a user

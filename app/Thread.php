@@ -88,6 +88,9 @@ class Thread extends Model implements SubscribableInterface
 
             // and remove the thread from the trending cache
             (new Trending(new Redis))->remove($thread);
+
+            // decrease the users reputation
+            $thread->user->reputation()->modelDeleted($thread);
         });
     }
 
