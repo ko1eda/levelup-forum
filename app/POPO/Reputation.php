@@ -112,6 +112,6 @@ class Reputation
      */
     public function score() : int
     {
-        return $this->user->awards()->sum('value');
+        return $this->user->awards->sum('value');
     }
 }

@@ -19,9 +19,17 @@
           <img src={{$user->profile->profile_photo_path}} alt="profile picture">
         </div>{{-- end profile pic --}}
 
-        <hr class="tw-mx-4 tw-mt-4 tw-mb-0">
-
         <h1 class="tw-mb-2 tw-text-center tw-text-2xl tw-font-light">
+          Reputation
+        </h1> {{-- end reputation header --}}
+
+        <div class="tw-px-6 tw-text-center">
+          <span class="tw-text-green tw-text-2xl">{{ $user->reputation()->score() }}</span>
+        </div>{{-- end reputation --}}
+
+        <hr class="tw-mx-4 tw-mt-4 tw-mb-2">
+
+        <h1 class="tw-mb-3 tw-text-center tw-text-2xl tw-font-light">
           Contact
         </h1> {{-- end contact header --}}
         
