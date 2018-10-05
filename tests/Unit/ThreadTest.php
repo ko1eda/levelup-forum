@@ -144,7 +144,7 @@ class ThreadTest extends TestCase
         $this->thread->removeSubscription();
         
         // Then that threads is_subscribed attribute should return false
-        $this->assertFalse($this->thread->is_subscribed);
+        $this->assertFalse($this->thread->fresh()->is_subscribed);
     }
 
     /** @test */

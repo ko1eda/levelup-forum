@@ -54,7 +54,7 @@ trait SubscribableTrait
     public function addSubscription(int $userID = null)
     {
         $this->subscriptions()->firstOrCreate([
-            'user_id' => $userID ? $userID : \Auth::id()
+            'user_id' => $userID ?? \Auth::id()
         ]);
 
         return $this;
@@ -91,7 +91,7 @@ trait SubscribableTrait
     public function removeSubscription(int $userID = null)
     {
         $this->subscriptions()
-            ->where('user_id', $userID ? $userID : \Auth::user()->id)
+            ->where('user_id', $userID ?? \Auth::id())
             ->delete();
             
         return $this;
@@ -108,8 +108,8 @@ trait SubscribableTrait
             return false;
         }
         
-        return $this->subscriptions()
+        return (boolean) $this->subscriptions
             ->where('user_id', \Auth::user()->id)
-            ->exists();
+            ->count();
     }
 }
