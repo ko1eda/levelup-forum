@@ -72,6 +72,9 @@ class Reply extends Model
         
         // remove any best replies associated with the reply
         static::deleting(function ($reply) {
+            // If the user deletes their reply, lower their reputation
+            $reply->user->reputation()->modelDeleted($reply);
+            
             $thread =  $reply->thread;
             // only remove if the deleted reply was the best
             if ($thread->best_reply_id === $reply->id) {

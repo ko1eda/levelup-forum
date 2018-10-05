@@ -58,6 +58,25 @@ class AwardsTest extends TestCase
     }
 
     /** @test */
+    public function when_a_reply_is_deleted_that_user_recieves_a_reply_deleted_award()
+    {
+        // Given we have a user
+        $this->signInUser($user = factory(User::class)->create());
+        
+        // and a thread
+        $thread = factory(Thread::class)->create();
+
+        // and that thread then recieves a reply from our user
+        $thread->addReply(['body' => 'hello', 'user_id' => $user->id]);
+
+        // if that reply is deleted by our user
+        $thread->replies()->firstOrFail()->delete();
+
+        // then that user should recieve a reply_deleted award
+        $this->assertCount(1, $user->awards()->where('type', 'reply_deleted')->get());
+    }
+
+    /** @test */
     public function when_a_reply_is_marked_best_the_user_recieves_a_best_reply_marked_or_best_reply_removed_award()
     {
         // Given we have a user

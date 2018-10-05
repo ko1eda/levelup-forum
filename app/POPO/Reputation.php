@@ -26,6 +26,7 @@ class Reputation
         'thread_created' => 10,
         'thread_deleted' => -10,
         'reply_created' => 2,
+        'reply_deleted' => -2,
         'reply_favorited' => 4,
     ];
 
@@ -131,6 +132,6 @@ class Reputation
      */
     public function score() : int
     {
-        return $this->user->awards->sum('value');
+        return $this->user->awards()->sum('value');
     }
 }
