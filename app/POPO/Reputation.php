@@ -28,6 +28,7 @@ class Reputation
         'reply_created' => 2,
         'reply_deleted' => -2,
         'reply_favorited' => 4,
+        'reply_unfavorited' => -4,
     ];
 
 
@@ -124,7 +125,21 @@ class Reputation
         ]);
     }
 
-    
+    /**
+     * reply_unfavorited
+     *
+     * @return void
+     */
+    public function replyUnfavorited(Reply $reply) : void
+    {
+        $reply->awardable()->create([
+            'user_id' => $this->user->id,
+            'type' => 'reply_unfavorited',
+            'value' => $this->values['reply_unfavorited']
+        ]);
+    }
+
+
     /**
      * return the sum of all the users awards
      *

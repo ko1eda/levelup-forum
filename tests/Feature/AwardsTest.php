@@ -107,7 +107,6 @@ class AwardsTest extends TestCase
         $this->assertCount(1, $user->awards()->where('type', 'best_reply_removed')->get());
     }
 
-
     /** @test */
     public function when_a_reply_is_favorited_the_replies_owner_recieves_a_reply_favorited_award()
     {
@@ -125,5 +124,30 @@ class AwardsTest extends TestCase
 
         // then the non signed in user should have reply favorited award
         $this->assertCount(1, $user->awards()->where('type', 'reply_favorited')->get());
+    }
+
+    /** @test */
+    public function when_a_reply_is_unfavorited_the_replies_owner_recieves_a_reply_unfavorited_award()
+    {
+        // Given we have a signed in user
+        $this->signInUser();
+        
+        // and a non signed in user
+        $user = factory(User::class)->create();
+
+        // and that user creates a thread
+        $reply = factory(Reply::class)->create(['user_id' => $user->id]);
+
+        // when the signed in user favorites the non signed in users reply
+        $reply->addFavorite();
+
+        // then the non signed in user should have reply favorited award
+        $this->assertCount(1, $user->awards()->where('type', 'reply_favorited')->get());
+
+        // however if the reply is unfavorited
+        $reply->removeFavorite();
+
+        // then the user should recieve a reply_unfavorited award
+        $this->assertCount(1, $user->awards()->where('type', 'reply_unfavorited')->get());
     }
 }

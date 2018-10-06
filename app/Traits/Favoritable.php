@@ -81,6 +81,9 @@ trait Favoritable
      */
     public function removeFavorite()
     {
+        // remove reputation related to the reply being favorited
+        $this->user->reputation()->replyUnfavorited($this);
+
         return $this->favorites()
             ->where('user_id', \Auth::user()->id)
             ->firstOrFail()
