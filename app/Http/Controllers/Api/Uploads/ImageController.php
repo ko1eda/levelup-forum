@@ -46,7 +46,7 @@ class ImageController extends Controller
         
         // If no directory exists for our path create one
         if (!file_exists(public_path() . '/storage/' .  $user->id)) {
-            \File::makeDirectory(public_path() . '/storage/' .  $user->id);
+            \File::makeDirectory(public_path() . '/storage/' .  $user->id, 0770, true);
         }
 
         $filePath = $this->processImage($req, $req->query('size') ?? 450);
