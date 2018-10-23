@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
             return $view->with(compact('channels'));
         });
 
-        // \Debugbar::disable();
+        \Debugbar::disable();
 
         // .blade templates for pagination
         Paginator::defaultView('shared.pagination');
