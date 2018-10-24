@@ -19,8 +19,7 @@ class Thread extends Model implements SubscribableInterface
 
     use RecordActivity,
         RecordViews,
-        SubscribableTrait,
-        Searchable;
+        SubscribableTrait;
 
     /**
      * The attributes that are mass assignable.

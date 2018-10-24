@@ -33,11 +33,5 @@ export default {
     display:none;
   }
 }
-
-@media(min-width: 768px) {
-  .hide-search {
-    display:none;
-  }
-} 
 </style>
   

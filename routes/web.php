@@ -67,10 +67,6 @@ Route::get('/profiles/{user}/settings/edit', 'ProfileController@edit')->name('pr
 
 Route::patch('/profiles/{user}/settings', 'ProfileController@update')->name('profiles.settings.update');
 
-// search
-Route::prefix('search')->group(function () {
-    Route::get('/threads', 'Search\ThreadSearchController@index')->name('search.threads');
-});
 
 // api endpoints
 Route::prefix('api')->group(function () {

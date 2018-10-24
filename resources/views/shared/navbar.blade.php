@@ -14,26 +14,6 @@
   
       <div id="navbar" :class="['navbar-menu tw-shadow-none', {'is-active' : isActive }, {'tw-border-t tw-border-bulma-lighter' : isActive}]" v-cloak>
         <div class="navbar-start">
-
-          <div class="navbar-item hide-search">
-            <form action="{{ route('search.threads')}}" >
-              <div class="field has-addons tw-w-full">
-  
-                <div class="control has-icons-left tw-w-full ">
-                  <input class="input is-small " type="text" placeholder="Search" name='q'>
-                  <span class="icon is-small is-left">
-                      <i class="fas fa-search"></i>
-                  </span>
-                </div>
-                
-                <div class="control">
-                  <button class="button is-small is-light">Submit</button>
-                </div>
-                
-              </div>
-            </form>
-          </div> {{-- end searchbar  --}}
-
           <div class="navbar-item has-dropdown is-hoverable ">
             @if(Auth::check() && count( Auth::user()->unreadNotifications))
               {{-- it is completely hidden on anything with a screen size above 1025px --}}
