@@ -1,5 +1,6 @@
 <?php
 
+
 return [
    /*
     |--------------------------------------------------------------------------
@@ -9,11 +10,18 @@ return [
     |
     |
     */
+    // Default admin account info
+    'admin' => [
+        'name' => '1upteam',
+        'username' => '1upteam',
+        'email' => 'admin@oneupforum.com',
+        'password' => password_hash(env('DEFAULT_ADMIN_PASSWORD') ?? 'secret', PASSWORD_BCRYPT),
+        'role_id' => 1,
+        'confirmed' => 1,
+    ],
 
-    // The @username for the forums default admin account
-    'admin' => 'levelup.team',
 
-
+    
     // Settings to control the activity feed
     'activityfeed' => []
 

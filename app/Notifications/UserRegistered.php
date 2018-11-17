@@ -35,7 +35,7 @@ class UserRegistered extends Notification
     public function toArray($notifiable)
     {
         return [
-            'username' => '@' . config('forum.admin'),
+            'username' => '@' . config('forum.admin.username'),
             'action' => 'reminder',
             'message' => 'register you email to participate in the forums!',
             'messageSub' => 'register you email to participate in the forums!',
