@@ -49,18 +49,20 @@ export default {
 
   methods: {
     approve () {
-      // get the query string without the ? 
       let regex = /tokenID=(.+)/gi;
-
-      axios.post(this.approveUri +  regex.exec(window.location.search)[0])
+      
+      axios.post(this.approveUri  +  regex.exec(window.location.search)[0])
         .then(res => {
-          flash('Channel approved, redirecting...');
+           flash('Channel approved, redirecting...');
           
           setTimeout(() => {
             window.location = "/threads";
           }, 500) 
 
         });
+
+
+
     },
 
     decline () {

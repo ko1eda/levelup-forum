@@ -48,7 +48,7 @@ class ChannelConfirmed extends Notification
     public function toArray($notifiable)
     {
         return [
-            'username' => '@'. config('forum.admin'),
+            'username' => '@'. config('forum.admin.username'),
             'action' => 'Your channel ' . $this->channel->name . ' was approved',
             'messageSub' => 'Check it out',
             'link' =>   route('threads.index', $this->channel, false)
