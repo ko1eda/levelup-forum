@@ -145,11 +145,11 @@
           <button class="button is-primary is-outlined">Submit</button>
         </div>
 
-        @if(!isset($isSignup))
+        {{-- @if(!isset($isSignup))
           <div class="control">
             <a class="button is-dark is-outlined" href="{{ route('password.request') }}">Forgot password?</a>
           </div>
-        @endif
+        @endif --}}
 
       </div>
     </form>
