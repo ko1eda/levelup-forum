@@ -141,8 +141,8 @@
       @endisset
 
       <div class="field is-grouped is-grouped-centered tw-my-8">
-        <div class="control">
-          <button class="button is-primary is-outlined">Submit</button>
+        <div class="control tw-w-3/4 tw-flex tw-justify-center">
+          <button class="button is-primary is-outlined tw-w-3/4">Submit</button>
         </div>
 
         {{-- @if(!isset($isSignup))
