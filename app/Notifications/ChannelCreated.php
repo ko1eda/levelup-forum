@@ -72,7 +72,7 @@ class ChannelCreated extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new Mailable($this->channelCreator, $this->relativeUri))->to($admin = $notifiable->email);
+        return (new Mailable($this->channelCreator, config('app.url') . '/' . $this->relativeUri))->to($admin = $notifiable->email);
     }
 
     /**
